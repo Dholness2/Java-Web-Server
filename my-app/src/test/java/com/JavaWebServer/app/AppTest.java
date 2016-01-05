@@ -1,5 +1,5 @@
 package com.JavaWebServer.app;
-
+import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -20,6 +20,12 @@ public class AppTest
         super( testName );
     }
 
+    @Test
+    public void testPrintHelloWorld() {
+
+       Assert.assertEquals(App.getHelloWorld(), "Hello World");
+
+      }
     /**
      * @return the suite of tests being tested
      */
@@ -35,4 +41,9 @@ public class AppTest
     {
         assertTrue( true );
     }
+
+    
+  
+
+
 }

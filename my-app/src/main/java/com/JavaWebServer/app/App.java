@@ -6,14 +6,8 @@ package com.JavaWebServer.app;
  */
 public class App 
 {
-    public static void main( String[] args )
+    public static void main( String[] args)
     {
-        System.out.println( "Hello World!" );
+        System.out.println("hi");
     }
-
-  public static String getHelloWorld() {
-
-        return "Hello World";
-
-          }
 }

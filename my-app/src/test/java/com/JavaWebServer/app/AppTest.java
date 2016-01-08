@@ -20,12 +20,6 @@ public class AppTest
         super( testName );
     }
 
-    @Test
-    public void testPrintHelloWorld() {
-
-       Assert.assertEquals(App.getHelloWorld(), "Hello World");
-
-      }
     /**
      * @return the suite of tests being tested
      */

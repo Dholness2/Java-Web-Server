@@ -6,39 +6,70 @@ import java.util.*;
 public class Server implements Runnable{
 
  private int port;
- private boolean on = false;
- 
+ private boolean serverOn = true;
+ private ServerSocket serverSocket = null;
+ private Thread runningThread = null;
  public Server (int port) {
    this.port = port;
  }
 
- public void  openSocket (int port) {
-  System.out.println(port);
-   try{
-    ServerSocket socket = new ServerSocket (port);
-    System.out.println(socket);
-    while (true){
-     Socket clientSocket = socket.accept();
-     
-     PrintWriter writer  = new PrintWriter(clientSocket.getOutputStream());
-     writer.println("200");
-     writer.close();
-     System.out.println("message sent from sever");
-    }
-   } catch (IOException e) {
-   System.out.println("Exception caught "+ port + " or listening for a connection");
-   System.out.println(e.getMessage());
-  }
- }
-
- public void run() {
-  this.on = true;
-  System.out.println("sever is on");
-  openSocket(port);
-  System.out.println("sever on and running");
+ public void  run () {
+   synchronized(this){
+    this.runningThread = Thread.currentThread();
+   }
+   openServerSocket();
+   System.out.println( "opened Server Socket");
+   while (isServerOn()){
+     System.out.println("inside while");
+     Socket clientSocket  = null;
+     try {
+       clientSocket =  this.serverSocket.accept();
+       System.out.println("listening on port");
+     } catch (IOException e) {
+        if(serverOn == false) {
+          System.out.println("Server off "+ e);
+          return;
+        } 
+        throw new RuntimeException(
+          "Error accepting client connection", e);
+     } 
+    try {
+        serveClient(clientSocket);
+    } catch (IOException e) {
+    } 
+   }
+   System.out.println("Server off");
  }
  
- public void off() {
-   this.on = false;
+ private void openServerSocket() {
+  try { 
+      this.serverSocket = new ServerSocket(port);
+      } catch(IOException e) {
+        throw new RuntimeException("cannont open port"+ port ,e);
+      }
+ }
+
+ private void serveClient (Socket clientSocket) 
+  throws IOException {
+   PrintWriter writer  = new PrintWriter(clientSocket.getOutputStream());
+    writer.println("200");
+    writer.close();
+    System.out.println("message sent from sever");
+    System.out.println("session completed");
+    clientSocket.close();
+   }
+
+ private synchronized boolean isServerOn() {
+  return this.serverOn;
+ }
+
+
+ public synchronized void off() {
+   this.serverOn = false;
+   try {
+     this.serverSocket.close();
+   } catch (IOException e) {
+   throw new RuntimeException("Error closing server", e);
+   }
  }
 }

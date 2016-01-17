@@ -2,13 +2,17 @@ package com.JavaWebServer.app;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Server implements Runnable{
-
+ private String serverName = "localhost";
  private int port;
  private boolean serverOn = true;
  private ServerSocket serverSocket = null;
  private Thread runningThread = null;
+ protected ExecutorService threadPool = Executors.newFixedThreadPool(10);
+ 
  public Server (int port) {
    this.port = port;
  }
@@ -19,7 +23,7 @@ public class Server implements Runnable{
    }
    openServerSocket();
    System.out.println( "opened Server Socket");
-   while (isServerOn()){
+   while (isServerOn()) {
      System.out.println("inside while");
      Socket clientSocket  = null;
      try {
@@ -29,15 +33,13 @@ public class Server implements Runnable{
         if(serverOn == false) {
           System.out.println("Server off "+ e);
           return;
-        } 
-        throw new RuntimeException(
+     } 
+     throw new RuntimeException(
           "Error accepting client connection", e);
      } 
-    try {
-        serveClient(clientSocket);
-    } catch (IOException e) {
-    } 
-   }
+     this.threadPool.execute(new ClientWorkerService(clientSocket,serverName));
+    }
+   this.threadPool.shutdown();
    System.out.println("Server off");
  }
  
@@ -49,21 +51,10 @@ public class Server implements Runnable{
       }
  }
 
- private void serveClient (Socket clientSocket) 
-  throws IOException {
-   PrintWriter writer  = new PrintWriter(clientSocket.getOutputStream());
-    writer.println("200");
-    writer.close();
-    System.out.println("message sent from sever");
-    System.out.println("session completed");
-    clientSocket.close();
-   }
-
  private synchronized boolean isServerOn() {
   return this.serverOn;
  }
-
-
+ 
  public synchronized void off() {
    this.serverOn = false;
    try {

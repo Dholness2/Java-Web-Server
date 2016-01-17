@@ -1,13 +1,10 @@
 package com.JavaWebServer.app;
 
-/**
- * Hello world!
- *
- */
 public class App 
 {
     public static void main( String[] args)
     {
-        System.out.println("hi");
+        Server app  = new Server(5000);
+        new Thread(app).start();	
     }
 }

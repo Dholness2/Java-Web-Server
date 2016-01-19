@@ -26,14 +26,14 @@ public class Server implements Runnable{
     while (isServerOn()) {
       Socket clientSocket  = null;
       try {
-        clientSocket =  this.serverSocket.accept();
-        System.out.println("Server: listening on port");
-      } catch (IOException e) {
-        if(serverOn == false) {
-          System.out.println("Server off "+ e);
-          break;
-        } throw new RuntimeException( "Error accepting client connection", e);
-      }
+          clientSocket =  this.serverSocket.accept();
+          System.out.println("Server: listening on port");
+          } catch (IOException e) {
+                                  if(serverOn == false) {
+                                  System.out.println("Server off "+ e);
+                                  break;
+                                  }throw new RuntimeException( "Error accepting client connection", e);
+          }
       this.threadPool.execute(new ClientWorkerService(clientSocket,serverName));
     }
     this.threadPool.shutdown();

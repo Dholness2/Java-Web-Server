@@ -18,8 +18,10 @@ public class ClientWorkerService implements Runnable {
        OutputStream output = clientSocket.getOutputStream();
        System.out.println("Server: reading inputstream");
        BufferedReader message = new BufferedReader(new InputStreamReader(input));
-       System.out.println(serverName +" Recevied message"+ message.readLine());
-       new PrintWriter (output,true).println("HTTP/1.1 200 ok");
+       System.out.println(serverName +" Recevied message");
+       PrintWriter response = new PrintWriter (output,true);
+       response.println("HTTP/1.1 200 ok"+"\n");
+       response.println("Hello world");
        output.close();
        input.close();
        clientSocket.close();

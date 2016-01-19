@@ -19,9 +19,9 @@ public class ClientWorkerServiceTest {
     outPut.print("GET / http/1.1");
     BufferedReader response = new BufferedReader(new InputStreamReader(clientTestSocket.getInputStream())); 
     assertEquals("200", response.readLine());
-    }
+  }
   
-   private class ClientSocketMock extends Socket {
+  private class ClientSocketMock extends Socket {
      String inputMessage = "200";
      String  serverName = null;
      int port;

@@ -4,30 +4,32 @@ import java.net.*;
 import java.util.*;
 
 public class ClientWorkerService implements Runnable {
-  private Socket clientSocket = null;
-  private String serverName = null;
-  
-  public ClientWorkerService (Socket clientSocket, String serverName) {
+  private WrapperSocket clientSocket = null;
+  private String serverName = null; 
+
+  public ClientWorkerService (WrapperSocket clientSocket, String serverName) {
     this.clientSocket = clientSocket;
     this.serverName = serverName;
   }
 
   public void run () {
-    try {
-          InputStream input = clientSocket.getInputStream();
-          OutputStream output = clientSocket.getOutputStream();
-          System.out.println("Server: reading inputstream");
-          BufferedReader message = new BufferedReader(new InputStreamReader(input));
-          System.out.println(serverName +" Recevied message");
-          PrintWriter response = new PrintWriter (output,true);
-          response.println("HTTP/1.1 200 ok"+"\n");
-          response.println("Hello world");
-          output.close();
-          input.close();
-          clientSocket.close();
-          System.out.println ("Server: request Closed");
-   } catch (IOException e) {
-     e.printStackTrace();
-   }
+     BufferedReader message = new BufferedReader(getStreamReader());
+     System.out.println(serverName +" Recevied message");
+     PrintWriter response = new PrintWriter (getOutputStream(),true);
+     response.println("HTTP/1.1 200 ok"+"\n");
+     response.println("Hello world");
+     clientSocket.close();
+     System.out.println ("Server: request Closed");
+  }
+  
+  public InputStreamReader getStreamReader () {
+    InputStreamReader stream = null;
+    InputStream input = clientSocket.getInputStream();
+    stream = new InputStreamReader(input);
+    return stream;
+  }
+  
+  public OutputStream getOutputStream () {
+    return clientSocket.getOutputStream();
   }
 }

@@ -1,21 +1,30 @@
 package com.JavaWebServer.app;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.junit.Before;
+import org.junit.After;
 
 import java.net.*;
 import java.io.*;
 
 public class ServerTest  {
   Server testServer;
+  ServerSocketWrapper testSocket; 
   
   @Before 
-  public void setupServer () {
+  public void setupServer () throws Exception {
     int  port = 8787;
-    testServer = new Server(port);
+    ServerSocket socket =  new ServerSocket(port);
+    testSocket = new ServerSocketWrapper(socket);
+    testServer = new Server(port,testSocket);
+  }
+
+  @After
+  public void turnOffServer() {
+    testSocket.close();
+    testServer.off();
   }
 
   @Test
@@ -35,30 +44,36 @@ public class ServerTest  {
   }
 
  @Test 
-  public void  TestServerGetsClientMessage () throws Exception {
+  public void  TestServerRun () throws Exception {
     Thread testThread = new Thread(testServer);
     testThread.start();
     testThread.sleep(100); 
     
- 
     Socket clientTestSocket = new Socket("localhost", 8787);
-    System.out.println( "Client: connected to Server");
-    PrintWriter outPut = new PrintWriter( clientTestSocket.getOutputStream(), true);
-    outPut.println("GET / HTTP/1.1");
-    System.out.println("Client: message sent from Client Get /HTTP/1.1");
-    InputStreamReader stream = new InputStreamReader(clientTestSocket.getInputStream());
-    BufferedReader response = new BufferedReader(stream);
-    String message =  readResponse(response);
+    clientGetRequest (clientTestSocket);
+    String message = readServerResponse(clientTestSocket); 
     assertEquals("HTTP/1.1 200 okHello world", message);
     System.out.println("Client: Message Recieved " + message);
   }
 
-  private String readResponse (BufferedReader buffer) throws Exception {
+
+  private void clientGetRequest(Socket clientTestSocket)  throws Exception{
+    PrintWriter outPut = new PrintWriter( clientTestSocket.getOutputStream(), true);
+    outPut.println("GET / HTTP/1.1");
+  }
+
+ private String readServerResponse(Socket clientTestSocket) throws Exception {
+   InputStreamReader stream = new InputStreamReader(clientTestSocket.getInputStream());
+   BufferedReader response = new BufferedReader(stream);
+   return readResponse(response);
+ }
+
+ private String readResponse (BufferedReader buffer) throws Exception {
     String message ="";
     String line;
     while ((line = buffer.readLine()) != null) {
       message += line;
     }
     return message;
-  }
+ }
 }

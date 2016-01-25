@@ -1,5 +1,4 @@
 package com.JavaWebServer.app;
-import java.net.*;
 import java.io.*;
 
 public interface InterfaceSocket {

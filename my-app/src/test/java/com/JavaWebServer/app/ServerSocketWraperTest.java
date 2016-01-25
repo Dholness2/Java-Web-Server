@@ -4,30 +4,30 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 public class ServerSocketWraperTest {
-  
-  @Test 
+
+  @Test
   public void TestServerWrapperisclosed() throws Exception {
-     ServerSocket testServer = new ServerSocket(9056 );
-     assertFalse(testServer.isClosed());
-     testServer.close();
-   }
-  
-  @Test 
+    ServerSocket testServer = new ServerSocket(9056 );
+    assertFalse(testServer.isClosed());
+    testServer.close();
+  }
+
+  @Test
   public void TestServerWrapperclose() throws Exception {
     ServerSocket testServer = new ServerSocket(9056);
-    ServerSocketWraper testWrapper =  new ServerSocketWraper(testServer);
+    ServerSocketWrapper testWrapper =  new ServerSocketWrapper(testServer);
     testWrapper.close();
     assertTrue(testWrapper.isClosed());
   }
-  
-  @Test 
+
+  @Test
   public void TestServerWrapperAccept() throws Exception {
     ServerSocket testServer = new ServerSocket(9056);
-    ServerSocketWraper testWrapper =  new ServerSocketWraper(testServer);
+    ServerSocketWrapper testWrapper =  new ServerSocketWrapper(testServer);
     Socket client = new Socket("localhost",9056);
-    WraperSocket clientSocket = testWrapper.accept();
-    assertTrue(clientSocket instanceof WraperSocket);
+    WrapperSocket clientSocket = testWrapper.accept();
+    assertTrue(clientSocket instanceof WrapperSocket);
     testWrapper.close();
-    clientSocket.close(); 
+    clientSocket.close();
   }
-} 
+}

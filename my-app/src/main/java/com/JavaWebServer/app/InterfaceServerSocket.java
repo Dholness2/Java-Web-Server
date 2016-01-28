@@ -1,6 +1,6 @@
 package com.JavaWebServer.app;
 
 public interface InterfaceServerSocket {
- public WrapperSocket accept();
+ public Socket accept();
  public void close();
 }

@@ -4,10 +4,10 @@ import java.net.*;
 import java.util.*;
 
 public class ClientWorkerService implements Runnable {
-  private WrapperSocket clientSocket = null;
+  private Socket clientSocket = null;
   private String serverName = null; 
 
-  public ClientWorkerService (WrapperSocket clientSocket, String serverName) {
+  public ClientWorkerService (Socket clientSocket, String serverName) {
     this.clientSocket = clientSocket;
     this.serverName = serverName;
   }

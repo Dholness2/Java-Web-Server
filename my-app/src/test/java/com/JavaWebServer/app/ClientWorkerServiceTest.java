@@ -11,13 +11,13 @@ import java.io.*;
 
 public class ClientWorkerServiceTest {
   private ClientWorkerService testWorker;
-  private WrapperSocket wrapper;
-  private Socket clientTestSocket;
+  private Socket wrapper;
+  private java.net.Socket clientTestSocket;
 
   @Before
   public void mocksetup() {
     clientTestSocket = new ClientSocketMock("localHost", 9999);
-    wrapper = new WrapperSocket(clientTestSocket);
+    wrapper = new Socket(clientTestSocket);
     testWorker = new ClientWorkerService(wrapper, "local host");
   }
 
@@ -40,7 +40,7 @@ public class ClientWorkerServiceTest {
     assertTrue(testWorker.getOutputStream() instanceof OutputStream);
   }
 
-  private class ClientSocketMock extends Socket {
+  private class ClientSocketMock extends java.net.Socket {
      String inputMessage = "200";
      String  serverName = null;
      int port;

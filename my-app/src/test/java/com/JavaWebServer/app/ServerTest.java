@@ -6,18 +6,18 @@ import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
 
-import java.net.*;
+import java.net.Socket;
+
 import java.io.*;
 
 public class ServerTest  {
   Server testServer;
-  ServerSocketWrapper testSocket; 
-  
+  ServerSocket testSocket;
+
   @Before 
   public void setupServer () throws Exception {
     int  port = 8787;
-    ServerSocket socket =  new ServerSocket(port);
-    testSocket = new ServerSocketWrapper(socket);
+    testSocket =  new ServerSocket(port);
     testServer = new Server(port,testSocket);
   }
 
@@ -48,9 +48,8 @@ public class ServerTest  {
     Thread testThread = new Thread(testServer);
     testThread.start();
     testThread.sleep(100); 
-    
-    Socket clientTestSocket = new Socket("localhost", 8787);
-    clientGetRequest (clientTestSocket);
+
+    java.net.Socket clientTestSocket = new Socket("localhost", 8787);
     String message = readServerResponse(clientTestSocket); 
     assertEquals("HTTP/1.1 200 okHello world", message);
     System.out.println("Client: Message Recieved " + message);

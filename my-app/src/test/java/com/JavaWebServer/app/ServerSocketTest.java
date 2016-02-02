@@ -1,7 +1,7 @@
 package com.JavaWebServer.app;
 
 import java.net.Socket;
-
+import java.io.*;
 import static org.junit.Assert.*;
 import org.junit.*;
 
@@ -21,13 +21,31 @@ public class ServerSocketTest {
     assertTrue(testWrapper.isClosed());
   }
 
+
+  class MockServerSocket extends java.net.ServerSocket  {
+
+   private boolean acceptWasCalled = false;
+
+   public MockServerSocket () throws Exception {
+   }
+
+   public java.net.Socket accept()  {
+     acceptWasCalled = true;
+     return null;
+   }
+
+   public boolean acceptWasCalled() {
+      return acceptWasCalled;
+   }
+  }
+
   @Test
   public void TestServerSocketAccept() throws Exception {
-    ServerSocket testWrapper =  new ServerSocket(9056);
-    Socket client = new Socket("localhost",9056);
-    com.JavaWebServer.app.Socket clientSocketWrapper = testWrapper.accept();
-    assertTrue(clientSocketWrapper instanceof  com.JavaWebServer.app.Socket);
-    testWrapper.close();
-    clientSocketWrapper.close();
+    MockServerSocket mockServerSocket = new MockServerSocket();
+    ServerSocket testWrapper =  new ServerSocket(mockServerSocket);
+
+    testWrapper.accept();
+
+    assertTrue(mockServerSocket.acceptWasCalled());
   }
 }

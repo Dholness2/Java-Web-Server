@@ -2,58 +2,60 @@ package com.JavaWebServer.app;
 
 import org.junit.Test;
 import org.junit.Before;
-
-import org.hamcrest.core.IsInstanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import java.net.*;
-import java.io.*;
+
+import java.io.OutputStream;
+import java.io.InputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
 
 public class ClientWorkerServiceTest {
+  private final String BREAK_LINE = "\\r?\\n";
+
   private ClientWorkerService testWorker;
   private Socket wrapper;
   private java.net.Socket clientTestSocket;
 
-  @Before
-  public void mocksetup() {
-    clientTestSocket = new ClientSocketMock("localHost", 9999);
-    wrapper = new Socket(clientTestSocket);
-    testWorker = new ClientWorkerService(wrapper, "local host");
-  }
 
   @Test
-  public void respondsToClientsRequest() throws Exception {
-    testWorker.run();
-    PrintWriter outPut = new PrintWriter(clientTestSocket.getOutputStream(),true);
-    outPut.print("GET / http/1.1");
-    BufferedReader response = new BufferedReader(testWorker.getStreamReader()); 
-    assertEquals("200", response.readLine());
-  }
+    public void respondsToClientsRequest() throws Exception {
+      clientTestSocket = new ClientSocketMock("localHost", 9999, "GET / http/1.1");
+      wrapper = new Socket(clientTestSocket);
+      testWorker = new ClientWorkerService(wrapper, "local host");
+      testWorker.run();
+      String response = testWorker.getOutputStream().toString().split(BREAK_LINE)[0];
+      assertEquals("HTTP/1.1 200 ok",response);
+    }
 
   @Test
-  public void testgetStreamReader() throws Exception {
-    assertTrue(testWorker.getStreamReader() instanceof InputStreamReader);
-  }
-
-  @Test
-  public void testgetOutputStream() throws Exception {
-    assertTrue(testWorker.getOutputStream() instanceof OutputStream);
-  }
+    public void respondsWith404() throws Exception {
+      clientTestSocket = new ClientSocketMock("localHost",9999, "GET /foo http/1.1");
+      wrapper = new Socket(clientTestSocket);
+      testWorker = new ClientWorkerService(wrapper, "local host");
+      testWorker.run();
+      String response = testWorker.getOutputStream().toString().split(BREAK_LINE)[0];
+      assertEquals("HTTP/1.1 404 not found",response);
+    }
 
   private class ClientSocketMock extends java.net.Socket {
-     String inputMessage = "200";
-     String  serverName = null;
-     int port;
-    public ClientSocketMock (String serverName, int port) {
+    private String inputMessage = "GET / http/1.1";
+    private  String  serverName = null;
+    private ByteArrayInputStream input;
+    private ByteArrayOutputStream outPut = new ByteArrayOutputStream();
+    private int port;
+
+    public ClientSocketMock (String serverName, int port, String request) {
       this.serverName  = serverName;
       this.port = port;
+      this.input = new ByteArrayInputStream(request.getBytes());
     } 
-     public OutputStream getOutputStream() {
-       return  new ByteArrayOutputStream();
-     }
+    public OutputStream getOutputStream() {
+      return  this.outPut;
+    }
 
-     public InputStream getInputStream () {
-       return new  ByteArrayInputStream(inputMessage.getBytes());
-     }
-   }
- }
+    public InputStream getInputStream () {
+      return this.input;
+    }
+  }
+}

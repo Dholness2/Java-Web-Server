@@ -16,7 +16,7 @@ public class ServerTest  {
 
   @Before 
   public void setupServer () throws Exception {
-    int  port = 8787;
+    int  port = 9094;
     testSocket =  new ServerSocket(port);
     testServer = new Server(port,testSocket);
   }
@@ -49,7 +49,9 @@ public class ServerTest  {
     testThread.start();
     testThread.sleep(100); 
 
-    java.net.Socket clientTestSocket = new Socket("localhost", 8787);
+    java.net.Socket clientTestSocket = new Socket("localhost", 9094);
+    PrintWriter outPut = new PrintWriter( clientTestSocket.getOutputStream(), true);
+    outPut.println("GET / HTTP/1.1");
     String message = readServerResponse(clientTestSocket); 
     assertEquals("HTTP/1.1 200 okHello world", message);
     System.out.println("Client: Message Recieved " + message);

@@ -14,14 +14,14 @@ public class ClientWorkerServiceTest {
   private final String BREAK_LINE = "\\r?\\n";
 
   private ClientWorkerService testWorker;
-  private Socket wrapper;
+  private ClientSocket wrapper;
   private java.net.Socket clientTestSocket;
 
 
   @Test
     public void respondsToClientsRequest() throws Exception {
       clientTestSocket = new ClientSocketMock("localHost", 9999, "GET / http/1.1");
-      wrapper = new Socket(clientTestSocket);
+      wrapper = new ClientSocket(clientTestSocket);
       testWorker = new ClientWorkerService(wrapper, "local host");
       testWorker.run();
       String response = testWorker.getOutputStream().toString().split(BREAK_LINE)[0];
@@ -31,7 +31,7 @@ public class ClientWorkerServiceTest {
   @Test
     public void respondsWith404() throws Exception {
       clientTestSocket = new ClientSocketMock("localHost",9999, "GET /foo http/1.1");
-      wrapper = new Socket(clientTestSocket);
+      wrapper = new ClientSocket(clientTestSocket);
       testWorker = new ClientWorkerService(wrapper, "local host");
       testWorker.run();
       String response = testWorker.getOutputStream().toString().split(BREAK_LINE)[0];

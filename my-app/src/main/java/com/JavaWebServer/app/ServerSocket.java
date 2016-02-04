@@ -19,9 +19,9 @@ public class ServerSocket implements InterfaceServerSocket {
 
   }
 
- public Socket accept() {
+ public ClientSocket accept() {
     try {
-      return new Socket(serverSocket.accept());
+      return new ClientSocket(serverSocket.accept());
     } catch(IOException e) {
       throw new RuntimeException("can not accept Client Connnection"+ e);
     }

@@ -10,19 +10,19 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class ClientWorkerService implements Runnable {
-  private Socket clientSocket = null;
+  private ClientSocket clientSocket = null;
   private String serverName = null;
 
-  public ClientWorkerService (Socket clientSocket, String serverName) {
+  public ClientWorkerService (ClientSocket clientSocket, String serverName) {
     this.clientSocket = clientSocket;
     this.serverName = serverName;
   }
 
   public void run () {
-     BufferedReader message = new BufferedReader(getStreamReader());
+     Request  request = clientSocket.getRequest();
      PrintWriter response = new PrintWriter (getOutputStream(),true);
 
-     if (pathExists(message)) {
+     if (pathExists(request)) {
        response.println("HTTP/1.1 200 ok"+"\n");
        response.println("Hello world");
      } else {
@@ -33,29 +33,9 @@ public class ClientWorkerService implements Runnable {
      System.out.println ("Server: request Closed");
   }
 
-  public boolean pathExists(BufferedReader message) {
-    String request = null;
-    try {
-      request = message.readLine();
-      System.out.println("request: " + request);
-    } catch (IOException e) {
-      System.out.println( e);
-    }
-    
-    String[] requestParts = request.split(" ");
-    System.out.println(Arrays.toString(requestParts));
-    String route = requestParts[1];
-    boolean ans = (route.equals( "/"));
-    System.out.println(ans);
-    return ans;
-    }
-
-
-  public InputStreamReader getStreamReader () {
-    InputStreamReader stream = null;
-    InputStream input = clientSocket.getInputStream();
-    stream = new InputStreamReader(input);
-    return stream;
+  public boolean pathExists(Request r) {
+    String route = r.getRoute();
+    return (route.equals( "/"));
   }
 
   public OutputStream getOutputStream () {

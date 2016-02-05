@@ -3,7 +3,7 @@ package com.JavaWebServer.app;
 import java.util.Map;
 import java.util.HashMap;
 
-public class RequestParser implements Parser {
+public class RequestParser {
   private String  METHODKEY = "method";
   private String   ROUTEKEY = "route";
 

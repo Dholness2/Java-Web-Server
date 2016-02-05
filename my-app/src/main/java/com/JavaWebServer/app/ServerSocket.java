@@ -14,14 +14,13 @@ public class ServerSocket implements InterfaceServerSocket {
   }
 
   public ServerSocket (java.net.ServerSocket socket) {
-     
     this.serverSocket = socket;
 
   }
 
- public ClientSocket accept() {
+ public Socket accept() {
     try {
-      return new ClientSocket(serverSocket.accept());
+      return new Socket(serverSocket.accept());
     } catch(IOException e) {
       throw new RuntimeException("can not accept Client Connnection"+ e);
     }

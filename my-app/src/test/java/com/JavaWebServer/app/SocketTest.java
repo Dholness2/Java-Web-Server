@@ -5,8 +5,6 @@ import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
 
-import java.net.Socket;
-
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
@@ -14,16 +12,16 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 
-public class ClientSocketTest {
+public class SocketTest {
 
   private final String BREAK_LINE = "\\r?\\n";
   private MockSocket mockSocket;
-  private ClientSocket wrapper;
+  private Socket wrapper;
 
   @Before
   public void buildSockets() {
     mockSocket = new MockSocket();
-    wrapper = new ClientSocket(mockSocket);
+    wrapper = new Socket(mockSocket);
   }
 
   @Test

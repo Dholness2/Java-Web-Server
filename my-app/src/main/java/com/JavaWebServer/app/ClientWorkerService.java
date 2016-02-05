@@ -1,10 +1,10 @@
 package com.JavaWebServer.app;
 
 public class ClientWorkerService implements Runnable {
-  private IClient client = null;
+  private ClientSocket client = null;
   private String serverName = null;
 
-  public ClientWorkerService (IClient client, String serverName) {
+  public ClientWorkerService (ClientSocket client, String serverName) {
     this.client = client;
     this.serverName = serverName;
   }

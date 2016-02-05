@@ -9,7 +9,7 @@ public class RequestParserTest {
    @Test
    public void parse () {
     String [] methods = {"GET"};
-     Parser testParser =  new RequestParser(methods);
+     RequestParser testParser =  new RequestParser(methods);
      String testRequest = "GET / HTTP/1.0";
      Map parsedRequest  = testParser.parse(testRequest.split(" "));
      Assert.assertEquals(parsedRequest.get("method"), "GET");

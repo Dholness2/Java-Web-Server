@@ -17,7 +17,7 @@ public class Server implements Runnable{
 
   public void run () {
     while (isServerOn()) {
-      Socket clientSocket  = null;
+      ClientSocket clientSocket  = null;
       clientSocket = serverSocket.accept();
       System.out.println("Server: listening on port");
       this.threadPool.execute(new ClientWorkerService(clientSocket,serverName));

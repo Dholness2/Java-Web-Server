@@ -2,18 +2,18 @@ package com.JavaWebServer.app;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 
 public class  ClientSocket implements IClient {
 
-  private java.net.Socket wrapper;
+  private java.net.Socket socket;
 
   public ClientSocket (java.net.Socket socket) {
-    this.wrapper = socket;
+    this.socket = socket;
   }
-
 
   public Request getRequest() {
     try{
@@ -25,46 +25,46 @@ public class  ClientSocket implements IClient {
     }
   }
 
- public Response sendResponse(Response r) {
-    return new Response();
-
- }
-
-  public InputStream  getInputStream() {
-    try { 
-      return wrapper.getInputStream();
-         } catch(IOException e) {
-           System.out.println("can't open InputStream"+ e);
-           return null;
-      }
-  }
-
-  public OutputStream getOutputStream() {
+  public void sendResponse(String r) {
     try {
-      return wrapper.getOutputStream();
-        } catch(IOException e) {
-          System.out.println("can't open OuputStream"+ e);
-         return null;
-        }
+      PrintWriter responder =  new PrintWriter(socket.getOutputStream(),true);
+      responder.println(r);
+    } catch (IOException e) {
+      System.out.println("Can't write to outputStream" + e);
+    }
   }
 
-  
-  private  InputStreamReader getStreamReader () throws IOException {
+  public void close () {
+    try {
+      this.socket.close();
+    } catch (IOException e) {
+      System.out.println("Can't Close Client Socket" + e);
+    }
+  } 
+
+
+  private InputStream getInputStream() {
+    try { 
+      return socket.getInputStream();
+    } catch(IOException e) {
+      System.out.println("can't open InputStream"+ e);
+      return null;
+    }
+  }
+
+  private OutputStream getOutputStream() {
+    try {
+      return socket.getOutputStream();
+    } catch(IOException e) {
+      System.out.println("can't open OuputStream"+ e);
+      return null;
+    }
+  }
+
+  private InputStreamReader getStreamReader () throws IOException {
     InputStreamReader stream = null;
-    InputStream input = this.wrapper.getInputStream();
+    InputStream input = this.socket.getInputStream();
     stream = new InputStreamReader(input);
     return stream;
   }
-
- public boolean isClosed() {
-    return wrapper.isClosed();
-  }
-
-  public void close() {
-    try {
-       wrapper.close();
-        } catch(IOException e) {
-          System.out.println("can't close socket"+ e);
-      }
-  }
- }
+}

@@ -27,13 +27,9 @@ public class  ClientSocket implements IClient {
     }
   }
 
-  public void sendResponse(String r) {
-    try {
-      PrintWriter responder =  new PrintWriter(socket.getOutputStream(),true);
-      responder.println(r);
-    } catch (IOException e) {
-      System.out.println("Can't write to outputStream" + e);
-    }
+  public void sendResponse(String response) {
+    PrintWriter responder =  new PrintWriter(getOutputStream(),true);
+    responder.println(response);
   }
 
   public void close () {
@@ -43,7 +39,6 @@ public class  ClientSocket implements IClient {
       System.out.println("Can't Close Client Socket" + e);
     }
   } 
-
 
   private InputStream getInputStream() {
     try { 
@@ -64,9 +59,8 @@ public class  ClientSocket implements IClient {
   }
 
   private InputStreamReader getStreamReader () throws IOException {
-    InputStreamReader stream = null;
     InputStream input = this.socket.getInputStream();
-    stream = new InputStreamReader(input);
+    InputStreamReader stream = new InputStreamReader(input);
     return stream;
   }
 }

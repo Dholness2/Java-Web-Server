@@ -14,50 +14,52 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 
+public class ClientSocketTest {
 
-public class ClientSocketTest { 
   private final String BREAK_LINE = "\\r?\\n";
+  private MockSocket mockSocket;
+  private ClientSocket wrapper;
+
+  @Before
+  public void buildSockets() {
+    mockSocket = new MockSocket();
+    wrapper = new ClientSocket(mockSocket);
+  }
 
   @Test
-    public void testGetRequest() {
-      String route = "/foo";
-      String requestMessage = "GET /foo http 1.1";
-      Socket mockSocket = new MockSocket(requestMessage);
-      ClientSocket wrapper = new ClientSocket(mockSocket);
-      Request request =  wrapper.getRequest();
-      assertEquals(request.getRoute(), route);
-    }
+  public void testGetRequest() {
+    String route = "/foo";
+    String requestMessage = "GET /foo http 1.1";
+    mockSocket.setRequest(requestMessage);
+    Request request = wrapper.getRequest();
+    assertEquals(request.getRoute(), route);
+  }
 
   @Test 
-    public void testsendResponse() {
-      MockSocket mockSocket = new MockSocket();
-      ClientSocket wrapper  = new ClientSocket(mockSocket);
-      String response = "HTTP/1.1 200 ok";
-      wrapper.sendResponse(response);
-      String output = mockSocket.getOutputStream().toString().split(BREAK_LINE)[0];
-      System.out.println(output);
-      assertEquals(response, output);
-    }
+  public void testsendResponse() {
+    String response = "HTTP/1.1 200 ok";
+    wrapper.sendResponse(response);
+    String output = mockSocket.getOutputStream().toString().split(BREAK_LINE)[0];
+    assertEquals(response, output);
+  }
 
-   @Test
-   public void testClose() {
-     MockSocket mockSocket = new MockSocket();
-     ClientSocket wrapper  = new ClientSocket(mockSocket);
-     wrapper.close();
-     assertTrue(mockSocket.closedStatus());
-   }
+  @Test
+  public void testClose() {
+    wrapper.close();
+    assertTrue(mockSocket.closedStatus());
+  }
 
   private class MockSocket extends java.net.Socket{
     private ByteArrayInputStream input;
     private ByteArrayOutputStream output;
-    private Boolean closed = false;
-
-    public MockSocket(String request) {
-      this.input = new ByteArrayInputStream(request.getBytes());
-    }
+    private boolean closed = false;
 
     public MockSocket() {
       this.output = new ByteArrayOutputStream();
+    }
+
+    public void setRequest(String request) {
+      this.input = new ByteArrayInputStream(request.getBytes());
     }
 
     public InputStream getInputStream() {
@@ -72,8 +74,8 @@ public class ClientSocketTest {
       this.closed = true;
     }
 
-    public Boolean closedStatus() {
+    public boolean closedStatus() {
       return this.closed;
     }
-}
+  }
 }

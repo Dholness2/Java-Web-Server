@@ -15,28 +15,27 @@ public class ClientWorkerServiceTest {
 
   private ClientWorkerService testWorker;
   private ClientSocket wrapper;
-  private java.net.Socket clientTestSocket;
-
-
-  @Test
-    public void respondsToClientsRequest() throws Exception {
-      clientTestSocket = new ClientSocketMock("localHost", 9999, "GET / http/1.1");
-      wrapper = new ClientSocket(clientTestSocket);
-      testWorker = new ClientWorkerService(wrapper, "local host");
-      testWorker.run();
-      String response = testWorker.getOutputStream().toString().split(BREAK_LINE)[0];
-      assertEquals("HTTP/1.1 200 ok",response);
-    }
+  private java.net.Socket mockSocket;
 
   @Test
-    public void respondsWith404() throws Exception {
-      clientTestSocket = new ClientSocketMock("localHost",9999, "GET /foo http/1.1");
-      wrapper = new ClientSocket(clientTestSocket);
-      testWorker = new ClientWorkerService(wrapper, "local host");
-      testWorker.run();
-      String response = testWorker.getOutputStream().toString().split(BREAK_LINE)[0];
-      assertEquals("HTTP/1.1 404 not found",response);
-    }
+  public void respondsToClientsRequest() throws Exception {
+    mockSocket = new ClientSocketMock("localHost", 9999, "GET / http/1.1");
+    wrapper = new ClientSocket(mockSocket);
+    testWorker = new ClientWorkerService(wrapper, "local host");
+    testWorker.run();
+    String response = mockSocket.getOutputStream().toString().split(BREAK_LINE)[0];
+    assertEquals("HTTP/1.1 200 ok",response);
+  }
+
+  @Test
+  public void respondsWith404() throws Exception {
+    mockSocket = new ClientSocketMock("localHost",9999, "GET /foo http/1.1");
+    wrapper = new ClientSocket(mockSocket);
+    testWorker = new ClientWorkerService(wrapper, "local host");
+    testWorker.run();
+    String response = mockSocket.getOutputStream().toString().split(BREAK_LINE)[0];
+    assertEquals("HTTP/1.1 404 not found",response);
+  }
 
   private class ClientSocketMock extends java.net.Socket {
     private String inputMessage = "GET / http/1.1";

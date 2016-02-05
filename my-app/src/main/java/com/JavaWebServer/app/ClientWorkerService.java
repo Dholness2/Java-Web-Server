@@ -16,6 +16,7 @@ public class ClientWorkerService implements Runnable {
       client.sendResponse("Hello world");
     } else {
       client.sendResponse("HTTP/1.1 404 not found"+"\n");
+      client.sendResponse("404");
     }
     client.close();
     System.out.println ("Server: request Closed");

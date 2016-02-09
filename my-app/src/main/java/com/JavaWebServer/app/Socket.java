@@ -18,7 +18,9 @@ public class Socket implements ClientSocket {
   public Request getRequest() {
     try{
       BufferedReader request = new BufferedReader(getStreamReader()); 
-      return new Request(request.readLine());  
+      Request currentRequest = new Request();
+      currentRequest.setMessage(request.readLine());
+      return currentRequest;
     } catch (IOException e) {
       System.out.println("cant read request"+ e);
       return null;

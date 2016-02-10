@@ -1,21 +1,23 @@
 package com.JavaWebServer.app;
-import java.util.*;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 public class OptionsParser {
 
-  public static HashMap parse (String [] args, String [] keys) {
-    HashMap results = new HashMap();
+  public static Map<String,String> parse (String [] args, String [] keys) {
+    Map<String,String> results = new LinkedHashMap();
 
     int argsSize = args.length;
     int keysSize = keys.length;
 
     for(int x = 0; x < keysSize; x++) {
       for(int y = 0; y < argsSize; y++) {
-        if (keys[x] == args[y] && !(results.containsKey(keys[x]))) {
-           results.put(keys[x],args[(y + 1)]);
+        if (keys[x].equals(args[y])) {
+          results.put(keys[x],args[(y + 1)]);
         }
       }
     }
+
     return results;
   }
 }

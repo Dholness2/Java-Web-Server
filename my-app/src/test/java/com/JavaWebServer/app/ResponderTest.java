@@ -16,15 +16,18 @@ public class ResponderTest {
   private Responder testResponder;
 
   @Before
-  public void buildTestSetup()  {
-     ArrayList<String> routeMethods = new ArrayList<String>(); 
-     routeMethods.add("GET");
-     routeMethods.add("Post");
-     routes = new HashMap<String, ArrayList<String>>();
-     routes.put("/",routeMethods);
-     testRequest = new Request();
-     testResponder =  new Responder(routes);
-  }
+    public void buildTestSetup()  {
+      RestMethod putMethod = new Put();
+      RestMethod getMethod = new GetMethod();
+      getMethod.setNextMethod(putMethod);
+      ArrayList<String> routeMethods = new ArrayList<String>(); 
+      routeMethods.add("GET");
+      routeMethods.add("Post");
+      routes = new HashMap<String, ArrayList<String>>();
+      routes.put("/",routeMethods);
+      testRequest = new Request();
+      testResponder =  new Responder(routes, getMethod);
+    }
 
   @Test
   public void getResponseTest() {

@@ -16,14 +16,16 @@ public class ServerTest  {
   Server testServer;
   ServerSocket testSocket;
 
-  @Before 
+  @Before
   public void setupServer () throws Exception {
+    RestMethod putMethod = new Put();
+    RestMethod getMethod = new GetMethod();
+    getMethod.setNextMethod(putMethod);
     ArrayList<String> routeMethods = new ArrayList<String>(); 
     routeMethods.add("GET");
     routeMethods.add("Post");
-    HashMap<String,ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();
-    routes.put("/",routeMethods);
-    Responder  testResponder =  new Responder(routes);
+    HashMap<String,ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();routes.put("/",routeMethods);
+    Responder testResponder =  new Responder(routes, getMethod);
     int  port = 9094;
     testSocket =  new ServerSocket(port);
     testServer = new Server(port,testSocket,testResponder);

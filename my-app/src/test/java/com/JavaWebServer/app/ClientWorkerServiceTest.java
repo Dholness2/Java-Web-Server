@@ -22,14 +22,17 @@ public class ClientWorkerServiceTest {
   private HashMap<String, ArrayList<String>> routes;
   private Responder testResponder;
 
-  @Before  
+  @Before
    public  void responderSertup() { 
+     RestMethod putMethod = new Put();
+     RestMethod getMethod = new GetMethod();
+     getMethod.setNextMethod(putMethod);
      ArrayList<String> routeMethods = new ArrayList<String>(); 
      routeMethods.add("GET");
      routeMethods.add("Post");
      routes = new HashMap<String, ArrayList<String>>();
      routes.put("/",routeMethods);
-     testResponder =  new Responder(routes);
+     testResponder =  new Responder(routes, getMethod);
    }
 
   @Test

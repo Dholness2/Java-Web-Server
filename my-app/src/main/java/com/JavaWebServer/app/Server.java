@@ -7,12 +7,14 @@ public class Server implements Runnable{
   private String serverName = "localhost";
   private int port;
   private boolean serverOn = true;
-  private ServerSocket serverSocket = null;
+  private ServerSocket serverSocket;
+  private Responder responder;
   protected ExecutorService threadPool = Executors.newFixedThreadPool(10);
 
-  public Server (int port, ServerSocket socket) {
+  public Server (int port, ServerSocket socket, Responder responder) {
     this.port = port;
     this.serverSocket = socket;
+    this.responder = responder;
   }
 
   public void run () {
@@ -20,7 +22,7 @@ public class Server implements Runnable{
       ClientSocket clientSocket  = null;
       clientSocket = serverSocket.accept();
       System.out.println("Server: listening on port");
-      this.threadPool.execute(new ClientWorkerService(clientSocket,serverName));
+      this.threadPool.execute(new ClientWorkerService(clientSocket,responder));
     }
     closeThreadPool();
     System.out.println("Server off");

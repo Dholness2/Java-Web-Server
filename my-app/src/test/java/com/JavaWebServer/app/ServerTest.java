@@ -1,7 +1,9 @@
 package com.JavaWebServer.app;
 
-import static org.junit.Assert.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
+import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
@@ -16,9 +18,15 @@ public class ServerTest  {
 
   @Before 
   public void setupServer () throws Exception {
+    ArrayList<String> routeMethods = new ArrayList<String>(); 
+    routeMethods.add("GET");
+    routeMethods.add("Post");
+    HashMap<String,ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();
+    routes.put("/",routeMethods);
+    Responder  testResponder =  new Responder(routes);
     int  port = 9094;
     testSocket =  new ServerSocket(port);
-    testServer = new Server(port,testSocket);
+    testServer = new Server(port,testSocket,testResponder);
   }
 
   @After
@@ -53,7 +61,7 @@ public class ServerTest  {
     PrintWriter outPut = new PrintWriter( clientTestSocket.getOutputStream(), true);
     outPut.println("GET / HTTP/1.1");
     String message = readServerResponse(clientTestSocket); 
-    assertEquals("HTTP/1.1 200 okHello world", message);
+    assertEquals("HTTP/1.1 200 ok", message);
     System.out.println("Client: Message Recieved " + message);
   }
 

@@ -1,5 +1,8 @@
 package com.JavaWebServer.app;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.junit.Test;
 import org.junit.Before;
 import static org.junit.Assert.assertEquals;
@@ -16,12 +19,24 @@ public class ClientWorkerServiceTest {
   private ClientWorkerService testWorker;
   private Socket wrapper;
   private java.net.Socket mockSocket;
+  private HashMap<String, ArrayList<String>> routes;
+  private Responder testResponder;
+
+  @Before  
+   public  void responderSertup() { 
+     ArrayList<String> routeMethods = new ArrayList<String>(); 
+     routeMethods.add("GET");
+     routeMethods.add("Post");
+     routes = new HashMap<String, ArrayList<String>>();
+     routes.put("/",routeMethods);
+     testResponder =  new Responder(routes);
+   }
 
   @Test
   public void respondsToClientsRequest() throws Exception {
     mockSocket = new ClientSocketMock("localHost", 9999, "GET / http/1.1");
     wrapper = new Socket(mockSocket);
-    testWorker = new ClientWorkerService(wrapper, "local host");
+    testWorker = new ClientWorkerService(wrapper, testResponder);
     testWorker.run();
     String response = mockSocket.getOutputStream().toString().split(BREAK_LINE)[0];
     assertEquals("HTTP/1.1 200 ok",response);
@@ -31,7 +46,7 @@ public class ClientWorkerServiceTest {
   public void respondsWith404() throws Exception {
     mockSocket = new ClientSocketMock("localHost",9999, "GET /foo http/1.1");
     wrapper = new Socket(mockSocket);
-    testWorker = new ClientWorkerService(wrapper, "local host");
+    testWorker = new ClientWorkerService(wrapper, testResponder);
     testWorker.run();
     String response = mockSocket.getOutputStream().toString().split(BREAK_LINE)[0];
     assertEquals("HTTP/1.1 404 not found",response);

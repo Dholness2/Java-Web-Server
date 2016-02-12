@@ -1,4 +1,5 @@
 package com.JavaWebServer.app;
+import java.util.Arrays;
 
 public class Request {
   private String request;
@@ -8,7 +9,11 @@ public class Request {
   }
 
   public String getRoute() {
-     return this.request.split(" ")[1];
+    return this.request.split(" ")[1];
+  }
+
+  public String getRequest(){
+    return this.request.replace("HTTP/1.1","").trim();
   }
 
   public void setMessage(String message) {

@@ -15,24 +15,22 @@ public class RequestTest {
 
   @Test
   public void getRoute() {
-    String message = "GET / http 1.1";
+    String message = "GET / HTTP/1.1";
     String route = "/";
     request.setMessage(message);
     assertEquals(request.getRoute(),route);
   }
 
-
   @Test
   public void TestSetMessage() {
-
-
+    String message = "GET / HTTP/1.1";
+    request.setMessage(message);
+    assertEquals(request.getRequest(),"GET /");
   }
 
   @Test
   public void getMethod() {
-    String message = "POST / http 1.1";
+    String message = "POST / HTTP/1.1";
     String method ="POST";
-
-
   }
 }

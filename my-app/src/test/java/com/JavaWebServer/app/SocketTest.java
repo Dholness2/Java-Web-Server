@@ -27,7 +27,7 @@ public class SocketTest {
   @Test
   public void testGetRequest() {
     String route = "/foo";
-    String requestMessage = "GET /foo http 1.1";
+    String requestMessage = "GET /foo HTTP/1.1";
     mockSocket.setRequest(requestMessage);
     Request request = wrapper.getRequest();
     assertEquals(request.getRoute(), route);

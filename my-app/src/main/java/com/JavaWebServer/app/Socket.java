@@ -6,6 +6,8 @@ import java.io.PrintWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
+import java.util.zip.GZIPInputStream;
+
 
 public class Socket implements ClientSocket {
 
@@ -19,7 +21,7 @@ public class Socket implements ClientSocket {
     try{
       BufferedReader request = new BufferedReader(getStreamReader()); 
       Request currentRequest = new Request();
-      currentRequest.setMessage(request.readLine());
+      currentRequest.setMessage(getMessage(request));
       return currentRequest;
     } catch (IOException e) {
       System.out.println("cant read request"+ e);
@@ -62,5 +64,18 @@ public class Socket implements ClientSocket {
     InputStream input = this.socket.getInputStream();
     InputStreamReader stream = new InputStreamReader(input);
     return stream;
+  }
+
+  private String getMessage(BufferedReader request) throws IOException {
+    StringBuffer builder = new StringBuffer();
+    String message = request.readLine();
+  //  String currentLine = "";
+//    while ((request.ready()) && (currentLine = request.readLine()) != null) {
+  //    if(currentLine.trim().isEmpty()){ 
+    //    System.out.println("empty line !!!");
+     // } else {
+       // builder.append(currentLine +"\n\r");
+     // }}
+    return message;
   }
 }

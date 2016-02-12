@@ -33,10 +33,8 @@ public class Responder {
 
   private String getMessage(Request request){
     String message = request.getRequest(); 
-    System.out.println(message);
-    RestMethod temp = methods.get(message);
-    System.out.println(message);
-    return temp.handleRequest(request);
+    RestMethod currentMethod = methods.get(message);
+    return currentMethod.handleRequest(request);
   }
 
   private boolean checkRoute(Request request) {

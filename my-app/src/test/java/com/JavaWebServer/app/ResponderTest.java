@@ -17,34 +17,32 @@ public class ResponderTest {
 
   @Before
     public void buildTestSetup()  {
-      RestMethod putMethod = new Put();
-      RestMethod getMethod = new GetMethod();
-      getMethod.setNextMethod(putMethod);
+      HashMap<String, RestMethod> methods = new HashMap<String,RestMethod>();
+      methods.put("GET /", new Get("HTTP/1.1 200 ok"));
       ArrayList<String> routeMethods = new ArrayList<String>(); 
       routeMethods.add("GET");
-      routeMethods.add("Post");
       routes = new HashMap<String, ArrayList<String>>();
       routes.put("/",routeMethods);
       testRequest = new Request();
-      testResponder =  new Responder(routes, getMethod);
+      testResponder =  new Responder(routes, methods);
     }
 
   @Test
   public void getResponseTest() {
-    testRequest.setMessage("GET / htpp 1.1.");
+    testRequest.setMessage("GET / HTTP/1.1");
     String response =  testResponder.getResponse(testRequest);
     assertEquals("HTTP/1.1 200 ok", response);
   }
 
   @Test
   public void getResponseTestNoMethod() {
-    testRequest.setMessage("PUT / htpp 1.1.");
+    testRequest.setMessage("PUT / HTTP/1.1");
     String response =  testResponder.getResponse(testRequest);
     assertEquals("HTTP/1.1 405 Method Not Allowed/nput post", response);
   }
   @Test
   public void getResponseTestNoRoute() {
-    testRequest.setMessage("PUT /foo htpp 1.1.");
+    testRequest.setMessage("PUT /foo HTTP/1.1");
     String response =  testResponder.getResponse(testRequest);
     assertEquals("HTTP/1.1 404 not found", response);
   }

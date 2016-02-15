@@ -8,6 +8,9 @@ public class Options implements RestMethod {
   }
 
   public String handleRequest(Request request) {
-    return (this.responseStatus + System.lineSeparator() + "Allow: GET,HEAD,POST,OPTIONS,PUT");
+    StringBuilder response = new StringBuilder();
+    response.append(this.responseStatus + System.lineSeparator());
+    response.append("Allow: GET,HEAD,POST,OPTIONS,PUT");
+    return response.toString();
   }
 }

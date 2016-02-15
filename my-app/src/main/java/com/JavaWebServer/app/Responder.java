@@ -1,17 +1,18 @@
 package com.JavaWebServer.app;
 
 import java.util.ArrayList;
+import java.util.Map; 
 import java.util.HashMap;
 
 public class Responder {
-  private HashMap<String, ArrayList<String>> routes;
+  private Map <String, ArrayList<String>> routeDirectory;
   private final String NOT_ALLOWED = "HTTP/1.1 405 Method Not Allowed";
   private final String NOT_FOUND = "HTTP/1.1 404 not found"; 
-  private HashMap <String, RestMethod> methods;
+  private Map <String, RestMethod> routes;
 
-  public Responder(HashMap currentRoutes, HashMap methods) {
-    this.routes = currentRoutes;
-    this.methods = methods;
+  public Responder(Map routeDirectory, Map routes) {
+    this.routeDirectory = routeDirectory;
+    this.routes = routes;
   }
 
   public String getResponse(Request request) {
@@ -33,17 +34,16 @@ public class Responder {
 
   private String getMessage(Request request){
     String message = request.getRequest(); 
-    RestMethod currentMethod = methods.get(message);
-    return currentMethod.handleRequest(request);
+    RestMethod currentRoute = routes.get(message);
+    return currentRoute.handleRequest(request);
   }
 
   private boolean checkRoute(Request request) {
-    return routes.containsKey(request.getRoute());
+    return routeDirectory.containsKey(request.getRoute());
   }
 
   private boolean checkMethod(Request request) {
-    boolean results = routes.get(request.getRoute()).contains(request.getMethod());
-    System.out.println(request.getMethod() + results);
+    boolean results = routeDirectory.get(request.getRoute()).contains(request.getMethod());
     return (true  == results);
   }
 }

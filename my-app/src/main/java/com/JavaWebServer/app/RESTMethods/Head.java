@@ -1,12 +1,13 @@
 package com.JavaWebServer.app;
 
 public class Head  implements RestMethod {
-  private final String METHODKEY= "HEAD";
-  private final String ACCEPTED ="HTTP/1.1 200 ok";
+  private String responseStatus;
 
-  public Head() {}
+  public Head(String response ) {
+    this.responseStatus = response;
+  }
 
   public String handleRequest(Request request) {
-      return ACCEPTED;
+      return this.responseStatus;
   }
 }

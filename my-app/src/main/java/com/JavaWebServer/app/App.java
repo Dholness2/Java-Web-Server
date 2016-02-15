@@ -21,22 +21,22 @@ public class App {
     return routes;
   }
 
-  public static HashMap getRoutes () {
+  public static HashMap getRoutes (StatusCodes status) {
     HashMap<String, RestMethod> routes = new HashMap<String,RestMethod>();
-    routes.put("GET /file1",new Get("HTTP/1.1 200 ok"));
-    routes.put("POST /file1",new Post());
-    routes.put("GET /", new Get("HTTP/1.1 200 ok"));
-    routes.put("PUT /", new Put());
-    routes.put("GET /text-file.txt", new Get("HTTP/1.1 200 ok"));
-    routes.put("Put /text-file.txt", new Put());
-    routes.put("POST /form", new Post());
-    routes.put("PUT /form", new Put());
-    routes.put("OPTIONS /method_options", new Options());
-    routes.put("GET /method_options", new Get("HTTP/1.1 200 ok"));
-    routes.put("POST /method_options", new Post());
-    routes.put("HEAD /method_options", new Head());
-    routes.put("PUT /method_options", new Put());
-    routes.put("GET /redirect",new Get(("HTTP/1.1 302 FOUND"+"\n\r"+ "Location: http://localhost:5000/")));
+    routes.put("GET /file1",new Get(status.OK));
+    routes.put("POST /file1",new Post(status.OK));
+    routes.put("GET /", new Get(status.OK));
+    routes.put("PUT /", new Put(status.OK));
+    routes.put("GET /text-file.txt", new Get(status.OK));
+    routes.put("Put /text-file.txt", new Put(status.OK));
+    routes.put("POST /form", new Post(status.OK));
+    routes.put("PUT /form", new Put(status.OK));
+    routes.put("OPTIONS /method_options", new Options(status.OK));
+    routes.put("GET /method_options", new Get(status.OK));
+    routes.put("POST /method_options", new Post(status.OK));
+    routes.put("HEAD /method_options", new Head(status.OK));
+    routes.put("PUT /method_options", new Put(status.OK));
+    routes.put("GET /redirect",new Get((status.FOUND+"\n\r"+ "Location: http://localhost:5000/")));
     return routes;
   }
 
@@ -45,7 +45,8 @@ public class App {
   }
 
   public static void main( String[] args) throws Exception {
-    HashMap <String, RestMethod> routes = getRoutes();
+    StatusCodes httpStatuses = new StatusCodes ();
+    HashMap <String, RestMethod> routes = getRoutes(httpStatuses);
     port = Integer.parseInt(OptionsParser.parse(args,KEYS).get(KEYS[PORT_INDEX]));
 
     Responder responder = new Responder(buildRoutes(), routes);

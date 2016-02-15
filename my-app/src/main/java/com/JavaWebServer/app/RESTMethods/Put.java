@@ -1,12 +1,13 @@
 package com.JavaWebServer.app;
 
 public class Put  implements RestMethod {
-  private final String METHODKEY= "PUT";
-  private final String ACCEPTED ="HTTP/1.1 200 ok";
+  private String responseStatus;
 
-  public Put() {}
+  public Put(String response) {
+    this.responseStatus = response;
+  }
 
   public String handleRequest(Request request) {
-     return ACCEPTED;
+     return this.responseStatus;
   }
 }

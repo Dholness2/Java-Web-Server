@@ -9,7 +9,7 @@ public class PostTest {
   public void handleRequestTest() {
     Request testrequest = new Request();
     testrequest.setMessage("POST / HTTP/1.1");
-    RestMethod testPost = new Post();
-    assertEquals("HTTP/1.1 200 ok", testPost.handleRequest(testrequest));
+    RestMethod testPost = new Post("HTTP/1.1 200 OK");
+    assertEquals("HTTP/1.1 200 OK", testPost.handleRequest(testrequest));
   }
 }

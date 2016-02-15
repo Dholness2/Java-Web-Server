@@ -1,12 +1,13 @@
 package com.JavaWebServer.app;
 
 public class Options implements RestMethod {
-  private final String METHODKEY = "OPTIONS";
-  private final String ACCEPTED ="HTTP/1.1 200 ok";
+  private String responseStatus;
 
-  public Options() { }
+  public Options(String response) {
+    this.responseStatus = response;
+  }
 
   public String handleRequest(Request request) {
-    return (ACCEPTED + System.lineSeparator() + "Allow: GET,HEAD,POST,OPTIONS,PUT");
+    return (this.responseStatus + System.lineSeparator() + "Allow: GET,HEAD,POST,OPTIONS,PUT");
   }
 }

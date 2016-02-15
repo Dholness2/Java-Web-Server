@@ -10,7 +10,7 @@ public class App {
   private static final String [] KEYS = {"-p","-d"};
   private static int port;
 
-  public static HashMap buildRoutes(){
+  public static HashMap routeDirectory(){
     HashMap<String, ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();
     routes.put("/file1",routeMethods(new String [] {"GET", "POST"}));
     routes.put("/",routeMethods(new String [] {"GET","PUT"}));
@@ -49,7 +49,7 @@ public class App {
     HashMap <String, RestMethod> routes = getRoutes(httpStatuses);
     port = Integer.parseInt(OptionsParser.parse(args,KEYS).get(KEYS[PORT_INDEX]));
 
-    Responder responder = new Responder(buildRoutes(), routes);
+    Responder responder = new Responder(routeDirectory(), routes);
     ServerSocket serverSocket = new ServerSocket(port);
     Server app = new Server(port,serverSocket,responder);
     new Thread(app).start();

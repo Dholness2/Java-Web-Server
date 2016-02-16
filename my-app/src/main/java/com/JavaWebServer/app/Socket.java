@@ -40,10 +40,10 @@ public class Socket implements ClientSocket {
     } catch (IOException e) {
       System.out.println("Can't Close Client Socket" + e);
     }
-  } 
+  }
 
   private InputStream getInputStream() {
-    try { 
+    try {
       return socket.getInputStream();
     } catch(IOException e) {
       System.out.println("can't open InputStream"+ e);
@@ -67,15 +67,8 @@ public class Socket implements ClientSocket {
   }
 
   private String getMessage(BufferedReader request) throws IOException {
-    StringBuffer builder = new StringBuffer();
+    StringBuilder builder = new StringBuilder();
     String message = request.readLine();
-  //  String currentLine = "";
-//    while ((request.ready()) && (currentLine = request.readLine()) != null) {
-  //    if(currentLine.trim().isEmpty()){ 
-    //    System.out.println("empty line !!!");
-     // } else {
-       // builder.append(currentLine +"\n\r");
-     // }}
     return message;
   }
 }

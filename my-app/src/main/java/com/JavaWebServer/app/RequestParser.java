@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class RequestParser {
   private String  METHODKEY = "method";
-  private String   ROUTEKEY = "route";
+  private String  ROUTEKEY = "route";
 
   private int METHODINDEX = 0;
   private int ROUTEINDEX = 0;

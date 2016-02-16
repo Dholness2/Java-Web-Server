@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class ClientWorkerService implements Runnable {
   private ClientSocket client;
   private Responder responder;
+
   public ClientWorkerService (ClientSocket client, Responder responder) {
     this.client = client;
     this.responder = responder;

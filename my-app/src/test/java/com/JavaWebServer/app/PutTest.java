@@ -7,9 +7,10 @@ public class PutTest {
 
   @Test
   public void handleRequestTest() {
+    StatusCodes codes = new StatusCodes();
     Request testrequest = new Request();
     testrequest.setMessage("PUT / HTTP/1.1");
-    RestMethod testPut = new Put("HTTP/1.1 200 OK");
-    assertEquals("HTTP/1.1 200 OK", testPut.handleRequest(testrequest));
+    RestMethod testPut = new Put(codes.OK);
+    assertEquals(codes.OK , testPut.handleRequest(testrequest));
   }
 }

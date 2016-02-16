@@ -6,12 +6,13 @@ import static org.junit.Assert.assertEquals;
 
 public class GetTest {
 
-  @Test 
+  @Test
   public void handleRequestTest() {
-    Request testrequest = new Request();
-    testrequest.setMessage("GET / HTTP/1.1");
-    Get testGet = new Get("HTTP/1.1 200 ok");
-    String response = testGet.handleRequest(testrequest);
-    assertEquals("HTTP/1.1 200 ok", response);
+    StatusCodes codes = new StatusCodes();
+    Request testRequest = new Request();
+    testRequest.setMessage("GET / HTTP/1.1");
+    Get testGet = new Get(codes.OK);
+    String response = testGet.handleRequest(testRequest);
+    assertEquals(codes.OK, response);
   }
 }

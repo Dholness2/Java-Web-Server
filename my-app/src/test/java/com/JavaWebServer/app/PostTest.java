@@ -7,9 +7,10 @@ public class PostTest {
 
   @Test
   public void handleRequestTest() {
+    StatusCodes codes = new StatusCodes();
     Request testrequest = new Request();
     testrequest.setMessage("POST / HTTP/1.1");
-    RestMethod testPost = new Post("HTTP/1.1 200 OK");
-    assertEquals("HTTP/1.1 200 OK", testPost.handleRequest(testrequest));
+    RestMethod testPost = new Post(codes.OK);
+    assertEquals(codes.OK, testPost.handleRequest(testrequest));
   }
 }

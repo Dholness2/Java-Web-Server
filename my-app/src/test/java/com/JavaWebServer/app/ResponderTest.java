@@ -14,11 +14,12 @@ public class ResponderTest {
   private HashMap <String, ArrayList<String>> routes;
   private Request testRequest;
   private Responder testResponder;
+  private StatusCodes codes = new StatusCodes();
 
   @Before
     public void buildTestSetup()  {
       HashMap<String, RestMethod> methods = new HashMap<String,RestMethod>();
-      methods.put("GET /", new Get("HTTP/1.1 200 ok"));
+      methods.put("GET /", new Get(codes.OK));
       ArrayList<String> routeMethods = new ArrayList<String>(); 
       routeMethods.add("GET");
       routes = new HashMap<String, ArrayList<String>>();
@@ -31,7 +32,7 @@ public class ResponderTest {
   public void getResponseTest() {
     testRequest.setMessage("GET / HTTP/1.1");
     String response =  testResponder.getResponse(testRequest);
-    assertEquals("HTTP/1.1 200 ok", response);
+    assertEquals(codes.OK, response);
   }
 
   @Test

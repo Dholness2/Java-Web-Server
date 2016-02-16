@@ -23,7 +23,7 @@ public class ClientWorkerServiceTest {
   private Responder testResponder;
 
   @Before
-   public  void responderSertup() { 
+   public  void responderSertup() {
     HashMap<String, RestMethod> methods = new HashMap<String,RestMethod>();
     methods.put("GET /", new Get("HTTP/1.1 200 ok"));
      ArrayList<String> routeMethods = new ArrayList<String>(); 
@@ -64,7 +64,7 @@ public class ClientWorkerServiceTest {
       this.serverName  = serverName;
       this.port = port;
       this.input = new ByteArrayInputStream(request.getBytes());
-    } 
+    }
     public OutputStream getOutputStream() {
       return  this.outPut;
     }

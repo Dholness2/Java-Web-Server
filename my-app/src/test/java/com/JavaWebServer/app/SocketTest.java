@@ -17,11 +17,12 @@ public class SocketTest {
   private final String BREAK_LINE = "\\r?\\n";
   private MockSocket mockSocket;
   private Socket wrapper;
-
+  private StatusCodes codes;
   @Before
   public void buildSockets() {
     mockSocket = new MockSocket();
     wrapper = new Socket(mockSocket);
+    codes = new StatusCodes();
   }
 
   @Test
@@ -33,12 +34,12 @@ public class SocketTest {
     assertEquals(request.getRoute(), route);
   }
 
-  @Test 
+  @Test
   public void testsendResponse() {
-    String response = "HTTP/1.1 200 ok";
+    byte [] response = (codes.OK).getBytes();
     wrapper.sendResponse(response);
     String output = mockSocket.getOutputStream().toString().split(BREAK_LINE)[0];
-    assertEquals(response, output);
+    assertEquals(codes.OK, output);
   }
 
   @Test

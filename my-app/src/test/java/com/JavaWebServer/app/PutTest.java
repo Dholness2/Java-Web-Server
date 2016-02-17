@@ -11,6 +11,7 @@ public class PutTest {
     Request testrequest = new Request();
     testrequest.setMessage("PUT / HTTP/1.1");
     RestMethod testPut = new Put(codes.OK);
-    assertEquals(codes.OK , testPut.handleRequest(testrequest));
+    String response = new String (testPut.handleRequest(testrequest));
+    assertEquals(codes.OK , response);
   }
 }

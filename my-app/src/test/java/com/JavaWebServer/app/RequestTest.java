@@ -15,8 +15,8 @@ public class RequestTest {
 
   @Test
   public void getRoute() {
-    String message = "GET / HTTP/1.1";
-    String route = "/";
+    String message = "GET /foo HTTP/1.1";
+    String route = "/foo";
     request.setMessage(message);
     assertEquals(request.getRoute(),route);
   }

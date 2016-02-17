@@ -12,6 +12,7 @@ public class OptionsTest {
     Request testrequest = new Request();
     testrequest.setMessage("OPTIONS / HTTP/1.1");
     RestMethod testOptions = new Options(code.OK);
-    assertEquals(code.OK+ System.lineSeparator() +"Allow: GET,HEAD,POST,OPTIONS,PUT", testOptions.handleRequest(testrequest));
+    String response = new String (testOptions.handleRequest(testrequest));
+    assertEquals(code.OK+ System.lineSeparator() +"Allow: GET,HEAD,POST,OPTIONS,PUT", response);
   }
 }

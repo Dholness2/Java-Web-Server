@@ -31,20 +31,20 @@ public class ResponderTest {
   @Test
   public void getResponseTest() {
     testRequest.setMessage("GET / HTTP/1.1");
-    String response =  testResponder.getResponse(testRequest);
-    assertEquals(codes.OK, response);
+   byte [] response =  testResponder.getResponse(testRequest);
+    assertEquals(codes.OK, new String(response));
   }
 
   @Test
   public void getResponseTestNoMethod() {
     testRequest.setMessage("PUT / HTTP/1.1");
-    String response =  testResponder.getResponse(testRequest);
-    assertEquals("HTTP/1.1 405 Method Not Allowed/nput post", response);
+   byte [] response =  testResponder.getResponse(testRequest);
+    assertEquals("HTTP/1.1 405 Method Not Allowed/nput post", new String(response));
   }
   @Test
   public void getResponseTestNoRoute() {
     testRequest.setMessage("PUT /foo HTTP/1.1");
-    String response =  testResponder.getResponse(testRequest);
-    assertEquals("HTTP/1.1 404 not found", response);
+    byte [] response =  testResponder.getResponse(testRequest);
+    assertEquals("HTTP/1.1 404 not found", new String (response));
   }
 }

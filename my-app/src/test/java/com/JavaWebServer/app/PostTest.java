@@ -11,6 +11,7 @@ public class PostTest {
     Request testrequest = new Request();
     testrequest.setMessage("POST / HTTP/1.1");
     RestMethod testPost = new Post(codes.OK);
-    assertEquals(codes.OK, testPost.handleRequest(testrequest));
+    String response = new String (testPost.handleRequest(testrequest));
+    assertEquals(codes.OK, response);
   }
 }

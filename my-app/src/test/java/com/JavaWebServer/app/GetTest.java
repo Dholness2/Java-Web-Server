@@ -12,7 +12,7 @@ public class GetTest {
     Request testRequest = new Request();
     testRequest.setMessage("GET / HTTP/1.1");
     Get testGet = new Get(codes.OK);
-    String response = testGet.handleRequest(testRequest);
-    assertEquals(codes.OK, response);
+    byte [] response = testGet.handleRequest(testRequest);
+    assertEquals(codes.OK, new String(response));
   }
 }

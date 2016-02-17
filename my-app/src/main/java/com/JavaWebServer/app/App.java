@@ -18,6 +18,7 @@ public class App {
     routes.put("/form",routeMethods(new String [] {"POST","PUT"}));
     routes.put("/method_options",routeMethods(new String [] {"GET","HEAD","POST","OPTIONS","PUT"}));
     routes.put("/redirect",routeMethods(new String [] {"GET"}));
+    routes.put("/image.jpeg",routeMethods(new String[] {"GET"}));
     return routes;
   }
 
@@ -27,6 +28,7 @@ public class App {
     routes.put("POST /file1",new Post(status.OK));
     routes.put("GET /", new Get(status.OK));
     routes.put("PUT /", new Put(status.OK));
+    routes.put("GET /image.jpeg", new Get(status.OK));
     routes.put("GET /text-file.txt", new Get(status.OK));
     routes.put("Put /text-file.txt", new Put(status.OK));
     routes.put("POST /form", new Post(status.OK));

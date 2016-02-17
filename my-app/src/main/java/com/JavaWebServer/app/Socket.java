@@ -29,9 +29,13 @@ public class Socket implements ClientSocket {
     }
   }
 
-  public void sendResponse(String response) {
-    PrintWriter responder =  new PrintWriter(getOutputStream(),true);
-    responder.println(response);
+  public void sendResponse(byte [] response) {
+    try {
+      OutputStream output = getOutputStream();
+      output.write(response);
+    } catch  (IOException e)  {
+        System.out.println("can't write to ouptustream"+ e);
+    }
   }
 
   public void close () {

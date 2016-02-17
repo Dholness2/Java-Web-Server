@@ -15,24 +15,24 @@ public class Responder {
     this.routes = routes;
   }
 
-  public String getResponse(Request request) {
+  public byte [] getResponse(Request request) {
     return getResponseHeader(request);
   }
 
-  private String getResponseHeader(Request request) {
+  private byte [] getResponseHeader(Request request) {
     System.out.println("checking....");
     if (checkRoute(request) == true) {
       if(true == checkMethod(request)) {
         return getMessage(request);
       } else {
-        return NOT_ALLOWED +"/n"+ "put post";
+        return (NOT_ALLOWED +"/n"+ "put post").getBytes();
       }
     }else{
-      return NOT_FOUND;
+      return NOT_FOUND.getBytes();
     }
   }
 
-  private String getMessage(Request request){
+  private byte [] getMessage(Request request){
     String message = request.getRequest(); 
     RestMethod currentRoute = routes.get(message);
     return currentRoute.handleRequest(request);

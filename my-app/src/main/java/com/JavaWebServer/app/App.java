@@ -9,6 +9,7 @@ public class App {
   private static final int PORT_INDEX = 0;
   private static final String [] KEYS = {"-p","-d"};
   private static int port;
+  private static String directory = "/Users/don/desktop/cob_spec/public/";
 
   public static HashMap routeDirectory(){
     HashMap<String, ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();
@@ -19,6 +20,8 @@ public class App {
     routes.put("/method_options",routeMethods(new String [] {"GET","HEAD","POST","OPTIONS","PUT"}));
     routes.put("/redirect",routeMethods(new String [] {"GET"}));
     routes.put("/image.jpeg",routeMethods(new String[] {"GET"}));
+    routes.put("/image.gif",routeMethods(new String[] {"GET"}));
+    routes.put("/image.png",routeMethods(new String[] {"GET"}));
     return routes;
   }
 
@@ -28,7 +31,9 @@ public class App {
     routes.put("POST /file1",new Post(status.OK));
     routes.put("GET /", new Get(status.OK));
     routes.put("PUT /", new Put(status.OK));
-    routes.put("GET /image.jpeg", new Get(status.OK));
+    routes.put("GET /image.jpeg", new Get(status.OK,"image.jpeg","image/jpeg", directory));
+    routes.put("GET /image.gif", new Get(status.OK,"image.gif","image/gif", directory));
+    routes.put("GET /image.png", new Get(status.OK,"image.png","image/png", directory));
     routes.put("GET /text-file.txt", new Get(status.OK));
     routes.put("Put /text-file.txt", new Put(status.OK));
     routes.put("POST /form", new Post(status.OK));
@@ -50,7 +55,6 @@ public class App {
     StatusCodes httpStatuses = new StatusCodes ();
     HashMap <String, RestMethod> routes = getRoutes(httpStatuses);
     port = Integer.parseInt(OptionsParser.parse(args,KEYS).get(KEYS[PORT_INDEX]));
-
     Responder responder = new Responder(routeDirectory(), routes);
     ServerSocket serverSocket = new ServerSocket(port);
     Server app = new Server(port,serverSocket,responder);

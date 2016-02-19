@@ -11,36 +11,50 @@ import java.io.ByteArrayOutputStream;
 
 
 public class Get implements RestMethod {
-  private String response;
+  private String status;
+  private ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+  private String fileName;
+  private String CRLF ="\r\n";
+  private String directory;
+  private String contentType;
 
-  public Get (String response) {
-    this.response = response;
+  public Get (String status, String fileName, String contentType, String directory) {
+    this.status = status;
+    this.fileName = fileName;
+    this.contentType = contentType;
+    this.directory = directory;
+
+  }
+
+  public Get (String status) {
+    this.status = status;
+
   }
 
   public byte[] handleRequest(Request request)  {
-    System.out.println(request.getRoute());
-    if (request.getRoute().equals("/image.jpeg") ) {
-    System.out.println( "image flow");
-    try {
-      String location = System.getProperty("user.dir") + "/public"+ request.getRoute();
-
-      System.out.println(location);
-      Path path = Paths.get(location);
-      byte[] image = Files.readAllBytes(path);
-      System.out.println("image" + image.length);
-      //"Content-Type: image/jpeg"+"\r\n"+"Content-Length:"+ image.length +"\r\n"+ 
-      byte []  header = (response +"\r\n").getBytes();
-      ByteArrayOutputStream outputStream = new ByteArrayOutputStream( );
-      outputStream.write( header );
-      outputStream.write(image);
-      byte c[] = outputStream.toByteArray( );
-      return c;
-   } catch( IOException e) {
-     System.out.println("cant read request"+ e);
-   }
-
+    if (this.fileName != null) {
+      try {
+        byte [] file = getfile();
+        this.outputStream.write(buildHeader(file.length));
+        this.outputStream.write(file);
+        return outputStream.toByteArray();
+      } catch( IOException e) {
+        System.out.println("cant read request"+ e);
+      }
+    }
+    return status.getBytes();
   }
-  System.out.println(this.response); 
-  return this.response.getBytes();
+
+
+  private byte [] buildHeader (int fileLength) {
+    return (status +CRLF+"Content-Type: "
+            + contentType+CRLF+"Content-Length:"
+            + fileLength +CRLF+CRLF).getBytes();
+  }
+
+  private byte [] getfile() throws IOException {
+    String location = this.directory + this.fileName;
+    Path path = Paths.get(location);
+    return Files.readAllBytes(path);
   }
 }

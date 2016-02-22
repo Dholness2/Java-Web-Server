@@ -5,6 +5,7 @@ import org.junit.Before;
 
 import static org.junit.Assert.assertEquals;
 
+
 public class RequestTest {
   private Request request;
 
@@ -32,5 +33,17 @@ public class RequestTest {
   public void getMethod() {
     String message = "POST / HTTP/1.1";
     String method ="POST";
+  }
+
+  @Test
+  public void validReuestEmpty(){
+    request.setMessage("    ");
+    assertEquals(false,request.validRequest());
+  } 
+
+  @Test
+  public void validRequestProtocol() {
+   request.setMessage("GET /home");
+   assertEquals(false, request.validRequest());
   }
 }

@@ -47,4 +47,11 @@ public class ResponderTest {
     byte [] response =  testResponder.getResponse(testRequest);
     assertEquals("HTTP/1.1 404 not found", new String (response));
   }
+
+  @Test
+  public void getResponseTestBadRequest() {
+    testRequest.setMessage("PUT /foo ");
+    byte [] response =  testResponder.getResponse(testRequest);
+    assertEquals("HTTP/1.1 400 Bad Request", new String (response));
+  }
 }

@@ -54,4 +54,19 @@ public class ResponderTest {
     byte [] response =  testResponder.getResponse(testRequest);
     assertEquals("HTTP/1.1 400 Bad Request", new String (response));
   }
+
+
+  @Test
+  public void getResponseTestBadRequestEmptyString() {
+    testRequest.setMessage("   ");
+    byte [] response =  testResponder.getResponse(testRequest);
+    assertEquals("HTTP/1.1 400 Bad Request", new String (response));
+  }
+
+  @Test
+  public void getResponseTestBadRequestBadRoute() {
+    testRequest.setMessage("PUT foo  HTTP/1.1");
+    byte [] response =  testResponder.getResponse(testRequest);
+    assertEquals("HTTP/1.1 400 Bad Request", new String (response));
+  }
 }

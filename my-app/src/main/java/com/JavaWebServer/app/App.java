@@ -9,7 +9,7 @@ public class App {
   private static final int PORT_INDEX = 0;
   private static final String [] KEYS = {"-p","-d"};
   private static int port;
-  private static String directory = "/Users/don/desktop/cob_spec/public/";
+  private static String directory = "/Users/DHolness/Desktop/cob_spec/public/";
 
   public static HashMap routeDirectory(){
     HashMap<String, ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();
@@ -22,6 +22,7 @@ public class App {
     routes.put("/image.jpeg",routeMethods(new String[] {"GET"}));
     routes.put("/image.gif",routeMethods(new String[] {"GET"}));
     routes.put("/image.png",routeMethods(new String[] {"GET"}));
+    routes.put("/file1",routeMethods(new String[] {"GET"}));
     return routes;
   }
 
@@ -44,6 +45,7 @@ public class App {
     routes.put("HEAD /method_options", new Head(status.OK));
     routes.put("PUT /method_options", new Put(status.OK));
     routes.put("GET /redirect",new Get((status.FOUND+"\n\r"+ "Location: http://localhost:5000/")));
+    routes.put("GET /file1",new Get(status.OK,"file1","text/plain", directory));
     return routes;
   }
 

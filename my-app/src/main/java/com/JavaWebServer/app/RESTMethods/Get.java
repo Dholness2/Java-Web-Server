@@ -12,12 +12,14 @@ import java.io.ByteArrayOutputStream;
 
 public class Get implements RestMethod {
   private String status;
-  private ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
   private String fileName;
   private String CRLF ="\r\n";
+  String typeHeader = "Content-Type: ";
+  String contentLength = "Content-Length:";
   private String directory;
   private String contentType;
-
+  private ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+  
   public Get (String status, String fileName, String contentType, String directory) {
     this.status = status;
     this.fileName = fileName;
@@ -47,8 +49,8 @@ public class Get implements RestMethod {
 
 
   private byte [] buildHeader (int fileLength) {
-    return (status +CRLF+"Content-Type: "
-            + contentType+CRLF+"Content-Length:"
+    return (status +CRLF+typeHeader
+            + contentType+CRLF+contentLength
             + fileLength +CRLF+CRLF).getBytes();
   }
 

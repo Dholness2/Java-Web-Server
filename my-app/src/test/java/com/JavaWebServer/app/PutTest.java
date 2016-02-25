@@ -8,10 +8,8 @@ public class PutTest {
   @Test
   public void handleRequestTest() {
     StatusCodes codes = new StatusCodes();
-    Request testrequest = new Request();
-    testrequest.setMessage("PUT / HTTP/1.1");
     RestMethod testPut = new Put(codes.OK);
-    String response = new String (testPut.handleRequest(testrequest));
+    String response = new String (testPut.handleRequest());
     assertEquals(codes.OK , response);
   }
 }

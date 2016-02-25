@@ -39,7 +39,7 @@ public class Responder {
   private byte [] getMessage(Request request){
     String message = request.getRequest(); 
     RestMethod currentRoute = routes.get(message);
-    return currentRoute.handleRequest(request);
+    return currentRoute.handleRequest();
   }
 
   private boolean checkRoute(Request request) {

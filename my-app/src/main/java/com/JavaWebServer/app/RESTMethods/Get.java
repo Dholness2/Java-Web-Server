@@ -1,5 +1,6 @@
 package com.JavaWebServer.app;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
@@ -35,28 +36,49 @@ public class Get implements RestMethod {
 
   public byte[] handleRequest(Request request)  {
     if (this.fileName != null) {
+      Path path;
       try {
-        byte [] file = getfile();
-        this.outputStream.write(buildHeader(file.length));
-        this.outputStream.write(file);
-        return outputStream.toByteArray();
-      } catch( IOException e) {
-        System.out.println("cant read request"+ e);
+      path = getPath();
+      if (Files.isDirectory(path)) {
+        return directoryResponse(path); 
+      }else if (Files.isRegularFile(path)) {
+        return fileResponse(Files.readAllBytes(path));
       }
+      }catch (IOException e) {
+        System.out.println(e);
+       }
     }
-    return status.getBytes();
+      return status.getBytes();
+   }
+  
+  private byte [] directoryResponse(Path directory)throws IOException {
+    File file = new File (directory.toString());
+    String [] fileList = file.list();
+    StringBuffer files = new StringBuffer();
+    int size = fileList.length;
+    for (int i = 0; i < size; i++) {
+      files.append(fileList[i]);
+      files.append(CRLF);
+    }
+    byte [] body = (files.toString()).getBytes();
+    return fileResponse(body);
   }
 
-
+  private byte [] fileResponse(byte [] file) throws IOException {
+    this.outputStream.write(buildHeader(file.length));
+    this.outputStream.write(file);
+    return outputStream.toByteArray();
+  }
+  
   private byte [] buildHeader (int fileLength) {
     return (status +CRLF+typeHeader
             + contentType+CRLF+contentLength
             + fileLength +CRLF+CRLF).getBytes();
   }
 
-  private byte [] getfile() throws IOException {
+  private Path getPath() throws IOException {
     String location = this.directory + this.fileName;
     Path path = Paths.get(location);
-    return Files.readAllBytes(path);
+    return path;
   }
 }

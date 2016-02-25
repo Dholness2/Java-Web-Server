@@ -9,7 +9,7 @@ public class App {
   private static final int PORT_INDEX = 0;
   private static final String [] KEYS = {"-p","-d"};
   private static int port;
-  private static String directory = "/Users/DHolness/Desktop/cob_spec/public/";
+  private static String directory = "/Users/don/desktop/cob_spec/public/";
 
   public static HashMap routeDirectory(){
     HashMap<String, ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();
@@ -30,7 +30,7 @@ public class App {
     HashMap<String, RestMethod> routes = new HashMap<String,RestMethod>();
     routes.put("GET /file1",new Get(status.OK));
     routes.put("POST /file1",new Post(status.OK));
-    routes.put("GET /", new Get(status.OK));
+    routes.put("GET /", new Get(status.OK,"public","text/plain","/Users/don/desktop/cob_spec/"));
     routes.put("PUT /", new Put(status.OK));
     routes.put("GET /image.jpeg", new Get(status.OK,"image.jpeg","image/jpeg", directory));
     routes.put("GET /image.gif", new Get(status.OK,"image.gif","image/gif", directory));

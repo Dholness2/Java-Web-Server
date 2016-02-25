@@ -7,7 +7,7 @@ public class Head  implements RestMethod {
     this.responseStatus = response;
   }
 
-  public byte [] handleRequest(Request request) {
+  public byte [] handleRequest() {
       return this.responseStatus.getBytes();
   }
 }

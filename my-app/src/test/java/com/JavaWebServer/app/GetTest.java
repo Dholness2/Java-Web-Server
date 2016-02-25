@@ -10,59 +10,70 @@ import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 public class GetTest {
   private StatusCodes codes = new StatusCodes();
-  private Request testRequest = new Request();
+  private String directory = "/Users/don/desktop/cob_spec/public/";
   private String CRLF = "\r\n";
-  private ByteArrayOutputStream outputStream;
-  private String typeHeader = "Content-Type: ";
-  private String contentLength = "Content-Length:";
 
   @Test
   public void handleRequestTest() {
-    testRequest.setMessage("GET / HTTP/1.1");
     Get testGet = new Get(codes.OK);
-    byte [] response = testGet.handleRequest(testRequest);
+    byte [] response = testGet.handleRequest();
     assertEquals(codes.OK, new String(response));
   }
 
   @Test
-  public void handleImageRequestTest() throws IOException {
-     String directory =  "/Users/don/desktop/cob_spec/public/"; 
+  public void handleRequestContentTest() throws IOException {
      String fileName = "image.jpeg";
+     String type = "image/jpeg";
      String path = directory + fileName;
-     testRequest.setMessage("GET /image.jpeg HTTP/1.1");
-     Get testGet = new Get(codes.OK,fileName,"image/jpeg", directory);
-     byte [] response = testGet.handleRequest(testRequest);
-     byte [] body = ((new String(response)).split("\r\n\r\n")[1]).getBytes();
-     System.out.println(getFile(path).equals(body));
+     Get testGet = new Get(codes.OK,fileName,type, directory);
+     byte [] testResponse = testGet.handleRequest();
+     String expectedResponse = buildHeader(path,type);
+     String response =((new String(testResponse)).split((CRLF +CRLF))[0]);
+     assertEquals(expectedResponse,response);
   }
+
 
   @Test 
-    public void handleRequestDirectoryTest() {
-      String directory = "/Users/don/desktop/Java_Web_Server/my-app/"; 
-      testRequest.setMessage ("Get / HTTP/1.1");
-      Get testGet = new Get(codes.OK,"public","text/plain",directory);
-      byte [] reponse = testGet.handleRequest(testRequest);
-      // assertEquasl (getfile;
-    }
+  public void handleRequestDirectoryTest() throws IOException{
+    Get testGet = new Get(codes.OK,"public","text/plain",rootPath(directory)); 
+    byte [] testResponse = testGet.handleRequest();
+    String responseDirectory = (new String(testResponse).split((CRLF +CRLF))[1]);
+    String expectedDirectory = getDirectoryListing(directory);
+    assertEquals(expectedDirectory,responseDirectory);
+  }
 
   private byte [] getFile(String path) throws IOException {
-   Path location = Paths.get(path);
-   return Files.readAllBytes(location);
+    Path location = Paths.get(path);
+    return Files.readAllBytes(location);
   }
 
-  private byte [] fileResponse(byte [] file, String type) throws IOException {
-    outputStream = new ByteArrayOutputStream();
-    outputStream.write(buildHeader(file.length));
-    outputStream.write(file);
-    return outputStream.toByteArray();
+
+  private static String rootPath(String path) {
+    int indexOfLastFolder = path.lastIndexOf("/",((path.length())-2));
+    return ((path.substring(0 ,indexOfLastFolder)) + "/");
   }
 
-  private byte [] buildHeader (int fileLength, String contentType) {
+  private String buildHeader (String path, String contentType) throws IOException{
+    String typeHeader = "Content-Type: ";
+    String contentLength = "Content-Length:";
+    int fileLength = getFile(path).length;
     return (codes.OK +CRLF+typeHeader
-            + contentType+CRLF+contentLength
-            + fileLength +CRLF+CRLF).getBytes();
+        + contentType+CRLF+contentLength
+        + fileLength);
+  }
+
+  private String getDirectoryListing(String path)throws IOException {
+    String [] fileList = new File(path).list();
+    StringBuffer files = new StringBuffer();
+    int size = fileList.length;
+    for (int i = 0; i < size; i++) {
+      files.append(fileList[i]);
+      files.append(CRLF);
+    }
+    return files.toString();
   }
 }

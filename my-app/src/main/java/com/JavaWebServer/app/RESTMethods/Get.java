@@ -34,7 +34,7 @@ public class Get implements RestMethod {
 
   }
 
-  public byte[] handleRequest(Request request)  {
+  public byte[] handleRequest()  {
     if (this.fileName != null) {
       Path path;
       try {

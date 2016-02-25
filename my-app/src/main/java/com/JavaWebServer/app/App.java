@@ -30,7 +30,7 @@ public class App {
     HashMap<String, RestMethod> routes = new HashMap<String,RestMethod>();
     routes.put("GET /file1",new Get(status.OK));
     routes.put("POST /file1",new Post(status.OK));
-    routes.put("GET /", new Get(status.OK,"public","text/plain","/Users/don/desktop/cob_spec/"));
+    routes.put("GET /", new Get(status.OK,"public","text/plain", rootParent(directory)));
     routes.put("PUT /", new Put(status.OK));
     routes.put("GET /image.jpeg", new Get(status.OK,"image.jpeg","image/jpeg", directory));
     routes.put("GET /image.gif", new Get(status.OK,"image.gif","image/gif", directory));
@@ -51,6 +51,11 @@ public class App {
 
   private static ArrayList<String> routeMethods(String [] methods) {
    return new ArrayList<String>(Arrays.asList(methods));
+  }
+
+  private static String rootParent(String path) {
+    int indexOfLastFolder = path.lastIndexOf("/",((path.length())-2));
+    return ((path.substring(0 ,indexOfLastFolder)) + ("/"));
   }
 
   public static void main( String[] args) throws Exception {

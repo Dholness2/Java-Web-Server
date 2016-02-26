@@ -37,6 +37,30 @@ public class GetTest {
   }
 
   @Test
+  public void handleRequestContentImagePngTest() throws IOException {
+     String fileName = "image.png";
+     String type = "image/png";
+     String path = directory + fileName;
+     Get testGet = new Get(codes.OK,fileName,type, directory);
+     byte [] testResponse = testGet.handleRequest();
+     String expectedResponse = buildHeader(path,type);
+     String response =((new String(testResponse)).split((CRLF +CRLF))[0]);
+     assertEquals(expectedResponse,response);
+  }
+
+  @Test
+  public void handleRequestContentImageGifTest() throws IOException {
+     String fileName = "image.gif";
+     String type = "image/gif";
+     String path = directory + fileName;
+     Get testGet = new Get(codes.OK,fileName,type, directory);
+     byte [] testResponse = testGet.handleRequest();
+     String expectedResponse = buildHeader(path,type);
+     String response =((new String(testResponse)).split((CRLF +CRLF))[0]);
+     assertEquals(expectedResponse,response);
+  }
+
+  @Test
   public void handleRequestContentfileTest() throws IOException {
      String fileName = "file1";
      String type = "txt/plain";

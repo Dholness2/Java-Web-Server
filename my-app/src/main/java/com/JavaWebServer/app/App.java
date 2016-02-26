@@ -28,14 +28,13 @@ public class App {
 
   public static HashMap getRoutes (StatusCodes status) {
     HashMap<String, RestMethod> routes = new HashMap<String,RestMethod>();
-    routes.put("GET /file1",new Get(status.OK));
     routes.put("POST /file1",new Post(status.OK));
     routes.put("GET /", new Get(status.OK,"public","text/plain", rootParent(directory)));
     routes.put("PUT /", new Put(status.OK));
     routes.put("GET /image.jpeg", new Get(status.OK,"image.jpeg","image/jpeg", directory));
-    routes.put("GET /image.gif", new Get(status.OK,"image.gif","image/gif", directory));
-    routes.put("GET /image.png", new Get(status.OK,"image.png","image/png", directory));
-    routes.put("GET /text-file.txt", new Get(status.OK));
+    routes.put("GET /image.gif", new Get(status.OK,"image.gif","image/gif",directory));
+    routes.put("GET /image.png", new Get(status.OK,"image.png","image/png",directory));
+    routes.put("GET /text-file.txt", new Get(status.OK, "text-file.txt","text/plain",directory));
     routes.put("Put /text-file.txt", new Put(status.OK));
     routes.put("POST /form", new Post(status.OK));
     routes.put("PUT /form", new Put(status.OK));

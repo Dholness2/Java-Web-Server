@@ -25,7 +25,7 @@ public class GetTest {
   }
 
   @Test
-  public void handleRequestContentTest() throws IOException {
+  public void handleRequestContentImageTest() throws IOException {
      String fileName = "image.jpeg";
      String type = "image/jpeg";
      String path = directory + fileName;
@@ -36,6 +36,17 @@ public class GetTest {
      assertEquals(expectedResponse,response);
   }
 
+  @Test
+  public void handleRequestContentfileTest() throws IOException {
+     String fileName = "file1";
+     String type = "txt/plain";
+     String path = directory + fileName;
+     Get testGet = new Get(codes.OK,fileName,type, directory);
+     byte [] testResponse = testGet.handleRequest();
+     String expectedResponse = buildHeader(path,type);
+     String response =((new String(testResponse)).split((CRLF +CRLF))[0]);
+     assertEquals(expectedResponse,response);
+  }
 
   @Test 
   public void handleRequestDirectoryTest() throws IOException{
@@ -52,7 +63,7 @@ public class GetTest {
   }
 
 
-  private static String rootPath(String path) {
+  private String rootPath(String path) {
     int indexOfLastFolder = path.lastIndexOf("/",((path.length())-2));
     return ((path.substring(0 ,indexOfLastFolder)) + "/");
   }

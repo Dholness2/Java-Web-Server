@@ -17,6 +17,36 @@ public class GetTest {
   private String directory = "/Users/don/desktop/cob_spec/public/";
   private String CRLF = "\r\n";
 
+  private String rootPath(String path) {
+    int indexOfLastFolder = path.lastIndexOf("/",((path.length())-2));
+    return ((path.substring(0 ,indexOfLastFolder)) + "/");
+  }
+
+  private String buildHeader (String path, String contentType) throws IOException{
+    String typeHeader = "Content-Type: ";
+    String contentLength = "Content-Length:";
+    int fileLength = getFile(path).length;
+    return (codes.OK +CRLF+typeHeader
+        + contentType+CRLF+contentLength
+        + fileLength);
+  }
+
+  private String getDirectoryListing(String path)throws IOException {
+    String [] fileList = new File(path).list();
+    StringBuffer files = new StringBuffer();
+    int size = fileList.length;
+    for (int i = 0; i < size; i++) {
+      files.append(fileList[i]);
+      files.append(CRLF);
+    }
+    return files.toString();
+  }
+
+  private byte [] getFile(String path) throws IOException {
+    Path location = Paths.get(path);
+    return Files.readAllBytes(location);
+  }
+
   @Test
   public void handleRequestTest() {
     Get testGet = new Get(codes.OK);
@@ -25,7 +55,7 @@ public class GetTest {
   }
 
   @Test
-  public void handleRequestContentImageTest() throws IOException {
+  public void handleRequestContentImageJpegTest() throws IOException {
      String fileName = "image.jpeg";
      String type = "image/jpeg";
      String path = directory + fileName;
@@ -81,34 +111,12 @@ public class GetTest {
     assertEquals(expectedDirectory,responseDirectory);
   }
 
-  private byte [] getFile(String path) throws IOException {
-    Path location = Paths.get(path);
-    return Files.readAllBytes(location);
-  }
-
-
-  private String rootPath(String path) {
-    int indexOfLastFolder = path.lastIndexOf("/",((path.length())-2));
-    return ((path.substring(0 ,indexOfLastFolder)) + "/");
-  }
-
-  private String buildHeader (String path, String contentType) throws IOException{
-    String typeHeader = "Content-Type: ";
-    String contentLength = "Content-Length:";
-    int fileLength = getFile(path).length;
-    return (codes.OK +CRLF+typeHeader
-        + contentType+CRLF+contentLength
-        + fileLength);
-  }
-
-  private String getDirectoryListing(String path)throws IOException {
-    String [] fileList = new File(path).list();
-    StringBuffer files = new StringBuffer();
-    int size = fileList.length;
-    for (int i = 0; i < size; i++) {
-      files.append(fileList[i]);
-      files.append(CRLF);
-    }
-    return files.toString();
+  @Test
+  public void handleRequestMissingFileTest() {
+    Get testGet = new Get(codes.OK,"images.gif","image/gif", directory);
+    byte [] response = testGet.handleRequest();
+    String testResponse = new String(response);
+    String expectedResponse = "HTTP/1.1 500 Internal Server Error";
+    assertEquals(expectedResponse,testResponse);
   }
 }

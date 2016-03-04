@@ -1,11 +1,12 @@
 package com.JavaWebServer.app;
-import static org.hamcrest.CoreMatchers.instanceOf;
+
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
 public class OptionsParserTest  {
+
  @Test
  public void parseArugmentsTest() {
    String [] keys = {"-p","-d"};

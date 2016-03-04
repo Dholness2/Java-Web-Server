@@ -10,11 +10,30 @@ public class Request {
 
   }
 
-  public String getRoute() {
-    return this.request.split(" ")[1];
+  public boolean isParams() {
+    return this.request.split(" ")[1].contains("?");
   }
 
+  public String getRoute() {
+    if (isParams()){
+      return getParamsRoute();
+    } else {
+      return this.request.split(" ")[1];
+    }
+  }
+
+  public String getParams() {
+    return request.split(" ")[1].split("\\?")[1];
+  }
+
+  public String getParamsRoute() {
+    String route = this.request.split(" ")[1];
+    return route.substring(0,(route.indexOf("?") + 1));
+  }
   public String getRequest(){
+    if (isParams()){
+      return (getMethod() + " "+ getParamsRoute());
+    }
     return this.request.replace(PROTOCOL,"").trim();
   }
 

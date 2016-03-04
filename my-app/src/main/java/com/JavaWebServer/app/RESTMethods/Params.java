@@ -22,7 +22,8 @@ import java.util.Map;
     this.request = request;
     String body = decodeParams();
     int size = body.getBytes().length;
-    String response = (status+CRLF+typeHeader+"text/plain"+CRLF+contentLength+size+CRLF+body);
+    String response = (status+CRLF+typeHeader+"text/plain"+CRLF+contentLength+size+CRLF+CRLF+body);
+    System.out.println(response);
     return response.getBytes();
   }
 
@@ -30,9 +31,9 @@ import java.util.Map;
     String [] variables =  this.request.getParams().split("&");
     int length = variables.length;
     for (int index = 0; index < length; index++) {
-      variables[index] = CRLF+Decoder.decode(encodingKey,variables[index]);
+      variables[index] = Decoder.decode(encodingKey,variables[index])+CRLF;
     }
-    return buildString(variables);
+    return buildString(variables).trim();
   }
 
   private String buildString(String [] stringArray) {

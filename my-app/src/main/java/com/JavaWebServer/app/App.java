@@ -4,13 +4,15 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class App {
   private static final int PORT_INDEX = 0;
   private static final String [] KEYS = {"-p","-d"};
   private static int port;
   private static String directory = "/Users/don/desktop/cob_spec/public/";
-
+  private static String url = "http://localhost:";
+  
   public static HashMap routeDirectory(){
     HashMap<String, ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();
     routes.put("/file1",routeMethods(new String [] {"GET", "POST"}));
@@ -23,13 +25,49 @@ public class App {
     routes.put("/image.gif",routeMethods(new String[] {"GET"}));
     routes.put("/image.png",routeMethods(new String[] {"GET"}));
     routes.put("/file1",routeMethods(new String[] {"GET"}));
+    routes.put("/parameters?",routeMethods(new String[] {"GET"}));
     return routes;
   }
 
-  public static HashMap getRoutes (StatusCodes status) {
+  public static Map buildLinks() {
+    Map <String, String> directoryLinks = new LinkedHashMap <String, String> ();
+    directoryLinks.put("/file1","file1");
+    directoryLinks.put("/file2","file2");
+    directoryLinks.put("/image.gif","image.gif");
+    directoryLinks.put("/image.jpeg","image.jpeg");
+    directoryLinks.put("/image.png","image.png");
+    directoryLinks.put("/text-file.txt","text-file.txt"); 
+    return directoryLinks;
+  }
+
+  public static Map <String, String>  paramatersEncodingKeyMap() {
+    Map<String, String> encode = new HashMap<String, String>();
+    encode.put("%3C","<");
+    encode.put("%3E",">");
+    encode.put("%3D","=");
+    encode.put("%2C",",");
+    encode.put("%21","!" );
+    encode.put("%2B","+");
+    encode.put("%2D","-");
+    encode.put("%20"," ");
+    encode.put("%22", "\"");
+    encode.put("%3B",";");
+    encode.put("%2A","*");
+    encode.put("%26","&");
+    encode.put("%40","@");
+    encode.put("%23","#");
+    encode.put("%24","\\$");
+    encode.put("%5B","[");
+    encode.put("%5D","]");
+    encode.put("%3A",":");
+    encode.put("%3F","?");
+    return encode;
+  }
+
+  public static HashMap getRoutes (StatusCodes status,String url) {
     HashMap<String, RestMethod> routes = new HashMap<String,RestMethod>();
     routes.put("POST /file1",new Post(status.OK));
-    routes.put("GET /", new Get(status.OK,"public","text/plain", rootParent(directory)));
+    routes.put("GET /", new GetDirectory(status,buildLinks(), url));
     routes.put("PUT /", new Put(status.OK));
     routes.put("GET /image.jpeg", new Get(status.OK,"image.jpeg","image/jpeg", directory));
     routes.put("GET /image.gif", new Get(status.OK,"image.gif","image/gif",directory));
@@ -45,6 +83,7 @@ public class App {
     routes.put("PUT /method_options", new Put(status.OK));
     routes.put("GET /redirect",new Get((status.FOUND+"\n\r"+ "Location: http://localhost:5000/")));
     routes.put("GET /file1",new Get(status.OK,"file1","text/plain", directory));
+    routes.put("GET /parameters?", new Params(status.OK,"parameters?",paramatersEncodingKeyMap()));
     return routes;
   }
 
@@ -58,9 +97,9 @@ public class App {
   }
 
   public static void main( String[] args) throws Exception {
-    StatusCodes httpStatuses = new StatusCodes ();
-    HashMap <String, RestMethod> routes = getRoutes(httpStatuses);
     port = Integer.parseInt(OptionsParser.parse(args,KEYS).get(KEYS[PORT_INDEX]));
+    StatusCodes httpStatuses = new StatusCodes (); 
+    HashMap <String, RestMethod> routes = getRoutes(httpStatuses,(url+port));
     Responder responder = new Responder(routeDirectory(), routes);
     ServerSocket serverSocket = new ServerSocket(port);
     Server app = new Server(port,serverSocket,responder);

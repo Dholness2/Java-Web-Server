@@ -51,10 +51,10 @@ public class ParamsTest {
 
   @Test
   public void handleRequest() {
-    String content = "Content-Length:95";
+    String content = "Content-Length:97";
     String type = "Content-Type: text/plain";
-    String variableOne = "variable_1=Operators <, >, =, !=; +, -, *, &, @, #, $, [, ]: \"is that all\"?";
-    String variableTwo = "variable_2=stuff";
+    String variableOne = "variable_1 = Operators <, >, =, !=; +, -, *, &, @, #, $, [, ]: \"is that all\"?";
+    String variableTwo = "variable_2 = stuff";
     String expectedResponse = codes.OK +CRLF+type+CRLF+content+CRLF+CRLF+variableOne+CRLF+variableTwo;
     assertEquals(expectedResponse, new String(testParams.handleRequest(testRequest)));
   }

@@ -65,10 +65,10 @@ public class ResponderTest {
   @Test
   public void getParamsResponseTest() {
     String CRLF ="\r\n";
-    String content = "Content-Length:95";
+    String content = "Content-Length:97";
     String type = "Content-Type: text/plain";
-    String varOne = "variable_1=Operators <, >, =, !=; +, -, *, &, @, #, $, [, ]: \"is that all\"?";
-    String varTwo = "variable_2=stuff";
+    String varOne = "variable_1 = Operators <, >, =, !=; +, -, *, &, @, #, $, [, ]: \"is that all\"?";
+    String varTwo = "variable_2 = stuff";
     String expected = (codes.OK +CRLF+type+CRLF+content+CRLF+CRLF + varOne +CRLF+ varTwo);
     testRequest.setMessage(request);
     byte [] response =  testResponder.getResponse(testRequest);

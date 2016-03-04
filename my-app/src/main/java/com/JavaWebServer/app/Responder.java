@@ -40,10 +40,8 @@ public class Responder {
 
   private boolean checkRoute(Request request) {
    if (request.isParams()) {
-     System.out.println("got params");
     return hasRoute(request.getParamsRoute());
    }
-   System.out.println("not catching it");
    return hasRoute(request.getRoute());
   }
 
@@ -54,8 +52,6 @@ public class Responder {
   private boolean checkMethod(Request request) {
     String route = request.getRoute();
     String method = request.getMethod();
-    System.out.println(route +""+ method);
-    boolean results = routeDirectory.get(route).contains(method);
-    return results;
+    return routeDirectory.get(route).contains(method);
   }
 }

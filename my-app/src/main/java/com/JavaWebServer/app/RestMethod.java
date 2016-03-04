@@ -1,5 +1,5 @@
 package com.JavaWebServer.app;
 
 public interface RestMethod {
-  public byte [] handleRequest();
+  public byte [] handleRequest(Request request);
 }

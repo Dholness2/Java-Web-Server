@@ -2,33 +2,41 @@ package com.JavaWebServer.app;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.io.File;
+import java.util.Arrays;
+
+
 
 public class GetDirectory implements RestMethod {
   private final String TYPE="text/html";
   private final String CRLF = "\r\n";
 
-  private Map directoryLinks;
+  private String directoryPath;
   private StatusCodes codes;
   private String url;
 
-  public GetDirectory(StatusCodes codes, Map<String, String> dirLinks,String url) {
-    this.directoryLinks = dirLinks;
+  public GetDirectory(StatusCodes codes, String directoryPath) {
+    this.directoryPath = directoryPath;
     this.codes = codes;
-    this.url = url;
   }
 
   public byte []  handleRequest(Request request) {
-    String body = buildbody();
+    String  body = buildbody((getDirectoryList(this.directoryPath)));
     String header = buildHeader(body,TYPE);
     return ((header+CRLF+CRLF+body).getBytes());
   }
 
-  private String buildbody() {
+  private String buildbody(String [] dirList) {
     StringBuilder strBuilder = new StringBuilder();
     strBuilder.append("<!DOCTYPE html><html><body>");
-    this.directoryLinks.forEach((link,title)->{
-     strBuilder.append("<a href=\""+this.url+link+"\">"+title+"</a><br>"+CRLF);
-    });
+    Arrays.sort(dirList);
+    for(String file: dirList) {
+      if (file.startsWith(".")){
+       
+      }else {
+        strBuilder.append("<a href=\"/"+ file +"\">"+file+"</a><br>"+CRLF);
+      }
+    }
     return ((strBuilder.toString().trim()) + "</body></html>");
   }
 
@@ -37,5 +45,10 @@ public class GetDirectory implements RestMethod {
     String contentLength = "Content-Length:";
     int length = body.getBytes().length;
     return (codes.OK +CRLF+typeHeader+type+CRLF+contentLength+length);
+  }
+
+  private String [] getDirectoryList (String path) {
+    File directory = new File(path);
+    return directory.list();
   }
 }

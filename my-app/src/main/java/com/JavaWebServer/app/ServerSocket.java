@@ -15,10 +15,9 @@ public class ServerSocket implements InterfaceServerSocket {
 
   public ServerSocket (java.net.ServerSocket socket) {
     this.serverSocket = socket;
-
   }
 
- public Socket accept() {
+  public Socket accept() {
     try {
       return new Socket(serverSocket.accept());
     } catch(IOException e) {

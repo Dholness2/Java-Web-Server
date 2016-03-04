@@ -10,7 +10,7 @@ public class OptionsTest {
   public void handleRequestTest() {
     StatusCodes code = new StatusCodes();
     RestMethod testOptions = new Options(code.OK);
-    String response = new String (testOptions.handleRequest());
+    String response = new String (testOptions.handleRequest(new Request()));
     assertEquals(code.OK+ System.lineSeparator() +"Allow: GET,HEAD,POST,OPTIONS,PUT", response);
   }
 }

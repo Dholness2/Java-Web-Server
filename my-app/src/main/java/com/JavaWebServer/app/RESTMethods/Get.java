@@ -16,12 +16,11 @@ public class Get implements RestMethod {
   private String statusError = "HTTP/1.1 500 Internal Server Error";
   private String fileName;
   private String CRLF ="\r\n";
-  String typeHeader = "Content-Type: ";
-  String contentLength = "Content-Length:";
+  private String typeHeader = "Content-Type: ";
+  private String contentLength = "Content-Length:";
   private String directory;
   private String contentType;
   private ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
- 
 
   public Get (String status, String fileName, String contentType, String directory) {
     this.status = status;
@@ -34,22 +33,28 @@ public class Get implements RestMethod {
     this.status = status;
   }
 
-  public byte[] handleRequest() {
+  public byte[] handleRequest(Request request) {
     if (this.fileName != null) {
-      Path path;
       try {
-        path = getPath();
-        if (Files.isDirectory(path)) {
-          return directoryResponse(path); 
-        }else if (Files.isRegularFile(path)) {
-          return fileResponse(Files.readAllBytes(path));
-        }
+        Path path = getPath();
+       return getResponse(path);
       }catch (IOException e) {
         System.out.println("path not found"+ e);
       }
-      return statusError.getBytes();
     }
     return status.getBytes();
+  }
+
+  private byte [] getResponse(Path path) {
+    try {
+      if (Files.isDirectory(path)) {
+        return directoryResponse(path);
+      }
+      return fileResponse(Files.readAllBytes(path));
+    }catch (IOException e) {
+      System.out.println("path not found"+ e);
+    }
+    return statusError.getBytes();
   }
 
   private byte [] directoryResponse(Path directory) {

@@ -27,7 +27,7 @@ public class Responder {
   }
 
   private byte[] handleValidRequest(Request request) {
-    if (validRoute(request)) {
+    if (isValidRoute(request)) {
       return handleValidRoute(request);
     }else{
       return NOT_FOUND.getBytes();
@@ -48,7 +48,7 @@ public class Responder {
     return currentRoute.handleRequest(request);
   }
 
-  private boolean checkRoute(Request request) {
+  private boolean isValidRoute(Request request) {
    if (request.isParams()) {
     return hasRoute(request.getParamsRoute());
    }

@@ -16,14 +16,14 @@ public class ServerTest  {
   Server testServer;
   ServerSocket testSocket;
 
-  @Before 
+  @Before
   public void setupServer () throws Exception {
+    HashMap<String, RestMethod> methods = new HashMap<String,RestMethod>();
+    methods.put("GET /", new Get("HTTP/1.1 200 ok"));
     ArrayList<String> routeMethods = new ArrayList<String>(); 
     routeMethods.add("GET");
-    routeMethods.add("Post");
-    HashMap<String,ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();
-    routes.put("/",routeMethods);
-    Responder  testResponder =  new Responder(routes);
+    HashMap<String,ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();routes.put("/",routeMethods);
+    Responder testResponder =  new Responder(routes, methods);
     int  port = 9094;
     testSocket =  new ServerSocket(port);
     testServer = new Server(port,testSocket,testResponder);
@@ -60,6 +60,7 @@ public class ServerTest  {
     java.net.Socket clientTestSocket = new Socket("localhost", 9094);
     PrintWriter outPut = new PrintWriter( clientTestSocket.getOutputStream(), true);
     outPut.println("GET / HTTP/1.1");
+    System.out.println("request sent");
     String message = readServerResponse(clientTestSocket); 
     assertEquals("HTTP/1.1 200 ok", message);
     System.out.println("Client: Message Recieved " + message);

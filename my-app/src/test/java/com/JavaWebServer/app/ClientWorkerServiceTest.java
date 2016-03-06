@@ -22,19 +22,20 @@ public class ClientWorkerServiceTest {
   private HashMap<String, ArrayList<String>> routes;
   private Responder testResponder;
 
-  @Before  
-   public  void responderSertup() { 
+  @Before
+   public  void responderSertup() {
+    HashMap<String, RestMethod> methods = new HashMap<String,RestMethod>();
+    methods.put("GET /", new Get("HTTP/1.1 200 ok"));
      ArrayList<String> routeMethods = new ArrayList<String>(); 
      routeMethods.add("GET");
-     routeMethods.add("Post");
      routes = new HashMap<String, ArrayList<String>>();
      routes.put("/",routeMethods);
-     testResponder =  new Responder(routes);
+     testResponder =  new Responder(routes, methods);
    }
 
   @Test
   public void respondsToClientsRequest() throws Exception {
-    mockSocket = new ClientSocketMock("localHost", 9999, "GET / http/1.1");
+    mockSocket = new ClientSocketMock("localHost", 9999, "GET / HTTP/1.1");
     wrapper = new Socket(mockSocket);
     testWorker = new ClientWorkerService(wrapper, testResponder);
     testWorker.run();
@@ -44,7 +45,7 @@ public class ClientWorkerServiceTest {
 
   @Test
   public void respondsWith404() throws Exception {
-    mockSocket = new ClientSocketMock("localHost",9999, "GET /foo http/1.1");
+    mockSocket = new ClientSocketMock("localHost",9999, "GET /foo HTTP/1.1");
     wrapper = new Socket(mockSocket);
     testWorker = new ClientWorkerService(wrapper, testResponder);
     testWorker.run();
@@ -53,7 +54,7 @@ public class ClientWorkerServiceTest {
   }
 
   private class ClientSocketMock extends java.net.Socket {
-    private String inputMessage = "GET / http/1.1";
+    private String inputMessage = "GET / HTTP/1.1";
     private  String  serverName = null;
     private ByteArrayInputStream input;
     private ByteArrayOutputStream outPut = new ByteArrayOutputStream();
@@ -63,7 +64,7 @@ public class ClientWorkerServiceTest {
       this.serverName  = serverName;
       this.port = port;
       this.input = new ByteArrayInputStream(request.getBytes());
-    } 
+    }
     public OutputStream getOutputStream() {
       return  this.outPut;
     }

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class OptionsParserTest  {
- @Test 
+ @Test
  public void parseArugmentsTest() {
    String [] keys = {"-p","-d"};
    String [] testArguements = {"-p","9090","-d","PUBLIC_DIR"};

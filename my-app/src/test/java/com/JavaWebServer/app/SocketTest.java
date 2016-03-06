@@ -17,28 +17,29 @@ public class SocketTest {
   private final String BREAK_LINE = "\\r?\\n";
   private MockSocket mockSocket;
   private Socket wrapper;
-
+  private StatusCodes codes;
   @Before
   public void buildSockets() {
     mockSocket = new MockSocket();
     wrapper = new Socket(mockSocket);
+    codes = new StatusCodes();
   }
 
   @Test
   public void testGetRequest() {
     String route = "/foo";
-    String requestMessage = "GET /foo http 1.1";
+    String requestMessage = "GET /foo HTTP/1.1";
     mockSocket.setRequest(requestMessage);
     Request request = wrapper.getRequest();
     assertEquals(request.getRoute(), route);
   }
 
-  @Test 
+  @Test
   public void testsendResponse() {
-    String response = "HTTP/1.1 200 ok";
+    byte [] response = (codes.OK).getBytes();
     wrapper.sendResponse(response);
     String output = mockSocket.getOutputStream().toString().split(BREAK_LINE)[0];
-    assertEquals(response, output);
+    assertEquals(codes.OK, output);
   }
 
   @Test

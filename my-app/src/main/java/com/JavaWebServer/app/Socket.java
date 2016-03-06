@@ -6,6 +6,8 @@ import java.io.PrintWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
+import java.util.zip.GZIPInputStream;
+
 
 public class Socket implements ClientSocket {
 
@@ -19,7 +21,7 @@ public class Socket implements ClientSocket {
     try{
       BufferedReader request = new BufferedReader(getStreamReader()); 
       Request currentRequest = new Request();
-      currentRequest.setMessage(request.readLine());
+      currentRequest.setMessage(getMessage(request));
       return currentRequest;
     } catch (IOException e) {
       System.out.println("cant read request"+ e);
@@ -27,9 +29,13 @@ public class Socket implements ClientSocket {
     }
   }
 
-  public void sendResponse(String response) {
-    PrintWriter responder =  new PrintWriter(getOutputStream(),true);
-    responder.println(response);
+  public void sendResponse(byte [] response) {
+    try {
+      OutputStream output = getOutputStream();
+      output.write(response);
+    } catch  (IOException e)  {
+        System.out.println("can't write to ouptustream"+ e);
+    }
   }
 
   public void close () {
@@ -38,10 +44,10 @@ public class Socket implements ClientSocket {
     } catch (IOException e) {
       System.out.println("Can't Close Client Socket" + e);
     }
-  } 
+  }
 
   private InputStream getInputStream() {
-    try { 
+    try {
       return socket.getInputStream();
     } catch(IOException e) {
       System.out.println("can't open InputStream"+ e);
@@ -62,5 +68,11 @@ public class Socket implements ClientSocket {
     InputStream input = this.socket.getInputStream();
     InputStreamReader stream = new InputStreamReader(input);
     return stream;
+  }
+
+  private String getMessage(BufferedReader request) throws IOException {
+    StringBuilder builder = new StringBuilder();
+    String message = request.readLine();
+    return message;
   }
 }

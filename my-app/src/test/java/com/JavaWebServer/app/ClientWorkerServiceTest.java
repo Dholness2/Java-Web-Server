@@ -50,7 +50,7 @@ public class ClientWorkerServiceTest {
     testWorker = new ClientWorkerService(wrapper, testResponder);
     testWorker.run();
     String response = mockSocket.getOutputStream().toString().split(BREAK_LINE)[0];
-    assertEquals("HTTP/1.1 404 not found",response);
+    assertEquals("HTTP/1.1 404 Not Found",response);
   }
 
   private class ClientSocketMock extends java.net.Socket {

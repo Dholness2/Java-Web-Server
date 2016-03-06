@@ -7,7 +7,7 @@ public class Post implements RestMethod {
     this.responseStatus = response;
   }
 
-  public byte [] handleRequest() {
+  public byte [] handleRequest(Request request) {
     return this.responseStatus.getBytes();
   }
 }

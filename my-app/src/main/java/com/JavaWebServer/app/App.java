@@ -26,6 +26,7 @@ public class App {
     routes.put("/file1",routeMethods(new String[] {"GET"}));
     routes.put("/file2",routeMethods(new String[] {"GET"}));
     routes.put("/parameters?",routeMethods(new String[] {"GET"}));
+    routes.put("/form",routeMethods(new String[] {"GET","PUT","POST"}));
     return routes;
   }
 
@@ -72,8 +73,11 @@ public class App {
     routes.put("PUT /method_options", new Put(status.OK));
     routes.put("GET /redirect",new Get((status.FOUND+"\n\r"+ "Location: http://localhost:5000/")));
     routes.put("GET /file1",new Get(status.OK,"file1","text/plain", directory));
-    routes.put("GET /file2",new Get(status.OK,"file2","text/plain", directory));
+   routes.put("GET /file2",new Get(status.OK,"file2","text/plain", directory));
     routes.put("GET /parameters?", new Params(status.OK,"parameters?",paramatersEncodingKeyMap()));
+    routes.put("GET /form", new Get(status.OK,"form", "text/plain", directory));
+    routes.put("PUT /form", new Put(status.OK));
+    routes.put("POST /form", new Post(status.OK));
     return routes;
   }
 

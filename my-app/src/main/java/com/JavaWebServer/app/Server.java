@@ -9,7 +9,7 @@ public class Server implements Runnable{
   private boolean serverOn = true;
   private ServerSocket serverSocket;
   private Responder responder;
-  protected ExecutorService threadPool = Executors.newFixedThreadPool(10);
+  protected ExecutorService threadPool = Executors.newFixedThreadPool(20);
 
   public Server (int port, ServerSocket socket, Responder responder) {
     this.port = port;
@@ -17,7 +17,7 @@ public class Server implements Runnable{
     this.responder = responder;
   }
 
-  public void run () {
+  public synchronized void run () {
     while (isServerOn()) {
       ClientSocket clientSocket  = null;
       clientSocket = serverSocket.accept();

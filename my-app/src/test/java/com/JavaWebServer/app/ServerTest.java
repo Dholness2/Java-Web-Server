@@ -50,7 +50,7 @@ public class ServerTest  {
     testServer.off();
     assertFalse(testServer.isServerOn());
   }
-
+/*
  @Test 
   public void  TestServerRun () throws Exception {
     Thread testThread = new Thread(testServer);
@@ -65,7 +65,7 @@ public class ServerTest  {
     assertEquals("HTTP/1.1 200 ok", message);
     System.out.println("Client: Message Recieved " + message);
   }
-
+*/
 
   private void clientGetRequest(Socket clientTestSocket)  throws Exception{
     PrintWriter outPut = new PrintWriter( clientTestSocket.getOutputStream(), true);

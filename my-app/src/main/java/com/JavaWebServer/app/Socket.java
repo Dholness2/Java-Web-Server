@@ -9,18 +9,19 @@ import java.io.BufferedReader;
 
 
 public class Socket implements ClientSocket {
-
   private java.net.Socket socket;
+  private BufferedReader reader; 
+  private Request currentRequest;
 
   public Socket (java.net.Socket socket) {
     this.socket = socket;
   }
 
-  public Request getRequest() {
+  public synchronized Request getRequest() {
     try{
-      BufferedReader request = new BufferedReader(getStreamReader()); 
-      Request currentRequest = new Request();
-      currentRequest.setMessage(getMessage(request));
+      reader = new BufferedReader(getStreamReader());
+      currentRequest = new Request();
+      updateRequest();
       return currentRequest;
     } catch (IOException e) {
       System.out.println("cant read request"+ e);
@@ -69,9 +70,47 @@ public class Socket implements ClientSocket {
     return stream;
   }
 
-  private String getMessage(BufferedReader request) throws IOException {
-    StringBuilder builder = new StringBuilder();
-    String message = request.readLine();
-    return message;
+  private void updateRequest() throws IOException {
+    System.out.println("waiting for route");
+    String route = getRoute();
+    this.currentRequest.setMessage(route);
+    System.out.println(route);
+    if (hasData()) {
+      String head = (getHeaders());
+      this.currentRequest.setHeaders(head);
+      System.out.println(head);
+    }
+    if (hasData()){
+      String body = getBody();
+      this.currentRequest.setBody(body);
+      System.out.println(body);
+    }
+  }
+
+  private boolean hasData () throws IOException {
+    return this.reader.ready();
+  }
+
+  private String getRoute() throws IOException {
+    String route = this.reader.readLine();
+    return route;
+  }
+
+  private String getHeaders() throws IOException {
+    StringBuilder header = new StringBuilder();
+    String line;
+    while (((line = this.reader.readLine()) != null) && !(line.equals(""))){
+      header.append(line + System.getProperty("line.separator"));
+    }
+    return line;
+  }
+
+  private String getBody() throws IOException {
+    StringBuilder body = new StringBuilder();
+    int c;
+    while ((this.reader.ready()) && ((c = this.reader.read()) != -1)){
+      body.append((char)c);
+    }
+    return body.toString();
   }
 }

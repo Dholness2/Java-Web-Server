@@ -5,6 +5,8 @@ public class Request {
   final String  PROTOCOL = "HTTP/1.1";
   final String  ROUTESlASH = "/";
   private String request;
+  private String body;
+  private String header;
 
   public Request () {
 
@@ -39,6 +41,14 @@ public class Request {
 
   public void setMessage(String message) {
     this.request = message;
+  }
+
+  public void setHeaders( String header) {
+   this.header = header;
+  }
+
+  public void setBody( String body){
+    this.body = body;
   }
 
   public String getMethod() {

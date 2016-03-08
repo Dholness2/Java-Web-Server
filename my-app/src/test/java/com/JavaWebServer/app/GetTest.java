@@ -14,7 +14,7 @@ import java.io.File;
 
 public class GetTest {
   private StatusCodes codes = new StatusCodes();
-  private String directory = "/Users/DHolness/desktop/cob_spec/public/";
+  private String directory = "/Users/don/desktop/cob_spec/public/";
   private String CRLF = "\r\n";
 
   private String rootPath(String path) {

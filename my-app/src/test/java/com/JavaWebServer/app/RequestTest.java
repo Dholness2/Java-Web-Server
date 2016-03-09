@@ -37,23 +37,39 @@ public class RequestTest {
   }
 
   @Test
-  public void TestSetMessage() {
+  public void setMessageTest() {
     String message = "GET / HTTP/1.1";
     request.setMessage(message);
     assertEquals(request.getRequest(),"GET /");
   }
 
   @Test
-  public void getMethod() {
+  public void setAndGetHeadersTest() {
+    String expectedHeader = "Content-Type: text/html";
+    request.setHeaders(expectedHeader);
+    assertEquals(expectedHeader, request.getHeaders());
+  }
+
+  @Test
+  public void setAndGetBodyTest() {
+    String body = "data = foobar";
+    request.setBody(body);
+    assertEquals(body, request.getBody());
+  }
+
+  @Test
+  public void getMethodTest() {
     String message = "POST / HTTP/1.1";
-    String method ="POST";
+    String expectedMethod ="POST";
+    request.setMessage(message);
+    assertEquals(expectedMethod, request.getMethod());
   }
 
   @Test
   public void validReuestEmpty(){
     request.setMessage("    ");
     assertEquals(false,request.validRequest());
-  } 
+  }
 
   @Test
   public void validRequestProtocol() {

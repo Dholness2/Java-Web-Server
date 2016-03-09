@@ -2,8 +2,9 @@ package com.JavaWebServer.app;
 import java.util.Arrays;
 
 public class Request {
-  final String  PROTOCOL = "HTTP/1.1";
-  final String  ROUTESlASH = "/";
+  private static final String  PROTOCOL = "HTTP/1.1";
+  private static final String  ROUTESlASH = "/";
+
   private String request;
   private String body;
   private String header;
@@ -47,8 +48,16 @@ public class Request {
    this.header = header;
   }
 
-  public void setBody( String body){
+  public String getHeaders() {
+    return this.header;
+  }
+
+  public void setBody(String body){
     this.body = body;
+  }
+
+  public String getBody () {
+    return this.body;
   }
 
   public String getMethod() {

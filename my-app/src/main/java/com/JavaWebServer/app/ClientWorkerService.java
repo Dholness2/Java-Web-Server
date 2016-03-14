@@ -3,17 +3,17 @@ package com.JavaWebServer.app;
 import java.util.ArrayList;
 
 public class ClientWorkerService implements Runnable {
-  private ClientSocket client;
-  private Responder responder;
+  private final ClientSocket client;
+  private final Responder responder;
 
   public ClientWorkerService (ClientSocket client, Responder responder) {
     this.client = client;
     this.responder = responder;
   }
 
-  public void run () {
+  public  void run () {
     Request request = client.getRequest();
-    client.sendResponse(responder.getResponse(request));
+    client.sendResponse(this.responder.getResponse(request));
     client.close();
     System.out.println ("Server: request Closed");
   }

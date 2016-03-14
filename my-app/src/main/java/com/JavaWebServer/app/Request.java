@@ -9,9 +9,7 @@ public class Request {
   private String body;
   private String header;
 
-  public Request () {
-
-  }
+  public Request () {}
 
   public boolean isParams() {
     return this.request.split(" ")[1].contains("?");
@@ -33,6 +31,7 @@ public class Request {
     String route = this.request.split(" ")[1];
     return route.substring(0,(route.indexOf("?") + 1));
   }
+
   public String getRequest(){
     if (isParams()){
       return (getMethod() + " "+ getParamsRoute());

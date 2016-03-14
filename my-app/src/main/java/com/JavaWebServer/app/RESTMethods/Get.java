@@ -14,7 +14,6 @@ public class Get implements RestMethod {
   private String directory;
   private String contentType;
   private ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-  
   private static final String STATUSERROR = "HTTP/1.1 500 Internal Server Error";
   private static final String CRLF ="\r\n";
   private static final String TYPEHEADER = "Content-Type: ";
@@ -35,7 +34,7 @@ public class Get implements RestMethod {
     if (this.fileName != null) {
       try {
         Path path = getPath();
-       return getResponse(path);
+        return getResponse(path);
       }catch (IOException e) {
         System.out.println("path not found"+ e);
       }
@@ -45,7 +44,8 @@ public class Get implements RestMethod {
 
   private byte [] getResponse(Path path) {
     try {
-      return fileResponse(Files.readAllBytes(path));
+      byte[] fileBytes = Files.readAllBytes(path);
+      return fileResponse(fileBytes);
     }catch (IOException e) {
       System.out.println("path not found"+ e);
     }
@@ -53,7 +53,9 @@ public class Get implements RestMethod {
   }
 
   private byte [] fileResponse(byte [] file) {
+
     try{
+      this.outputStream.reset();
       this.outputStream.write(buildHeader(file.length));
       this.outputStream.write(file);
       return outputStream.toByteArray();

@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+import org.junit.After;
 
 public class FileEditorTest {
  private String path = "/Users/don/desktop/cob_spec/public/form";
@@ -25,11 +26,17 @@ public class FileEditorTest {
   return false;
  }
 
+ @After
+ public void undoChanges(){
+   String edit = "";
+   String replace = "data=helloworld";
+   new FileEditor().edit(path,edit);
+ }
+
  @Test
  public void EditfileTest () throws IOException {
-   String replace = "Data=foobar";
-   String edit = "Data=helloworld";
-   FileEditor.edit(path,replace,edit);
+   String edit = "data=helloworld";
+   new FileEditor().edit(path,edit);
    currentFile = new File(path);
    assertEquals(true, containsEdit(edit));
  }

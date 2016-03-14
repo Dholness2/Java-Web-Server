@@ -10,14 +10,14 @@ import java.io.BufferedReader;
 
 public class Socket implements ClientSocket {
   private java.net.Socket socket;
-  private BufferedReader reader; 
+  private BufferedReader reader;
   private Request currentRequest;
 
   public Socket (java.net.Socket socket) {
     this.socket = socket;
   }
 
-  public synchronized Request getRequest() {
+  public  Request getRequest() {
     try{
       reader = new BufferedReader(getStreamReader());
       currentRequest = new Request();
@@ -33,6 +33,7 @@ public class Socket implements ClientSocket {
     try {
       OutputStream output = getOutputStream();
       output.write(response);
+      output.close();
     } catch  (IOException e)  {
         System.out.println("can't write to ouptustream"+ e);
     }
@@ -71,19 +72,12 @@ public class Socket implements ClientSocket {
   }
 
   private void updateRequest() throws IOException {
-    System.out.println("waiting for route");
-    String route = getRoute();
-    this.currentRequest.setMessage(route);
-    System.out.println(route);
+    this.currentRequest.setMessage(getRoute());
     if (hasData()) {
-      String head = (getHeaders());
-      this.currentRequest.setHeaders(head);
-      System.out.println(head);
+      this.currentRequest.setHeaders(getHeaders());
     }
     if (hasData()){
-      String body = getBody();
-      this.currentRequest.setBody(body);
-      System.out.println(body);
+      this.currentRequest.setBody(getBody());
     }
   }
 
@@ -102,7 +96,7 @@ public class Socket implements ClientSocket {
     while (((line = this.reader.readLine()) != null) && !(line.equals(""))){
       header.append(line + System.getProperty("line.separator"));
     }
-    return line;
+    return header.toString();
   }
 
   private String getBody() throws IOException {

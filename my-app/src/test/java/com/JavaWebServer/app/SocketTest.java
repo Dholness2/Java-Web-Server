@@ -42,7 +42,7 @@ public class SocketTest {
     assertEquals(codes.OK, output);
   }
 
-  @Test
+ @Test
   public void testClose() {
     wrapper.close();
     assertTrue(mockSocket.closedStatus());

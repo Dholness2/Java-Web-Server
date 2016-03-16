@@ -7,7 +7,7 @@ public class Options implements RestMethod {
     this.responseStatus = response;
   }
 
-  public byte [] handleRequest() {
+  public byte [] handleRequest(Request request) {
     StringBuilder response = new StringBuilder();
     response.append(this.responseStatus + System.lineSeparator());
     response.append("Allow: GET,HEAD,POST,OPTIONS,PUT");

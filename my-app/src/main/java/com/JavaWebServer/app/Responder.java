@@ -17,11 +17,7 @@ public class Responder {
   }
 
   public byte [] getResponse(Request request) {
-    return getResponseHeader(request);
-  }
-
-  private byte [] getResponseHeader(Request request) {
-    if (request.validRequest()){   
+    if (request.validRequest()){
       if (checkRoute(request) == true) {
         if(true == checkMethod(request)) {
           return getMessage(request);
@@ -35,19 +31,27 @@ public class Responder {
       return BAD_REQUEST.getBytes();
     }
   }
-  
+
   private byte [] getMessage(Request request){
-    String message = request.getRequest(); 
+    String message = request.getRequest();
     RestMethod currentRoute = routes.get(message);
-    return currentRoute.handleRequest();
+    return currentRoute.handleRequest(request);
   }
 
   private boolean checkRoute(Request request) {
-    return routeDirectory.containsKey(request.getRoute());
+   if (request.isParams()) {
+    return hasRoute(request.getParamsRoute());
+   }
+   return hasRoute(request.getRoute());
+  }
+
+  private boolean hasRoute(String route) {
+    return routeDirectory.containsKey(route);
   }
 
   private boolean checkMethod(Request request) {
-    boolean results = routeDirectory.get(request.getRoute()).contains(request.getMethod());
-    return (true  == results);
+    String route = request.getRoute();
+    String method = request.getMethod();
+    return routeDirectory.get(route).contains(method);
   }
 }

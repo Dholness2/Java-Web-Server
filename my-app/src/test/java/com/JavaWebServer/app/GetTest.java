@@ -50,7 +50,7 @@ public class GetTest {
   @Test
   public void handleRequestTest() {
     Get testGet = new Get(codes.OK);
-    byte [] response = testGet.handleRequest();
+    byte [] response = testGet.handleRequest(new Request());
     assertEquals(codes.OK, new String(response));
   }
 
@@ -60,7 +60,7 @@ public class GetTest {
      String type = "image/jpeg";
      String path = directory + fileName;
      Get testGet = new Get(codes.OK,fileName,type, directory);
-     byte [] testResponse = testGet.handleRequest();
+     byte [] testResponse = testGet.handleRequest(new Request());
      String expectedResponse = buildHeader(path,type);
      String response =((new String(testResponse)).split((CRLF +CRLF))[0]);
      assertEquals(expectedResponse,response);
@@ -72,7 +72,7 @@ public class GetTest {
      String type = "image/png";
      String path = directory + fileName;
      Get testGet = new Get(codes.OK,fileName,type, directory);
-     byte [] testResponse = testGet.handleRequest();
+     byte [] testResponse = testGet.handleRequest(new Request());
      String expectedResponse = buildHeader(path,type);
      String response =((new String(testResponse)).split((CRLF +CRLF))[0]);
      assertEquals(expectedResponse,response);
@@ -84,7 +84,7 @@ public class GetTest {
      String type = "image/gif";
      String path = directory + fileName;
      Get testGet = new Get(codes.OK,fileName,type, directory);
-     byte [] testResponse = testGet.handleRequest();
+     byte [] testResponse = testGet.handleRequest(new Request());
      String expectedResponse = buildHeader(path,type);
      String response =((new String(testResponse)).split((CRLF +CRLF))[0]);
      assertEquals(expectedResponse,response);
@@ -96,7 +96,7 @@ public class GetTest {
      String type = "txt/plain";
      String path = directory + fileName;
      Get testGet = new Get(codes.OK,fileName,type, directory);
-     byte [] testResponse = testGet.handleRequest();
+     byte [] testResponse = testGet.handleRequest(new Request());
      String expectedResponse = buildHeader(path,type);
      String response =((new String(testResponse)).split((CRLF +CRLF))[0]);
      assertEquals(expectedResponse,response);
@@ -105,7 +105,7 @@ public class GetTest {
   @Test 
   public void handleRequestDirectoryTest() throws IOException{
     Get testGet = new Get(codes.OK,"public","text/plain",rootPath(directory)); 
-    byte [] testResponse = testGet.handleRequest();
+    byte [] testResponse = testGet.handleRequest(new Request());
     String responseDirectory = (new String(testResponse).split((CRLF +CRLF))[1]);
     String expectedDirectory = getDirectoryListing(directory);
     assertEquals(expectedDirectory,responseDirectory);
@@ -114,7 +114,7 @@ public class GetTest {
   @Test
   public void handleRequestMissingFileTest() {
     Get testGet = new Get(codes.OK,"images.gif","image/gif", directory);
-    byte [] response = testGet.handleRequest();
+    byte [] response = testGet.handleRequest(new Request());
     String testResponse = new String(response);
     String expectedResponse = "HTTP/1.1 500 Internal Server Error";
     assertEquals(expectedResponse,testResponse);

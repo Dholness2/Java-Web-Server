@@ -2,13 +2,14 @@ package com.JavaWebServer.app;
 import java.util.Arrays;
 
 public class Request {
-  final String  PROTOCOL = "HTTP/1.1";
-  final String  ROUTESlASH = "/";
+  private static final String  PROTOCOL = "HTTP/1.1";
+  private static final String  ROUTESlASH = "/";
+
   private String request;
+  private String body;
+  private String header;
 
-  public Request () {
-
-  }
+  public Request () {}
 
   public boolean isParams() {
     return this.request.split(" ")[1].contains("?");
@@ -30,6 +31,7 @@ public class Request {
     String route = this.request.split(" ")[1];
     return route.substring(0,(route.indexOf("?") + 1));
   }
+
   public String getRequest(){
     if (isParams()){
       return (getMethod() + " "+ getParamsRoute());
@@ -39,6 +41,22 @@ public class Request {
 
   public void setMessage(String message) {
     this.request = message;
+  }
+
+  public void setHeaders( String header) {
+   this.header = header;
+  }
+
+  public String getHeaders() {
+    return this.header;
+  }
+
+  public void setBody(String body){
+    this.body = body;
+  }
+
+  public String getBody () {
+    return this.body;
   }
 
   public String getMethod() {

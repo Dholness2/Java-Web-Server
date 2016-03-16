@@ -51,7 +51,7 @@ public class ServerTest  {
     assertFalse(testServer.isServerOn());
   }
 
- @Test 
+ @Test
   public void  TestServerRun () throws Exception {
     Thread testThread = new Thread(testServer);
     testThread.start();

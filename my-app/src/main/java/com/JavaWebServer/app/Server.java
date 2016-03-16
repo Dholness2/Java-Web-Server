@@ -8,8 +8,9 @@ public class Server implements Runnable{
   private int port;
   private boolean serverOn = true;
   private ServerSocket serverSocket;
-  private Responder responder;
-  protected ExecutorService threadPool = Executors.newFixedThreadPool(10);
+  private final  Responder responder;
+  private  ClientSocket clientSocket;
+  protected ExecutorService threadPool = Executors.newFixedThreadPool(98);
 
   public Server (int port, ServerSocket socket, Responder responder) {
     this.port = port;
@@ -17,9 +18,8 @@ public class Server implements Runnable{
     this.responder = responder;
   }
 
-  public void run () {
+  public  void run () {
     while (isServerOn()) {
-      ClientSocket clientSocket  = null;
       clientSocket = serverSocket.accept();
       System.out.println("Server: listening on port");
       this.threadPool.execute(new ClientWorkerService(clientSocket,responder));
@@ -28,11 +28,11 @@ public class Server implements Runnable{
     System.out.println("Server off");
   }
 
-  public synchronized boolean isServerOn() {
+  public  boolean isServerOn() {
     return this.serverOn;
   }
 
-  public synchronized void off() {
+  public  void off() {
     this.serverOn = false;
   }
 

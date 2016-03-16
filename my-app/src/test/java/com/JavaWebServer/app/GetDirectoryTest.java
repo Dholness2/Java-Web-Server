@@ -14,7 +14,7 @@ public class GetDirectoryTest {
   private StatusCodes codes = new StatusCodes();
   private  final String CRLF = "\r\n";
   private  final String CONTENTYPE = "text/html";
-  private  String directory = "/Users/DHolness/desktop/cob_spec/public/";
+  private  String directory = "/Users/don/desktop/cob_spec/public/";
 
   private String buildHeader (String body, String type) {
     String typeHeader = "Content-Type: ";
@@ -31,7 +31,8 @@ public class GetDirectoryTest {
     byte [] response = testGetDir.handleRequest(new Request());
     String body = "<!DOCTYPE html><html><body><a href=\"/file1\">file1</a><br>"+CRLF+
                    "<a href=\"/file2\">file2</a><br>"+CRLF+
-                  "<a href=\"/image.gif\">image.gif</a><br>"+CRLF+
+                   "<a href=\"/form\">form</a><br>"+CRLF+
+                   "<a href=\"/image.gif\">image.gif</a><br>"+CRLF+
                    "<a href=\"/image.jpeg\">image.jpeg</a><br>"+CRLF+
                    "<a href=\"/image.png\">image.png</a><br>"+CRLF+
 	           "<a href=\"/partial_content.txt\">partial_content.txt</a><br>"+CRLF+

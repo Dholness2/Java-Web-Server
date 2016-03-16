@@ -11,6 +11,7 @@ public class App {
   private static final String [] KEYS = {"-p","-d"};
   private static int port;
   private static String directory = "/Users/don/desktop/cob_spec/public/";
+  private static String formPath = "/Users/don/desktop/cob_spec/public/form";
 
   public static HashMap routeDirectory(){
     HashMap<String, ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();
@@ -26,6 +27,7 @@ public class App {
     routes.put("/file1",routeMethods(new String[] {"GET"}));
     routes.put("/file2",routeMethods(new String[] {"GET"}));
     routes.put("/parameters?",routeMethods(new String[] {"GET"}));
+    routes.put("/form",routeMethods(new String[] {"GET","POST","PUT","DELETE"}));
     return routes;
   }
 
@@ -55,25 +57,27 @@ public class App {
 
   public static HashMap getRoutes (StatusCodes status,String path) {
     HashMap<String, RestMethod> routes = new HashMap<String,RestMethod>();
-    routes.put("POST /file1",new Post(status.OK));
+    routes.put("POST /file1",new PutPost(status.OK));
     routes.put("GET /", new GetDirectory(status,path));
-    routes.put("PUT /", new Put(status.OK));
+    routes.put("PUT /", new PutPost(status.OK));
     routes.put("GET /image.jpeg", new Get(status.OK,"image.jpeg","image/jpeg", directory));
     routes.put("GET /image.gif", new Get(status.OK,"image.gif","image/gif",directory));
     routes.put("GET /image.png", new Get(status.OK,"image.png","image/png",directory));
     routes.put("GET /text-file.txt", new Get(status.OK, "text-file.txt","text/plain",directory));
-    routes.put("Put /text-file.txt", new Put(status.OK));
-    routes.put("POST /form", new Post(status.OK));
-    routes.put("PUT /form", new Put(status.OK));
+    routes.put("Put /text-file.txt", new PutPost(status.OK));
     routes.put("OPTIONS /method_options", new Options(status.OK));
     routes.put("GET /method_options", new Get(status.OK));
-    routes.put("POST /method_options", new Post(status.OK));
+    routes.put("POST /method_options", new PutPost(status.OK));
     routes.put("HEAD /method_options", new Head(status.OK));
-    routes.put("PUT /method_options", new Put(status.OK));
+    routes.put("PUT /method_options", new PutPost(status.OK));
     routes.put("GET /redirect",new Get((status.FOUND+"\n\r"+ "Location: http://localhost:5000/")));
     routes.put("GET /file1",new Get(status.OK,"file1","text/plain", directory));
     routes.put("GET /file2",new Get(status.OK,"file2","text/plain", directory));
     routes.put("GET /parameters?", new Params(status.OK,"parameters?",paramatersEncodingKeyMap()));
+    routes.put("GET /form", new Get(status.OK,"form", "text/plain", directory));
+    routes.put("POST /form", new PutPost(status.OK,formPath,new FileEditor()));
+    routes.put("PUT /form", new PutPost(status.OK,formPath,new FileEditor()));
+    routes.put("DELETE /form", new Delete(status.OK,formPath,new FileEditor()));
     return routes;
   }
 
@@ -93,6 +97,6 @@ public class App {
     Responder responder = new Responder(routeDirectory(), routes);
     ServerSocket serverSocket = new ServerSocket(port);
     Server app = new Server(port,serverSocket,responder);
-    new Thread(app).start();
+    app.run();
   }
 }

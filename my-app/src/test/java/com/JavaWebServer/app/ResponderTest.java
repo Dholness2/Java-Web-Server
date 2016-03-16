@@ -85,7 +85,7 @@ public class ResponderTest {
   public void getResponseTestNoRoute() {
     testRequest.setMessage("PUT /foo HTTP/1.1");
     byte [] response =  testResponder.getResponse(testRequest);
-    assertEquals("HTTP/1.1 404 not found", new String (response));
+    assertEquals("HTTP/1.1 404 Not Found", new String (response));
   }
 
   @Test

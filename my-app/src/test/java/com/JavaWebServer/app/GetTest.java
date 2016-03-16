@@ -14,7 +14,7 @@ import java.io.File;
 
 public class GetTest {
   private StatusCodes codes = new StatusCodes();
-  private String directory = "/Users/don/desktop/cob_spec/public/";
+  private String directory = "/Users/DHolness/desktop/cob_spec/public/";
   private String CRLF = "\r\n";
 
   private String rootPath(String path) {
@@ -29,17 +29,6 @@ public class GetTest {
     return (codes.OK +CRLF+typeHeader
         + contentType+CRLF+contentLength
         + fileLength);
-  }
-
-  private String getDirectoryListing(String path)throws IOException {
-    String [] fileList = new File(path).list();
-    StringBuffer files = new StringBuffer();
-    int size = fileList.length;
-    for (int i = 0; i < size; i++) {
-      files.append(fileList[i]);
-      files.append(CRLF);
-    }
-    return files.toString();
   }
 
   private byte [] getFile(String path) throws IOException {
@@ -100,15 +89,6 @@ public class GetTest {
      String expectedResponse = buildHeader(path,type);
      String response =((new String(testResponse)).split((CRLF +CRLF))[0]);
      assertEquals(expectedResponse,response);
-  }
-
-  @Test 
-  public void handleRequestDirectoryTest() throws IOException{
-    Get testGet = new Get(codes.OK,"public","text/plain",rootPath(directory)); 
-    byte [] testResponse = testGet.handleRequest(new Request());
-    String responseDirectory = (new String(testResponse).split((CRLF +CRLF))[1]);
-    String expectedDirectory = getDirectoryListing(directory);
-    assertEquals(expectedDirectory,responseDirectory);
   }
 
   @Test

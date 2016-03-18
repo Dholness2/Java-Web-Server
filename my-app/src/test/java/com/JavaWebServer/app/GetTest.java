@@ -16,6 +16,7 @@ public class GetTest {
   private StatusCodes codes = new StatusCodes();
   private String directory = "/Users/don/desktop/cob_spec/public/";
   private String CRLF = "\r\n";
+  private boolean protectedRoute = false;
 
   private String rootPath(String path) {
     int indexOfLastFolder = path.lastIndexOf("/",((path.length())-2));
@@ -37,10 +38,20 @@ public class GetTest {
   }
 
   @Test
-  public void handleRequestTest() {
+  public void handleSimepleRequestTest() {
     Get testGet = new Get(codes.OK);
     byte [] response = testGet.handleRequest(new Request());
     assertEquals(codes.OK, new String(response));
+  }
+
+  @Test
+  public void unauthorizedTest() {
+    String type = "text/plain";
+    String fileName = "logs";
+    boolean protectedRoute = true;
+    Get testGet = new Get(codes,fileName,type,directory,true);
+    String response = (new String(testGet.handleRequest(new Request())));
+    assertEquals(codes.UNAUTHORIZED,response);
   }
 
   @Test
@@ -48,7 +59,7 @@ public class GetTest {
      String fileName = "image.jpeg";
      String type = "image/jpeg";
      String path = directory + fileName;
-     Get testGet = new Get(codes.OK,fileName,type, directory);
+     Get testGet = new Get(codes,fileName,type, directory, protectedRoute);
      byte [] testResponse = testGet.handleRequest(new Request());
      String expectedResponse = buildHeader(path,type);
      String response =((new String(testResponse)).split((CRLF +CRLF))[0]);
@@ -60,7 +71,7 @@ public class GetTest {
      String fileName = "image.png";
      String type = "image/png";
      String path = directory + fileName;
-     Get testGet = new Get(codes.OK,fileName,type, directory);
+     Get testGet = new Get(codes,fileName,type, directory,protectedRoute);
      byte [] testResponse = testGet.handleRequest(new Request());
      String expectedResponse = buildHeader(path,type);
      String response =((new String(testResponse)).split((CRLF +CRLF))[0]);
@@ -72,7 +83,7 @@ public class GetTest {
      String fileName = "image.gif";
      String type = "image/gif";
      String path = directory + fileName;
-     Get testGet = new Get(codes.OK,fileName,type, directory);
+     Get testGet = new Get(codes,fileName,type, directory, protectedRoute);
      byte [] testResponse = testGet.handleRequest(new Request());
      String expectedResponse = buildHeader(path,type);
      String response =((new String(testResponse)).split((CRLF +CRLF))[0]);
@@ -84,7 +95,7 @@ public class GetTest {
      String fileName = "file1";
      String type = "txt/plain";
      String path = directory + fileName;
-     Get testGet = new Get(codes.OK,fileName,type, directory);
+     Get testGet = new Get(codes,fileName,type, directory, protectedRoute);
      byte [] testResponse = testGet.handleRequest(new Request());
      String expectedResponse = buildHeader(path,type);
      String response =((new String(testResponse)).split((CRLF +CRLF))[0]);
@@ -93,7 +104,7 @@ public class GetTest {
 
   @Test
   public void handleRequestMissingFileTest() {
-    Get testGet = new Get(codes.OK,"images.gif","image/gif", directory);
+    Get testGet = new Get(codes,"images.gif","image/gif", directory, protectedRoute);
     byte [] response = testGet.handleRequest(new Request());
     String testResponse = new String(response);
     String expectedResponse = "HTTP/1.1 500 Internal Server Error";

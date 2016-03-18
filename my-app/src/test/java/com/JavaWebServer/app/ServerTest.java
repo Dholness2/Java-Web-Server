@@ -15,7 +15,7 @@ import java.io.*;
 public class ServerTest  {
   Server testServer;
   ServerSocket testSocket;
-
+  Logger testLogger;
   @Before
   public void setupServer () throws Exception {
     HashMap<String, RestMethod> methods = new HashMap<String,RestMethod>();
@@ -23,14 +23,16 @@ public class ServerTest  {
     ArrayList<String> routeMethods = new ArrayList<String>(); 
     routeMethods.add("GET");
     HashMap<String,ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();routes.put("/",routeMethods);
+    testLogger = new Logger("/logs");
     Responder testResponder =  new Responder(routes, methods);
     int  port = 9094;
     testSocket =  new ServerSocket(port);
-    testServer = new Server(port,testSocket,testResponder);
+    testServer = new Server(port,testSocket,testResponder, testLogger);
   }
 
   @After
   public void turnOffServer() {
+    testLogger.clearLogs();
     testSocket.close();
     testServer.off();
   }

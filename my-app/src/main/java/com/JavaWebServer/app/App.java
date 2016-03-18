@@ -12,9 +12,10 @@ public class App {
   private static final String [] KEYS = {"-p","-d"};
   private static int port;
   private static String loggerPath = System.getProperty("user.dir")+"/logs";
-  private static String directory = "/Users/don/desktop/cob_spec/public/";
+  private static String directory = System.getProperty("user.dir")+"/public";
   private static String formPath = "/Users/don/desktop/cob_spec/public/form";
   private static String patchPath = "/Users/don/desktop/cob_spec/public/patch-content.txt";
+
   public static HashMap routeDirectory(){
     HashMap<String, ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();
     routes.put("/file1",routeMethods(new String [] {"GET", "POST"}));
@@ -40,7 +41,7 @@ public class App {
     boolean protectedRoute = true;
     HashMap<String, RestMethod> routes = new HashMap<String,RestMethod>();
     routes.put("POST /file1",new PutPost(status.OK,"file",new FileEditor()));
-    routes.put("GET /", new GetDirectory(status,directory));
+    routes.put("GET /", new GetDirectory(status,rootParent(directory)));
     routes.put("PUT /", new PutPost(status.OK, "/", new FileEditor()));
     routes.put("GET /image.jpeg", new Get(status,"image.jpeg","image/jpeg", directory,unprotected));
     routes.put("GET /image.gif", new Get(status,"image.gif","image/gif",directory,unprotected));
@@ -63,7 +64,7 @@ public class App {
     routes.put("GET /partial_content.txt", new GetPartialContent(status,"partial_content.txt","text/plain",directory));
     routes.put("GET /patch-content.txt", new Get(status,"patch-content.txt","text/plain",directory,unprotected));
     routes.put("PATCH /patch-content.txt", new Patch(status,patchPath,new FileEditor(), new SHA1Encoder()));
-    routes.put("GET /logs", new Get(status,"logs","text/plain",directory,protectedRoute));
+    routes.put("GET /logs", new Get(status,"","text/plain",loggerPath, protectedRoute));
     return routes;
   }
 

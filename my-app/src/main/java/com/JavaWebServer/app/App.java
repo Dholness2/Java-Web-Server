@@ -13,7 +13,7 @@ public class App {
   private static int port;
   private static String directory = "/Users/don/desktop/cob_spec/public/";
   private static String formPath = "/Users/don/desktop/cob_spec/public/form";
-
+  private static String patchPath = "/Users/don/desktop/cob_spec/public/patch-content.txt";
   public static HashMap routeDirectory(){
     HashMap<String, ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();
     routes.put("/file1",routeMethods(new String [] {"GET", "POST"}));
@@ -29,7 +29,7 @@ public class App {
     routes.put("/file2",routeMethods(new String[] {"GET"}));
     routes.put("/parameters?",routeMethods(new String[] {"GET"}));
     routes.put("/form",routeMethods(new String[] {"GET","POST","PUT","DELETE"}));
-    routes.put("/partial_content.txt", routeMethods(new String[] {"GET"}));
+    routes.put("/patch-content.txt", routeMethods(new String [] {"PATCH", "GET"}));
     return routes;
   }
 
@@ -80,7 +80,9 @@ public class App {
     routes.put("POST /form", new PutPost(status.OK,formPath,new FileEditor()));
     routes.put("PUT /form", new PutPost(status.OK,formPath,new FileEditor()));
     routes.put("DELETE /form", new Delete(status.OK,formPath,new FileEditor()));
-    routes.put("GET /partial_content.txt", new GetPartialContent(status,"partial_content.txt","text/plain",directory));
+    routes.put("GET /partial_content.txt", new GetPartialContent(status,"partial_content.txt","text/plain",directory)
+    routes.put("GET /patch-content.txt", new Get(status.OK,"patch-content.txt","text/plain", directory));
+    routes.put("PATCH /patch-content.txt", new Patch(status,patchPath,new FileEditor(), new SHA1Encoder()));
     return routes;
   }
 

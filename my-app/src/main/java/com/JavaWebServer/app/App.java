@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 
 public class App {
   private static final int PORT_INDEX = 0;
+  private static final int DIR_INDEX = 1;
   private static final String [] KEYS = {"-p","-d"};
   private static int port;
   private static String directory = "/Users/don/desktop/cob_spec/public/";
@@ -28,6 +29,7 @@ public class App {
     routes.put("/file2",routeMethods(new String[] {"GET"}));
     routes.put("/parameters?",routeMethods(new String[] {"GET"}));
     routes.put("/form",routeMethods(new String[] {"GET","POST","PUT","DELETE"}));
+    routes.put("/partial_content.txt", routeMethods(new String[] {"GET"}));
     return routes;
   }
 
@@ -55,10 +57,10 @@ public class App {
     return encode;
   }
 
-  public static HashMap getRoutes (StatusCodes status,String path) {
+  public static HashMap getRoutes (StatusCodes status) {
     HashMap<String, RestMethod> routes = new HashMap<String,RestMethod>();
     routes.put("POST /file1",new PutPost(status.OK));
-    routes.put("GET /", new GetDirectory(status,path));
+    routes.put("GET /", new GetDirectory(status,directory));
     routes.put("PUT /", new PutPost(status.OK));
     routes.put("GET /image.jpeg", new Get(status.OK,"image.jpeg","image/jpeg", directory));
     routes.put("GET /image.gif", new Get(status.OK,"image.gif","image/gif",directory));
@@ -70,7 +72,7 @@ public class App {
     routes.put("POST /method_options", new PutPost(status.OK));
     routes.put("HEAD /method_options", new Head(status.OK));
     routes.put("PUT /method_options", new PutPost(status.OK));
-    routes.put("GET /redirect",new Get((status.FOUND+"\n\r"+ "Location: http://localhost:5000/")));
+    routes.put("GET /redirect",new Get((status.FOUND+getRootLocation())));
     routes.put("GET /file1",new Get(status.OK,"file1","text/plain", directory));
     routes.put("GET /file2",new Get(status.OK,"file2","text/plain", directory));
     routes.put("GET /parameters?", new Params(status.OK,"parameters?",paramatersEncodingKeyMap()));
@@ -78,6 +80,7 @@ public class App {
     routes.put("POST /form", new PutPost(status.OK,formPath,new FileEditor()));
     routes.put("PUT /form", new PutPost(status.OK,formPath,new FileEditor()));
     routes.put("DELETE /form", new Delete(status.OK,formPath,new FileEditor()));
+    routes.put("GET /partial_content.txt", new GetPartialContent(status,"partial_content.txt","text/plain",directory));
     return routes;
   }
 
@@ -90,10 +93,16 @@ public class App {
     return ((path.substring(0 ,indexOfLastFolder)) + ("/"));
   }
 
+  private static String getRootLocation() {
+   return ("\n\r"+"Location: http://localhost:"+port+"/");
+  }
+
   public static void main( String[] args) throws Exception {
-    port = Integer.parseInt(OptionsParser.parse(args,KEYS).get(KEYS[PORT_INDEX]));
+    Map<String, String> Options = OptionsParser.parse(args,KEYS);
+    port = Integer.parseInt(Options.get(KEYS[PORT_INDEX]));
+//    directory = Options.get(KEYS[DIR_INDEX]);
     StatusCodes httpStatuses = new StatusCodes ();
-    HashMap <String, RestMethod> routes = getRoutes(httpStatuses,directory);
+    HashMap <String, RestMethod> routes = getRoutes(httpStatuses);
     Responder responder = new Responder(routeDirectory(), routes);
     ServerSocket serverSocket = new ServerSocket(port);
     Server app = new Server(port,serverSocket,responder);

@@ -7,7 +7,7 @@ import static org.junit.Assert.assertEquals;
 public class PatchTest {
  private  Request testRequest = new Request();
  private StatusCodes codes = new StatusCodes();
- private String path = System.getProperty("user.dir") + "/TestData/patch-content.txt";
+ private String path = System.getProperty("user.dir") + "/public/patch-content.txt";
  private String CRLF = System.getProperty("line.separator");
 
   private void setRequest(String method ,String route,int length, String etag, String body) {

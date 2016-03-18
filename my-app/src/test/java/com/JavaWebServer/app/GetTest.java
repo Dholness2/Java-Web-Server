@@ -51,7 +51,8 @@ public class GetTest {
     boolean protectedRoute = true;
     Get testGet = new Get(codes,fileName,type,directory,true);
     String response = (new String(testGet.handleRequest(new Request())));
-    assertEquals(codes.UNAUTHORIZED,response);
+    String expectedResponse = (codes.UNAUTHORIZED+CRLF+"WWW-Authenticate: Basic realm=logs"+CRLF);
+    assertEquals(expectedResponse,response);
   }
 
   @Test

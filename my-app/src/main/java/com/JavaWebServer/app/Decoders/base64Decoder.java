@@ -1,11 +1,9 @@
 package com.JavaWebServer.app;
 import java.util.Base64;
 
-public class base64Decoder{
+public class Base64Decoder{
 
-  public  base64Decoder () {}
-
-  public String decode (String encoded) {
+ public static String decode (String encoded) {
     return new String (Base64.getDecoder().decode(encoded));
-  }
+ }
 }

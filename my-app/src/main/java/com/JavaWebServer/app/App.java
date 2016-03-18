@@ -78,7 +78,7 @@ public class App {
     routes.put("GET /redirect",new Get(status.FOUND+"\n\r"+ "Location: http://localhost:5000/"));
     routes.put("GET /file1",new Get(status,"file1","text/plain", directory,unprotected));
     routes.put("GET /file2",new Get(status,"file2","text/plain", directory,unprotected));
-    routes.put("GET /parameters?", new Params(status.OK,"parameters?",paramatersEncodingKeyMap()));
+    routes.put("GET /parameters?", new Params(status.OK,"parameters?"));
     routes.put("GET /form", new Get(status,"form", "text/plain", directory,unprotected));
     routes.put("POST /form", new PutPost(status.OK,formPath,new FileEditor()));
     routes.put("PUT /form", new PutPost(status.OK,formPath,new FileEditor()));

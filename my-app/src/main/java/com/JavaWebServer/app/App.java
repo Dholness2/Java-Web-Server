@@ -29,17 +29,17 @@ public class App {
     routes.put("/file2",routeMethods(new String[] {"GET"}));
     routes.put("/parameters?",routeMethods(new String[] {"GET"}));
     routes.put("/form",routeMethods(new String[] {"GET","POST","PUT","DELETE"}));
-    routes.put("/patch-content.txt", routeMethods(new String [] {"PATCH", "GET"});
+    routes.put("/patch-content.txt", routeMethods(new String [] {"PATCH", "GET"}));
     routes.put("/logs", routeMethods(new String[] {"GET"}));
     return routes;
   }
 
-  public static HashMap getRoutes (StatusCodes status,String path) {
+  public static HashMap getRoutes (StatusCodes status) {
     boolean unprotected = false;
     boolean protectedRoute = true;
     HashMap<String, RestMethod> routes = new HashMap<String,RestMethod>();
     routes.put("POST /file1",new PutPost(status.OK,"file",new FileEditor()));
-    routes.put("GET /", new GetDirectory(status,path));
+    routes.put("GET /", new GetDirectory(status,directory));
     routes.put("PUT /", new PutPost(status.OK, "/", new FileEditor()));
     routes.put("GET /image.jpeg", new Get(status,"image.jpeg","image/jpeg", directory,unprotected));
     routes.put("GET /image.gif", new Get(status,"image.gif","image/gif",directory,unprotected));
@@ -59,8 +59,8 @@ public class App {
     routes.put("POST /form", new PutPost(status.OK,formPath,new FileEditor()));
     routes.put("PUT /form", new PutPost(status.OK,formPath,new FileEditor()));
     routes.put("DELETE /form", new Delete(status.OK,formPath,new FileEditor()));
-    routes.put("GET /partial_content.txt", new GetPartialContent(status,"partial_content.txt","text/plain",directory)
-    routes.put("GET /patch-content.txt", new Get(status.OK,"patch-content.txt","text/plain", directory));
+    routes.put("GET /partial_content.txt", new GetPartialContent(status,"partial_content.txt","text/plain",directory));
+    routes.put("GET /patch-content.txt", new Get(status,"patch-content.txt","text/plain",directory,unprotected));
     routes.put("PATCH /patch-content.txt", new Patch(status,patchPath,new FileEditor(), new SHA1Encoder()));
     routes.put("GET /logs", new Get(status,"logs","text/plain",directory,protectedRoute));
     return routes;
@@ -82,7 +82,6 @@ public class App {
   public static void main( String[] args) throws Exception {
     Map<String, String> Options = OptionsParser.parse(args,KEYS);
     port = Integer.parseInt(Options.get(KEYS[PORT_INDEX]));
-//    directory = Options.get(KEYS[DIR_INDEX]);
     StatusCodes httpStatuses = new StatusCodes ();
     HashMap <String, RestMethod> routes = getRoutes(httpStatuses);
     Responder responder = new Responder(routeDirectory(), routes);

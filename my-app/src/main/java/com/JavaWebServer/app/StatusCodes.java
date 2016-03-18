@@ -9,5 +9,4 @@ public class StatusCodes {
   public static final String STATUSERROR = "HTTP/1.1 500 Internal Server Error";
   public static final String NO_CONTENT ="HTTP/1.1 204 NO CONTENT";
   public static final String UNAUTHORIZED = "HTTP/1.1 401 UNAUTHORIZED";
-  public static final String STATUSERROR = "HTTP/1.1 500 Internal Server Error";
 }

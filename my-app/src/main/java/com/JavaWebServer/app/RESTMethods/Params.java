@@ -7,15 +7,13 @@ import java.util.Map;
   private String status;
   private String params;
   private Request request;
-  private Map <String, String> encodingKey;
   private String CRLF ="\r\n";
   private String typeHeader = "Content-Type: ";
   private String contentLength = "Content-Length:";
 
-  public Params (String status, String params, Map <String, String> encodingKey) {
+  public Params (String status, String params) {
     this.status = status;
     this.params = params;
-    this.encodingKey= encodingKey;
   }
 
   public byte [] handleRequest (Request request) {
@@ -23,7 +21,6 @@ import java.util.Map;
     String body = decodeParams();
     int size = body.getBytes().length;
     String response = (status+CRLF+typeHeader+"text/plain"+CRLF+contentLength+size+CRLF+CRLF+body);
-    System.out.println(response);
     return response.getBytes();
   }
 
@@ -31,7 +28,7 @@ import java.util.Map;
     String [] variables =  this.request.getParams().split("&");
     int length = variables.length;
     for (int index = 0; index < length; index++) {
-      variables[index] = Decoder.decode(encodingKey,variables[index])+CRLF;
+      variables[index] = ParamsDecoder.decode(variables[index])+CRLF;
     }
     return buildString(variables).trim();
   }

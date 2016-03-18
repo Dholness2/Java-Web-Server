@@ -14,7 +14,7 @@ public class GetDirectoryTest {
   private StatusCodes codes = new StatusCodes();
   private  final String CRLF = "\r\n";
   private  final String CONTENTYPE = "text/html";
-  private  String directory = "/Users/don/desktop/cob_spec/public/";
+  private  String directory = System.getProperty("user.dir")+"/public";
 
   private String buildHeader (String body, String type) {
     String typeHeader = "Content-Type: ";

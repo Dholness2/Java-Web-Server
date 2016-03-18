@@ -1,6 +1,5 @@
 package com.JavaWebServer.app;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
@@ -9,71 +8,80 @@ import java.util.Arrays;
 import java.io.ByteArrayOutputStream;
 
 public class Get implements RestMethod {
-  private String status;
+  private StatusCodes status;
   private String fileName;
   private String directory;
   private String contentType;
-  private ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-  private static final String STATUSERROR = "HTTP/1.1 500 Internal Server Error";
+  private String simpleResponse;
+  private boolean protectedRoute;
   private static final String CRLF ="\r\n";
+  private static final String authHeader ="WWW-Authenticate: Basic realm=";
   private static final String TYPEHEADER = "Content-Type: ";
   private static final String LENGTHHEADER = "Content-Length:";
 
-  public Get (String status, String fileName, String contentType, String directory) {
+  public Get (StatusCodes status, String fileName, String contentType, String directory, boolean protectedRoute) {
     this.status = status;
     this.fileName = fileName;
     this.contentType = contentType;
     this.directory = directory;
+    this.protectedRoute = protectedRoute;
   }
 
-  public Get (String status) {
-    this.status = status;
+  public Get (String simpleResponse){
+    this.simpleResponse = simpleResponse;
   }
 
   public byte[] handleRequest(Request request) {
-    if (this.fileName != null) {
-      try {
-        Path path = getPath();
-        return getResponse(path);
-      }catch (IOException e) {
-        System.out.println("path not found"+ e);
+    if (this.fileName != null ) {
+      if(protectedRoute){
+        return getProtectedResponse(request);
       }
+      return getResponse();
     }
-    return status.getBytes();
+    return this.simpleResponse.getBytes();
   }
 
-  private byte [] getResponse(Path path) {
+  private byte [] getProtectedResponse(Request request) {
+    if(Authenticator.authenticate(request)) {
+      return getResponse();
+    }
+    return noAccessResponse();
+  }
+
+  private byte [] getResponse() {
     try {
-      byte[] fileBytes = Files.readAllBytes(path);
+      byte[] fileBytes = Files.readAllBytes(Paths.get(getLocation()));
       return fileResponse(fileBytes);
     }catch (IOException e) {
       System.out.println("path not found"+ e);
+      return status.STATUSERROR.getBytes();
     }
-    return STATUSERROR.getBytes();
   }
 
   private byte [] fileResponse(byte [] file) {
-
+    ByteArrayOutputStream output= new ByteArrayOutputStream();
     try{
-      this.outputStream.reset();
-      this.outputStream.write(buildHeader(file.length));
-      this.outputStream.write(file);
-      return outputStream.toByteArray();
+      output.write(buildHeader(file.length));
+      output.write(file);
+      return output.toByteArray();
     } catch (IOException e) {
       System.out.println("could not write file" + e);
-      return STATUSERROR.getBytes();
+      return status.STATUSERROR.getBytes();
     }
   }
 
   private byte [] buildHeader (int fileLength) {
-    return (status +CRLF+TYPEHEADER
-            + contentType+CRLF+LENGTHHEADER
-            + fileLength +CRLF+CRLF).getBytes();
+    return (status.OK +CRLF+TYPEHEADER
+        + contentType+CRLF+LENGTHHEADER
+        + fileLength +CRLF+CRLF).getBytes();
   }
-  
-  private Path getPath() throws IOException {
-    String location = this.directory + this.fileName;
-    Path path = Paths.get(location);
-    return path;
+
+  private byte [] noAccessResponse() {
+    return (this.status.UNAUTHORIZED + CRLF
+        + authHeader+ this.fileName +CRLF).getBytes();
+  }
+
+  private String getLocation()  {
+    return this.directory + this.fileName;
   }
 }

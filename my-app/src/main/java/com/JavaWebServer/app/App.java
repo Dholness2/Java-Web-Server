@@ -11,6 +11,7 @@ public class App {
   private static final int DIR_INDEX = 1;
   private static final String [] KEYS = {"-p","-d"};
   private static int port;
+  private static String loggerPath = System.getProperty("user.dir")+"/logs";
   private static String directory = "/Users/don/desktop/cob_spec/public/";
   private static String formPath = "/Users/don/desktop/cob_spec/public/form";
   private static String patchPath = "/Users/don/desktop/cob_spec/public/patch-content.txt";
@@ -86,7 +87,8 @@ public class App {
     HashMap <String, RestMethod> routes = getRoutes(httpStatuses);
     Responder responder = new Responder(routeDirectory(), routes);
     ServerSocket serverSocket = new ServerSocket(port);
-    Server app = new Server(port,serverSocket,responder);
+    Logger logger = new Logger(loggerPath);
+    Server app = new Server(port,serverSocket,responder,logger);
     app.run();
   }
 }

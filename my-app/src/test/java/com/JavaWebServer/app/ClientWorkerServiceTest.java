@@ -21,6 +21,7 @@ public class ClientWorkerServiceTest {
   private java.net.Socket mockSocket;
   private HashMap<String, ArrayList<String>> routes;
   private Responder testResponder;
+  private LoggerMock loggerMock;
 
   @Before
    public  void responderSertup() {
@@ -31,13 +32,14 @@ public class ClientWorkerServiceTest {
      routes = new HashMap<String, ArrayList<String>>();
      routes.put("/",routeMethods);
      testResponder =  new Responder(routes, methods);
+     loggerMock = new LoggerMock("/foobar");
    }
 
   @Test
   public void respondsToClientsRequest() throws Exception {
     mockSocket = new ClientSocketMock("localHost", 9999, "GET / HTTP/1.1");
     wrapper = new Socket(mockSocket);
-    testWorker = new ClientWorkerService(wrapper, testResponder);
+    testWorker = new ClientWorkerService(wrapper, testResponder, loggerMock);
     testWorker.run();
     String response = mockSocket.getOutputStream().toString().split(BREAK_LINE)[0];
     assertEquals("HTTP/1.1 200 ok",response);
@@ -47,10 +49,39 @@ public class ClientWorkerServiceTest {
   public void respondsWith404() throws Exception {
     mockSocket = new ClientSocketMock("localHost",9999, "GET /foo HTTP/1.1");
     wrapper = new Socket(mockSocket);
-    testWorker = new ClientWorkerService(wrapper, testResponder);
+    testWorker = new ClientWorkerService(wrapper, testResponder, loggerMock);
     testWorker.run();
     String response = mockSocket.getOutputStream().toString().split(BREAK_LINE)[0];
     assertEquals("HTTP/1.1 404 Not Found",response);
+  }
+
+
+  @Test
+  public void logsRequest() throws Exception {
+    mockSocket = new ClientSocketMock("localHost",9999, "GET /foo HTTP/1.1");
+    wrapper = new Socket(mockSocket);
+    testWorker = new ClientWorkerService(wrapper, testResponder, loggerMock);
+    testWorker.run();
+    assertEquals(true ,loggerMock.requestLogged());
+  }
+
+
+  private class LoggerMock extends Logger {
+
+    private boolean logged = false;
+    private String mockPath;
+
+    public LoggerMock (String path) {
+     super(path);
+    }
+
+    public void logRequest (Request request) {
+      this.logged = true;
+    }
+
+    public boolean requestLogged() {
+      return logged;
+    }
   }
 
   private class ClientSocketMock extends java.net.Socket {

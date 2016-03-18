@@ -12,7 +12,6 @@ import java.util.ArrayList;
 public class Authenticator {
   private static String credentialsPath = System.getProperty("user.dir")+"/auth.txt";
   private static String CRLF = System.getProperty("line.separator");
-  private static base64Decoder decoder = new base64Decoder();
   private static final String credentialHeader = "Authorization: Basic ";
 
   public static boolean authenticate (Request request) {
@@ -45,6 +44,6 @@ public class Authenticator {
   }
 
   private static String decodeCredential(String credential) {
-    return  decoder.decode(credential);
+    return  Base64Decoder.decode(credential);
   }
 }

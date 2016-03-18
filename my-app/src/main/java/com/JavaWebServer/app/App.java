@@ -34,30 +34,6 @@ public class App {
     return routes;
   }
 
-  public static Map <String, String>  paramatersEncodingKeyMap() {
-    Map<String, String> encode = new HashMap<String, String>();
-    encode.put("%3C","<");
-    encode.put("%3E",">");
-    encode.put("%3D","=");
-    encode.put("%2C",",");
-    encode.put("%21","!" );
-    encode.put("%2B","+");
-    encode.put("%2D","-");
-    encode.put("%20"," ");
-    encode.put("%22", "\"");
-    encode.put("%3B",";");
-    encode.put("%2A","*");
-    encode.put("%26","&");
-    encode.put("%40","@");
-    encode.put("%23","#");
-    encode.put("%24","\\$");
-    encode.put("%5B","[");
-    encode.put("%5D","]");
-    encode.put("%3A",":");
-    encode.put("%3F","?");
-    return encode;
-  }
-
   public static HashMap getRoutes (StatusCodes status,String path) {
     boolean unprotected = false;
     boolean protectedRoute = true;
@@ -72,9 +48,9 @@ public class App {
     routes.put("Put /text-file.txt", new PutPost(status.OK,"text",new FileEditor()));
     routes.put("OPTIONS /method_options", new Options(status.OK));
     routes.put("GET /method_options", new Get(status.OK));
-    routes.put("POST /method_options", new PutPost(status.OK,"N/A",new FileEditor()));
+    routes.put("POST /method_options", new PutPost(status.OK,"method",new FileEditor()));
     routes.put("HEAD /method_options", new Head(status.OK));
-    routes.put("PUT /method_options", new PutPost(status.OK,"N/A", new FileEditor()));
+    routes.put("PUT /method_options", new PutPost(status.OK,"method", new FileEditor()));
     routes.put("GET /redirect",new Get(status.FOUND+"\n\r"+ "Location: http://localhost:5000/"));
     routes.put("GET /file1",new Get(status,"file1","text/plain", directory,unprotected));
     routes.put("GET /file2",new Get(status,"file2","text/plain", directory,unprotected));

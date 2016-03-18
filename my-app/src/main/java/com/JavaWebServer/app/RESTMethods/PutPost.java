@@ -1,7 +1,5 @@
 package com.JavaWebServer.app;
 
-import java.io.PrintWriter;
-
 public class PutPost implements RestMethod {
   private String responseStatus;
   private String path;
@@ -12,10 +10,6 @@ public class PutPost implements RestMethod {
     this.responseStatus = response;
     this.editor = editor;
     this.path = path;
-  }
-
-  public PutPost(String response) {
-   this.responseStatus = response;
   }
 
   public  byte [] handleRequest(Request request) {

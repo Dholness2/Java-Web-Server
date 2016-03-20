@@ -13,7 +13,8 @@ public class FileEditor {
     try {
       Files.write(file.toPath(),edit.getBytes("UTF-8"));
     } catch (Exception e) {
-      System.out.println("cant read file" + e);
+      new Exception("Path not found:").printStackTrace();
+      e.printStackTrace(); 
     }
   }
 }

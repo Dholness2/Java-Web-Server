@@ -33,7 +33,8 @@ public class GetPartialContent implements RestMethod {
       byte[] fileBytes = Files.readAllBytes(getPath());
       return getPartialResponse(fileBytes, request);
     }catch (IOException e) {
-      System.out.println("path not found"+ e);
+      new Exception("Path not found:").printStackTrace();
+      e.printStackTrace();
     }
     return status.STATUSERROR.getBytes();
   }
@@ -65,9 +66,10 @@ public class GetPartialContent implements RestMethod {
       output.write(partial);
       return output.toByteArray();
     } catch (IOException e) {
-      System.out.println("could not write file" + e);
-      return status.STATUSERROR.getBytes();
+      new Exception("Could not write to file").printStackTrace();
+      e.printStackTrace();
     }
+   return status.STATUSERROR.getBytes();
   }
 
   private byte [] buildHeader (int fileLength) {

@@ -20,7 +20,8 @@ public class Logger {
       logger.newLine();
       logger.close();
     } catch (IOException e) {
-      System.out.println("error logging request"+ e);
+      new Exception("Path not found:").printStackTrace();
+      e.printStackTrace();
     }
   }
 
@@ -31,7 +32,8 @@ public class Logger {
       logger.write("");
       logger.close();
     } catch (Exception e) {
-      System.out.println("cant write line" +e);
+      new Exception("Path not found:").printStackTrace();
+      e.printStackTrace(); 
     }
   }
 }

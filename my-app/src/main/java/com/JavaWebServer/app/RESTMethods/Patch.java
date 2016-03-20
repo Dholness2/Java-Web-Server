@@ -48,8 +48,9 @@ public class Patch implements RestMethod {
       try{
         byte [] fileBytes = Files.readAllBytes(Paths.get(this.directory+ this.fileName));
         return this.encoder.encode(fileBytes);
-      } catch (IOException exception) {
-        System.out.println("Can not read file" + exception);
+      } catch (IOException e) {
+	new Exception("File not found:").printStackTrace();
+	e.printStackTrace();
       }
     return tag;
   }

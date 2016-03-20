@@ -27,7 +27,8 @@ public class Authenticator {
     try{
       credentials = new ArrayList<String>(Files.readAllLines(Paths.get(credentialsPath),Charset.forName("utf-8")));
     }catch (IOException e) {
-      System.out.println("File not found" +e);
+      new Exception("File not found:").printStackTrace();
+      e.printStackTrace();
     }
     return credentials;
   }

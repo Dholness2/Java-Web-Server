@@ -16,7 +16,7 @@ public class ClientWorkerService implements Runnable {
 
   public void run () {
     this.request = client.getRequest();
-    log();
+    logRequest();
     client.sendResponse(getResponse());
     client.close();
     System.out.println ("Server: request Closed");
@@ -27,7 +27,7 @@ public class ClientWorkerService implements Runnable {
     return this.responder.getResponse(this.request);
   }
 
-  private void log() {
+  private void logRequest() {
     this.logger.logRequest(this.request);
   }
 }

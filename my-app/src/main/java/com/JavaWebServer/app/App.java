@@ -10,9 +10,11 @@ public class App {
   private static final int PORT_INDEX = 0;
   private static final int DIR_INDEX = 1;
   private static final String [] KEYS = {"-p","-d"};
+  
   private static String loggerPath = System.getProperty("user.dir")+"logs";
   private static  StatusCodes status = new StatusCodes ();
-
+  private static String serverName = "http://localhost:";
+  
   public static HashMap routeDirectory(){
     HashMap<String, ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();
     routes.put("/file1",routeMethods(new String [] {"GET", "POST"}));
@@ -34,7 +36,7 @@ public class App {
     return routes;
   }
 
-  public static HashMap getRoutes (String directory) {
+  public static HashMap getRoutes (String directory, int port) {
     boolean unprotected = false;
     boolean protectedRoute = true;
     
@@ -52,9 +54,9 @@ public class App {
     routes.put("POST /method_options", new PutPost(status.OK,"/method",directory,new FileEditor()));
     routes.put("HEAD /method_options", new Head(status.OK));
     routes.put("PUT /method_options", new PutPost(status.OK,"/method",directory,new FileEditor()));
-    routes.put("GET /redirect",new Get(status.FOUND+"\n\r"+ "Location: http://localhost:5000/"));
-    routes.put("GET /file1",new Get(status,"/file1","text/plain", directory,unprotected));
-    routes.put("GET /file2",new Get(status,"/file2","text/plain", directory,unprotected));
+    routes.put("GET /redirect", new GetRedirect(status,port,serverName));
+    routes.put("GET /file1", new Get(status,"/file1","text/plain", directory,unprotected));
+    routes.put("GET /file2", new Get(status,"/file2","text/plain", directory,unprotected));
     routes.put("GET /parameters?", new Params(status.OK,"parameters?"));
     routes.put("GET /form", new Get(status,"/form", "text/plain", directory,unprotected));
     routes.put("POST /form", new PutPost(status.OK,"/form",directory,new FileEditor()));
@@ -71,18 +73,14 @@ public class App {
     return new ArrayList<String>(Arrays.asList(methods));
   }
 
-  private static String getRootLocation() {
-    return ("\n\r"+"Location: http://localhost:"+5000+"/");
-  }
-
   public static void main( String[] args) throws Exception {
     Map<String, String> Options = OptionsParser.parse(args,KEYS);
     String directory = Options.get(KEYS[DIR_INDEX]);
+    int port = Integer.parseInt(Options.get(KEYS[PORT_INDEX]));
     
-    HashMap <String, RestMethod> routes = getRoutes(directory);
+    HashMap <String, RestMethod> routes = getRoutes(directory, port);
     Responder responder = new Responder(routeDirectory(), routes);
     
-    int port = Integer.parseInt(Options.get(KEYS[PORT_INDEX]));
     ServerSocket serverSocket = new ServerSocket(port);
     Logger logger = new Logger(loggerPath);
     

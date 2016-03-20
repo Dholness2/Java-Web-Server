@@ -2,11 +2,9 @@ package com.JavaWebServer.app;
 
 import java.io.FileWriter;
 import java.io.BufferedWriter;
-import java.io.PrintWriter;
 import java.io.IOException;
 
 public class Logger {
-
   private String logPath;
   private static final String  PROTOCOL = " HTTP/1.1";
 

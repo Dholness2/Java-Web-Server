@@ -15,7 +15,7 @@ import java.io.File;
 public class GetPartialContentTest {
   private Request  testRequest = new Request();
   private StatusCodes codes = new StatusCodes();
-  private String directory = "/Users/don/desktop/cob_spec/public/";
+  private String directory = System.getProperty("user.dir")+"/public/";;
   private String CRLF = System.getProperty("line.separator");
 
     private String buildHeader (String path, String contentType) throws IOException{

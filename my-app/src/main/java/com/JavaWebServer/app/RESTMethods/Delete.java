@@ -4,14 +4,15 @@ import java.io.PrintWriter;
 
 public class Delete implements RestMethod {
   private String responseStatus;
-  private String path;
-  private String formField;
+  private String fileName;
+  private String directory;
   private FileEditor editor;
 
-  public Delete (String response, String path, FileEditor editor) {
+  public Delete (String response, String fileName, String directory, FileEditor editor) {
     this.responseStatus = response;
     this.editor = editor;
-    this.path = path;
+    this.fileName = fileName;
+    this.directory = directory; 
   }
 
   public  byte [] handleRequest(Request request) {
@@ -20,6 +21,10 @@ public class Delete implements RestMethod {
   }
 
   private void clearFile() {
-   this.editor.edit(this.path, "");
+   this.editor.edit(getPath(), "");
+  }
+
+  private String getPath() {
+    return (this.directory +this.fileName);
   }
 }

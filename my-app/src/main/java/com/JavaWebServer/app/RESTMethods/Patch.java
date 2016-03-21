@@ -27,9 +27,9 @@ public class Patch implements RestMethod {
     String body = request.getBody();
     if ((body != null) && (matchedEtag(request))) {
       editFile(body);
-    return status.NO_CONTENT.getBytes();
+      return status.NO_CONTENT.getBytes();
     }
-    return status.NOT_FOUND.getBytes();
+   return status.NOT_FOUND.getBytes();
   }
 
   private void editFile(String body) {

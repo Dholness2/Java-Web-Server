@@ -66,7 +66,7 @@ public class App {
     routes.put("DELETE /form", new Delete(status.OK,"/form",directory,new FileEditor()));
     routes.put("GET /partial_content.txt", new GetPartialContent(status,"/partial_content.txt","text/plain",directory));
     routes.put("GET /patch-content.txt", new Get(status,"/patch-content.txt","text/plain",directory,unprotected));
-    routes.put("PATCH /patch-content.txt", new Patch(status,"patch-content",directory,new FileEditor(), new SHA1Encoder()));
+    routes.put("PATCH /patch-content.txt", new Patch(status,"/patch-content.txt",directory,new FileEditor(), new SHA1Encoder()));
     routes.put("GET /logs", new Get(status,"","text/plain",loggerPath, protectedRoute));
     return routes;
   }

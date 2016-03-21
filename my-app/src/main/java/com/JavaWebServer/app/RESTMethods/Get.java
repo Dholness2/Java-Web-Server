@@ -42,7 +42,7 @@ public class Get implements RestMethod {
   }
 
   private byte [] getProtectedResponse(Request request) {
-    if(Authenticator.authenticate(request)) {
+    if(Authenticator.canAuthenticate(request)) {
       return getResponse();
     }
     return noAccessResponse();

@@ -10,14 +10,14 @@ public class AuthenticatorTest {
  @Test
  public void requestAuthenticateTest() {
     testRequest.setHeaders("Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ="+CRLF );
-    boolean validCredentials =  Authenticator.authenticate(testRequest);
-    assertEquals(true,validCredentials);
+    boolean hasValidCredentials =  Authenticator.canAuthenticate(testRequest);
+    assertEquals(true,hasValidCredentials);
   }
 
   @Test
   public void requestAuthenticateInvalidCredentialTest() {
     testRequest.setHeaders("Authorization: Basic V3JvbmdQYXNzd29yZA=="+CRLF );
-    boolean validCredentials =  Authenticator.authenticate(testRequest);
-    assertEquals(false,validCredentials);
+    boolean hasValidCredentials =  Authenticator.canAuthenticate(testRequest);
+    assertEquals(false,hasValidCredentials);
   }
 }

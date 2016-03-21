@@ -14,8 +14,8 @@ public class Authenticator {
   private static String CRLF = System.getProperty("line.separator");
   private static final String credentialHeader = "Authorization: Basic ";
 
-  public static boolean authenticate (Request request) {
-    if (validHeader(request)){
+  public static boolean canAuthenticate (Request request) {
+    if (hasValidHeader(request)){
       ArrayList<String> validCredentials = getValidCredentials();
       return validCredentials.contains(decodeCredential(getCredential(request)));
     }
@@ -33,7 +33,7 @@ public class Authenticator {
     return credentials;
   }
 
-  private static boolean validHeader(Request request) {
+  private static boolean hasValidHeader(Request request) {
     return ((request.getHeaders() != null) && (request.getHeaders().contains(credentialHeader)));
   }
 

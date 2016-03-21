@@ -45,13 +45,13 @@ public class Patch implements RestMethod {
 
   private String  getCurrentFileTag() {
     String tag = "";
-      try{
-        byte [] fileBytes = Files.readAllBytes(Paths.get(this.directory+ this.fileName));
-        return this.encoder.encode(fileBytes);
-      } catch (IOException e) {
-	new Exception("File not found:").printStackTrace();
-	e.printStackTrace();
-      }
+    try{
+      byte [] fileBytes = Files.readAllBytes(Paths.get(this.directory+ this.fileName));
+      return this.encoder.encode(fileBytes);
+    } catch (IOException e) {
+      new Exception("File not found:").printStackTrace();
+      e.printStackTrace();
+    }
     return tag;
   }
 
@@ -59,7 +59,6 @@ public class Patch implements RestMethod {
  private String getEtag(String header) {
   String match = header.split(matchHeader)[1];
   String tag  = match.substring(0, match.indexOf(CRLF));
-  System.out.println(tag);
   return tag;
  }
 }

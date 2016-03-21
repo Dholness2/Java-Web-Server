@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class Authenticator {
   private static String credentialsPath = System.getProperty("user.dir")+"/auth.txt";
-  private static String CRLF = System.getProperty("line.separator");
+  private static final String CRLF = System.getProperty("line.separator");
   private static final String credentialHeader = "Authorization: Basic ";
 
   public static boolean canAuthenticate (Request request) {

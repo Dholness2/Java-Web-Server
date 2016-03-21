@@ -15,6 +15,7 @@ public class ResponderTest {
   private Request testRequest;
   private Responder testResponder;
   private StatusCodes codes = new StatusCodes();
+  private String CRLF = System.getProperty("line.separator");
   private String request = "GET /paramaters?variable_1=Operators%20%3C%2C%20%3E%2C%20%3D%2C%20!%3D%3B%20%2B%2C%20-%2C%20*%2C%20%26%2C%20%40%2C%20%23%2C%20%24%2C%20%5B%2C%20%5D%3A%20%22is%20that%20all%22%3F&variable_2=stuff HTTP/1.1";
 
 
@@ -25,6 +26,7 @@ public class ResponderTest {
      methods.put("GET /paramaters?", new Params(codes.OK, "paramaters?"));
      ArrayList<String> routeMethods = new ArrayList<String>(); 
      routeMethods.add("GET");
+     routeMethods.add("POST");
      routes = new HashMap<String, ArrayList<String>>();
      routes.put("/",routeMethods);
      routes.put("/paramaters?",routeMethods);
@@ -54,9 +56,9 @@ public class ResponderTest {
 
   @Test
   public void getResponseTestNoMethod() {
-    testRequest.setMessage("PUT / HTTP/1.1");
+    testRequest.setMessage("PATCH / HTTP/1.1");
    byte [] response =  testResponder.getResponse(testRequest);
-    assertEquals("HTTP/1.1 405 Method Not Allowed/nput post", new String(response));
+    assertEquals(("HTTP/1.1 405 Method Not Allowed"+CRLF+"GET POST"), new String(response));
   }
   @Test
   public void getResponseTestNoRoute() {
@@ -71,7 +73,6 @@ public class ResponderTest {
     byte [] response =  testResponder.getResponse(testRequest);
     assertEquals("HTTP/1.1 400 Bad Request", new String (response));
   }
-
 
   @Test
   public void getResponseTestBadRequestEmptyString() {

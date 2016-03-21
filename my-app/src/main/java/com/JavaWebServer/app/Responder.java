@@ -9,6 +9,7 @@ public class Responder {
   private static final String NOT_ALLOWED = "HTTP/1.1 405 Method Not Allowed";
   private static final String NOT_FOUND = "HTTP/1.1 404 Not Found"; 
   private static final String BAD_REQUEST = "HTTP/1.1 400 Bad Request";
+  private String CRLF = System.getProperty("line.separator");
 
   private Map <String, ArrayList<String>> routeDirectory;
   private Map <String, RestMethod> routes;
@@ -38,7 +39,7 @@ public class Responder {
     if(checkMethod(request)) {
       return getMessage(request);
     } else {
-      return (NOT_ALLOWED + "/n" + "put post").getBytes();
+      return (NOT_ALLOWED + CRLF + getAllowedMethods(request.getRoute())).getBytes();
     }
   }
 
@@ -64,4 +65,13 @@ public class Responder {
     String method = request.getMethod();
     return routeDirectory.get(route).contains(method);
   }
+
+ private String getAllowedMethods(String route) {
+   ArrayList <String> methods = this.routeDirectory.get(route);
+   StringBuilder allowed = new StringBuilder();
+    for (String  restMethod : methods) {
+      allowed.append(restMethod + " ");
+    }
+    return allowed.toString().trim();
+ }
 }

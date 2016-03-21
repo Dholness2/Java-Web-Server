@@ -58,7 +58,7 @@ public class ResponderTest {
   public void getResponseTestNoMethod() {
     testRequest.setMessage("PATCH / HTTP/1.1");
    byte [] response =  testResponder.getResponse(testRequest);
-    assertEquals(("HTTP/1.1 405 Method Not Allowed"+CRLF+"GET POST"), new String(response));
+    assertEquals(("HTTP/1.1 405 Method Not Allowed"), new String(response));
   }
   @Test
   public void getResponseTestNoRoute() {

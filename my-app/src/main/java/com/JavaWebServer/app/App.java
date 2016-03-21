@@ -11,6 +11,8 @@ public class App {
   private static final int DIR_INDEX = 1;
   private static final String [] KEYS = {"-p","-d"};
   
+  private static HashMap<String,ArrayList<String>> routeDirectory = routeDirectory();
+
   private static String loggerPath = System.getProperty("user.dir")+"logs";
   private static  StatusCodes status = new StatusCodes ();
   private static String serverName = "http://localhost:";
@@ -49,7 +51,7 @@ public class App {
     routes.put("GET /image.png", new Get(status,"/image.png","image/png",directory,unprotected));
     routes.put("GET /text-file.txt", new Get(status, "/text-file.txt","text/plain",directory,unprotected));
     routes.put("Put /text-file.txt", new PutPost(status.OK,"text",directory,new FileEditor()));
-    routes.put("OPTIONS /method_options", new Options(status.OK));
+    routes.put("OPTIONS /method_options", new Options(status.OK,routeDirectory));
     routes.put("GET /method_options", new Get(status.OK));
     routes.put("POST /method_options", new PutPost(status.OK,"/method",directory,new FileEditor()));
     routes.put("HEAD /method_options", new Head(status.OK));
@@ -79,7 +81,7 @@ public class App {
     int port = Integer.parseInt(Options.get(KEYS[PORT_INDEX]));
     
     HashMap <String, RestMethod> routes = getRoutes(directory, port);
-    Responder responder = new Responder(routeDirectory(), routes);
+    Responder responder = new Responder(routeDirectory, routes);
     
     ServerSocket serverSocket = new ServerSocket(port);
     Logger logger = new Logger(loggerPath);

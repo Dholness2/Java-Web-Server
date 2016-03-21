@@ -13,38 +13,67 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 
 public class SocketTest {
-
-  private final String BREAK_LINE = "\\r?\\n";
+  private final String CRLF = System.getProperty("line.separator");
   private MockSocket mockSocket;
-  private Socket wrapper;
+  private Socket testSocket;
   private StatusCodes codes;
+  
   @Before
   public void buildSockets() {
     mockSocket = new MockSocket();
-    wrapper = new Socket(mockSocket);
+    testSocket = new Socket(mockSocket);
     codes = new StatusCodes();
   }
 
   @Test
-  public void testGetRequest() {
+  public void testGetRequestIntialHeaderTest() {
     String route = "/foo";
     String requestMessage = "GET /foo HTTP/1.1";
     mockSocket.setRequest(requestMessage);
-    Request request = wrapper.getRequest();
+    Request request = testSocket.getRequest();
     assertEquals(request.getRoute(), route);
   }
 
   @Test
+  public void testGetRequestSecondaryHeaderTest() {
+    String initalHeader = "POST /simplePost HTTP/1.1"+ CRLF;
+    String additionalHeaders = "Host: test"+CRLF
+	                     +"Accept-Language: en-us"+ CRLF
+	                     +"Connection: Keep-Alive"+ CRLF
+	                     +"Content-type: text/html"+ CRLF
+	                     +"Content-Length:0 "+ CRLF;
+    String fullRequest = initalHeader + additionalHeaders;
+    mockSocket.setRequest(fullRequest);
+    Request request = testSocket.getRequest();
+    assertEquals(request.getHeaders(), additionalHeaders);
+  }
+
+  @Test
+  public void testGetRequestBodyTest() {
+    String initalHeader = "POST /simplePost HTTP/1.1"+ CRLF;
+    String additionalHeaders = "Host: test"+CRLF
+	                     +"Accept-Language: en-us"+ CRLF
+	                     +"Connection: Keep-Alive"+ CRLF
+	                     +"Content-type: text/plain"+ CRLF
+	                     +"Content-Length: 11"+ CRLF+CRLF;
+    String body = "Hello World";
+    String fullRequest = initalHeader + additionalHeaders + body;
+    mockSocket.setRequest(fullRequest);
+    Request request = testSocket.getRequest();
+    assertEquals(request.getBody(), body);
+  }
+  
+  @Test
   public void testsendResponse() {
     byte [] response = (codes.OK).getBytes();
-    wrapper.sendResponse(response);
-    String output = mockSocket.getOutputStream().toString().split(BREAK_LINE)[0];
+    testSocket.sendResponse(response);
+    String output = mockSocket.getOutputStream().toString().split(CRLF)[0];
     assertEquals(codes.OK, output);
   }
 
  @Test
   public void testClose() {
-    wrapper.close();
+    testSocket.close();
     assertTrue(mockSocket.closedStatus());
   }
 

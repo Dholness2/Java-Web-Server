@@ -31,7 +31,6 @@ public class GetDirectoryTest {
     byte [] response = testGetDir.handleRequest(new Request());
     String body = "<!DOCTYPE html><html><body><a href=\"/file1\">file1</a><br>"+CRLF+
                    "<a href=\"/file2\">file2</a><br>"+CRLF+
-                   "<a href=\"/form\">form</a><br>"+CRLF+
                    "<a href=\"/image.gif\">image.gif</a><br>"+CRLF+
                    "<a href=\"/image.jpeg\">image.jpeg</a><br>"+CRLF+
                    "<a href=\"/image.png\">image.png</a><br>"+CRLF+

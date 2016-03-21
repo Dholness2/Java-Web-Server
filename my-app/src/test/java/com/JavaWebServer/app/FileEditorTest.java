@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.After;
 
 public class FileEditorTest {
- private String path = "/Users/dholness/desktop/cob_spec/public/form";
+ private String path = System.getProperty("user.dir")+"/public/form";
  private File currentFile;
 
  private boolean containsEdit(String edit) throws IOException {

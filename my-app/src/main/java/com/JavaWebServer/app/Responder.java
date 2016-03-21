@@ -39,7 +39,7 @@ public class Responder {
     if(checkMethod(request)) {
       return getMessage(request);
     } else {
-      return (NOT_ALLOWED + CRLF + getAllowedMethods(request.getRoute())).getBytes();
+      return (NOT_ALLOWED).getBytes();
     }
   }
 

@@ -1,91 +1,99 @@
 package com.JavaWebServer.app;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+
 import java.net.Socket;
 
-import java.io.*;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 public class ServerTest  {
-  Server testServer;
-  ServerSocket testSocket;
-  Logger testLogger;
+ private Server testServer;
+ private ServerSocketMock serverSocketMock;
+ private SocketMock socketMock = new SocketMock(new Socket());
+ private String logPath = System.getProperty("user.dir")+"/logs";
+ private Logger testLogger;
+  
   @Before
   public void setupServer () throws Exception {
     HashMap<String, RestMethod> methods = new HashMap<String,RestMethod>();
-    methods.put("GET /", new Get("HTTP/1.1 200 ok"));
-    ArrayList<String> routeMethods = new ArrayList<String>(); 
-    routeMethods.add("GET");
-    HashMap<String,ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();routes.put("/",routeMethods);
-    testLogger = new Logger("/logs");
+    HashMap<String,ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();
+    testLogger = new Logger(logPath);
     Responder testResponder =  new Responder(routes, methods);
     int  port = 9094;
-    testSocket =  new ServerSocket(port);
-    testServer = new Server(port,testSocket,testResponder, testLogger);
+    serverSocketMock =  new ServerSocketMock(port);
+    testServer = new Server(port,serverSocketMock,testResponder, testLogger);
   }
 
   @After
   public void turnOffServer() {
     testLogger.clearLogs();
-    testSocket.close();
     testServer.off();
   }
 
   @Test
-  public void TestisServerOnEqualsTrue () {
+  public void testisServerOnEqualsTrue () {
     assertTrue(testServer.isServerOn());
+  }
+  
+  @Test
+  public void testisServerOnEqualsFalse () {
+    testServer.off();
+    assertFalse(testServer.isServerOn());
+  }
+
+  @Test
+  public void  testServerRunMethod() throws Exception {
+    serverSocketMock.setSocket(socketMock);
+    testServer.run(); 
+    assertTrue(socketMock.workerWasAssigned());
+    testServer.off();
+  }
+  
+  private class SocketMock extends com.JavaWebServer.app.Socket {
+  private  boolean workerRan = false; 
+	   
+    public SocketMock (java.net.Socket socket) {
+     super(socket);
     }
-  @Test
-  public void TestisServerOnEqualsFalse () {
-    testServer.off();
-    assertFalse(testServer.isServerOn());
-  }
+  
+    public Request getRequest() {
+      this.workerRan = true;
+      testServer.off();
+      Request fakeRequest = new Request();
+      fakeRequest.setMessage("GET /foo HTTP/1.1");
+      return fakeRequest;
+    }   
 
-  @Test
-  public void TestServerTurnsoff () {
-    testServer.off();
-    assertFalse(testServer.isServerOn());
-  }
-
- @Test
-  public void  TestServerRun () throws Exception {
-    Thread testThread = new Thread(testServer);
-    testThread.start();
-    testThread.sleep(100); 
-
-    java.net.Socket clientTestSocket = new Socket("localhost", 9094);
-    PrintWriter outPut = new PrintWriter( clientTestSocket.getOutputStream(), true);
-    outPut.println("GET / HTTP/1.1");
-    System.out.println("request sent");
-    String message = readServerResponse(clientTestSocket); 
-    assertEquals("HTTP/1.1 200 ok", message);
-    System.out.println("Client: Message Recieved " + message);
-  }
-
-
-  private void clientGetRequest(Socket clientTestSocket)  throws Exception{
-    PrintWriter outPut = new PrintWriter( clientTestSocket.getOutputStream(), true);
-    outPut.println("GET / HTTP/1.1");
-  }
-
- private String readServerResponse(Socket clientTestSocket) throws Exception {
-   InputStreamReader stream = new InputStreamReader(clientTestSocket.getInputStream());
-   BufferedReader response = new BufferedReader(stream);
-   return readResponse(response);
+    public boolean workerWasAssigned () {
+      return this.workerRan;
+    }
+  
+    public void sendResponse(byte [] response) { }
+  
+    public void close() {}
  }
 
- private String readResponse (BufferedReader buffer) throws Exception {
-    String message ="";
-    String line;
-    while ((line = buffer.readLine()) != null) {
-      message += line;
-    }
-    return message;
+   private class ServerSocketMock implements InterfaceServerSocket{
+   private SocketMock socketMock;
+  
+   public ServerSocketMock (int port) { }
+  
+   public void setSocket(SocketMock socket) {
+     this.socketMock = socket;
+   } 
+  
+   public com.JavaWebServer.app.Socket accept () {
+     return this.socketMock;
+   }
+  
+   public void close() {}
+
  }
 }

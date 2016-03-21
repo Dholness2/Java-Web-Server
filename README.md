@@ -11,9 +11,9 @@ To Start the Server:
 `-p {PORT}`
 `-d {DIRECTORY PATH}`
 
-### Exmaple
+### Example
  `java -jar Server.jar -p 5000 -d public`
 
 ### Resources
- Default directory resources are avaible in my-app/public
+ Default directory resources are available in my-app/public
 

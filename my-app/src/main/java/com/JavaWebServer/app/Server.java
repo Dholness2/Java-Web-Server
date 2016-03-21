@@ -10,7 +10,7 @@ public class Server implements Runnable{
   private Responder responder;
   private ClientSocket clientSocket;
   private Logger logger;
-  protected ExecutorService threadPool = Executors.newFixedThreadPool(98);
+  protected ExecutorService threadPool = Executors.newFixedThreadPool(120);
 
   public Server (int port, InterfaceServerSocket socket, Responder responder, Logger logger) {
     this.port = port;

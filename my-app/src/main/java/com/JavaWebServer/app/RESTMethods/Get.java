@@ -53,9 +53,9 @@ public class Get implements RestMethod {
       byte[] fileBytes = Files.readAllBytes(Paths.get(getLocation()));
       return fileResponse(fileBytes);
     }catch (IOException e) {
-      System.out.println("path not found"+ e);
-      return status.STATUSERROR.getBytes();
+   
     }
+    return status.STATUSERROR.getBytes();
   }
 
   private byte [] fileResponse(byte [] file) {
@@ -65,9 +65,10 @@ public class Get implements RestMethod {
       output.write(file);
       return output.toByteArray();
     } catch (IOException e) {
-      System.out.println("could not write file" + e);
-      return status.STATUSERROR.getBytes();
+      new Exception("could not write to Strem").printStackTrace();
+      e.printStackTrace();
     }
+    return status.STATUSERROR.getBytes();
   }
 
   private byte [] buildHeader (int fileLength) {

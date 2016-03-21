@@ -24,9 +24,10 @@ public class Socket implements ClientSocket {
       updateRequest();
       return currentRequest;
     } catch (IOException e) {
-      System.out.println("cant read request"+ e);
-      return null;
+      new Exception("Can't read Request").printStackTrace();
+      e.printStackTrace();
     }
+   return this.currentRequest;
   }
 
   public void sendResponse(byte [] response) {

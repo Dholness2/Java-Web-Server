@@ -20,9 +20,7 @@ public class Responder {
 
   public byte [] getResponse(Request request) {
     if (request.validRequest()){
-      byte[] response = handleValidRequest(request);
-      System.out.println(new String (response));
-      return response;
+      return handleValidRequest(request);
     } else {
       return BAD_REQUEST.getBytes();
     }

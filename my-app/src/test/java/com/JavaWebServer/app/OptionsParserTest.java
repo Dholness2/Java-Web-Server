@@ -13,11 +13,8 @@ public class OptionsParserTest  {
    String [] testArguements = {"-p","9090","-d","PUBLIC_DIR"};
    Map <String,String> expectedResults = new HashMap<String, String>();
    Map <String, String> parsedArguments = OptionsParser.parse(testArguements, keys);
-
    expectedResults.put("-p", "9090");
    expectedResults.put("-d","PUBLIC_DIR");
    assertEquals(parsedArguments.keySet(), expectedResults.keySet());
-   System.out.println(parsedArguments.keySet());
-   System.out.println(parsedArguments.values());
  }
 }

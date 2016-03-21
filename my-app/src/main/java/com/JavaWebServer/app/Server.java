@@ -6,13 +6,13 @@ import java.util.concurrent.Executors;
 public class Server implements Runnable{
   private int port;
   private boolean serverOn = true;
-  private ServerSocket serverSocket;
+  private InterfaceServerSocket serverSocket;
   private Responder responder;
   private ClientSocket clientSocket;
   private Logger logger;
-  protected ExecutorService threadPool = Executors.newFixedThreadPool(98);
+  protected ExecutorService threadPool = Executors.newFixedThreadPool(120);
 
-  public Server (int port, ServerSocket socket, Responder responder, Logger logger) {
+  public Server (int port, InterfaceServerSocket socket, Responder responder, Logger logger) {
     this.port = port;
     this.serverSocket = socket;
     this.responder = responder;

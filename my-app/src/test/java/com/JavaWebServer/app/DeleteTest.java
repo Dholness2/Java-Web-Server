@@ -8,12 +8,12 @@ public class DeleteTest {
  private  Request testRequest = new Request();
  private StatusCodes codes = new StatusCodes();
  private FileEditorMock editorMock = new FileEditorMock();
- private String path = "/foobar";
-
+ private String fileName = "/foobar";
+ private String directory = "foo/bar";
 
   @Test
   public void HandleRequestTest() {
-    Delete testDelete = new Delete(codes.OK,path,editorMock);
+    Delete testDelete = new Delete(codes.OK,fileName,directory,editorMock);
     String response = new String (testDelete.handleRequest(testRequest));
     assertEquals(true, editorMock.fileChanged());
     assertEquals(codes.OK, response);
@@ -27,7 +27,9 @@ public class DeleteTest {
 
     @Override
     public void edit(String path, String post) {
-      this.hasEditedFile = true;
+      if(path.equals(directory+fileName)) {
+        this.hasEditedFile = true;
+      }
     }
 
     public boolean fileChanged() {

@@ -3,13 +3,16 @@ package com.JavaWebServer.app;
 public class PutPost implements RestMethod {
   private String responseStatus;
   private String path;
-  private String formField;
+  private String fileName;
   private FileEditor editor;
+  private String directory;
 
-  public PutPost(String response, String path, FileEditor editor) {
+  public PutPost(String response, String fileName, String directory, FileEditor editor) {
     this.responseStatus = response;
     this.editor = editor;
     this.path = path;
+    this.fileName = fileName;
+    this.directory = directory;
   }
 
   public  byte [] handleRequest(Request request) {
@@ -20,7 +23,11 @@ public class PutPost implements RestMethod {
     return this.responseStatus.getBytes();
   }
 
-  public void editFile(String body) {
-   this.editor.edit(this.path, body);
+  private void editFile(String body) {
+   this.editor.edit(getPath(), body);
+  }
+
+  private String getPath() {
+    return (this.directory + this.fileName);
   }
 }

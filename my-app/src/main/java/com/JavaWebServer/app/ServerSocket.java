@@ -4,7 +4,8 @@ import java.io.IOException;
 
 public class ServerSocket implements InterfaceServerSocket {
   private java.net.ServerSocket serverSocket;
-
+  private Socket failedAccept = null;
+  
   public ServerSocket(int port) {
     try{
       this.serverSocket = new java.net.ServerSocket(port);
@@ -21,8 +22,10 @@ public class ServerSocket implements InterfaceServerSocket {
     try {
       return new Socket(serverSocket.accept());
     } catch(IOException e) {
-      throw new RuntimeException("can not accept Client Connnection"+ e);
+      new Exception("Can not accept Client Connection").printStackTrace();
+      e.printStackTrace();
     }
+    return failedAccept;
   }
 
   public Boolean isClosed() {
@@ -33,7 +36,8 @@ public class ServerSocket implements InterfaceServerSocket {
     try {
       serverSocket.close();
     } catch(IOException e) {
-      throw new RuntimeException("can not close ServerSocket"+ e);
+      new Exception("Can not close ServerSocket").printStackTrace();
+      e.printStackTrace();
     }
   }
 }

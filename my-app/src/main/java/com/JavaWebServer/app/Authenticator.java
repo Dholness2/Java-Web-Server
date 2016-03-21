@@ -27,7 +27,8 @@ public class Authenticator {
     try{
       credentials = new ArrayList<String>(Files.readAllLines(Paths.get(credentialsPath),Charset.forName("utf-8")));
     }catch (IOException e) {
-      System.out.println("File not found" +e);
+      new Exception("File not found:").printStackTrace();
+      e.printStackTrace();
     }
     return credentials;
   }
@@ -39,7 +40,6 @@ public class Authenticator {
   private static String getCredential(Request request){
     String header = request.getHeaders().split(credentialHeader)[1];
     String credentials  = header.substring(0, header.indexOf(CRLF));
-    System.out.println(credentials);
     return credentials;
   }
 

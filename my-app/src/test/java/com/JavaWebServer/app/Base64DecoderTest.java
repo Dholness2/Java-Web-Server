@@ -5,7 +5,7 @@ import org.junit.Before;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class base64DecoderTest {
+public class Base64DecoderTest {
 
   @Test
   public void decodeTest() {

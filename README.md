@@ -1,4 +1,4 @@
-#Simple Java WebServer
+#Simple Java Web Server
 
 ### Start
 To Start the Server:

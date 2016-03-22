@@ -1,4 +1,4 @@
-/*package com.JavaWebServer.app;
+package com.JavaWebServer.app;
 
 import org.junit.Test;
 import org.junit.Before;
@@ -6,8 +6,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class SHA1EncoderTest {
-
-
   @Test
   public void encodeTestiDefault()  throws Exception {
     byte [] testContent = ("default content").getBytes("utf-8");
@@ -23,4 +21,4 @@ public class SHA1EncoderTest {
     Encoder  testEncoder = new SHA1Encoder();
     assertEquals(expectedEncodedString,testEncoder.encode(testContent));
   }
-}*/
+}

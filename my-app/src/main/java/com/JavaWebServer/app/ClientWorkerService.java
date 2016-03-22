@@ -22,7 +22,6 @@ public class ClientWorkerService implements Runnable {
     System.out.println ("Server: request Closed");
   }
 
-
   private byte [] getResponse() {
     return this.responder.getResponse(this.request);
   }

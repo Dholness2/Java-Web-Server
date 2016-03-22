@@ -42,7 +42,7 @@ public class Get implements RestMethod {
   }
 
   private byte [] getProtectedResponse(Request request) {
-    if(Authenticator.authenticate(request)) {
+    if(Authenticator.canAuthenticate(request)) {
       return getResponse();
     }
     return noAccessResponse();
@@ -53,7 +53,8 @@ public class Get implements RestMethod {
       byte[] fileBytes = Files.readAllBytes(Paths.get(getLocation()));
       return fileResponse(fileBytes);
     }catch (IOException e) {
-   
+     new Exception("could not readfile").printStackTrace();
+      e.printStackTrace();
     }
     return status.STATUSERROR.getBytes();
   }

@@ -15,7 +15,7 @@ public class Get implements RestMethod {
   private String simpleResponse;
   private boolean protectedRoute;
   private static final String CRLF ="\r\n";
-  private static final String authHeader ="WWW-Authenticate: Basic realm=";
+  private static final String AUTHHEADER ="WWW-Authenticate: Basic realm=";
   private static final String TYPEHEADER = "Content-Type: ";
   private static final String LENGTHHEADER = "Content-Length:";
 
@@ -80,7 +80,7 @@ public class Get implements RestMethod {
 
   private byte [] noAccessResponse() {
     return (this.status.UNAUTHORIZED + CRLF
-        + authHeader+ this.fileName +CRLF).getBytes();
+        + AUTHHEADER + this.fileName +CRLF).getBytes();
   }
 
   private String getLocation()  {

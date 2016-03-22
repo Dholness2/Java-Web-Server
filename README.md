@@ -5,9 +5,9 @@ To Start the Server:
 
  cd my-app
 
-`java -jar Server.jar`
+`java -jar Server.jar -p 5000 -d public`
 
-### Options
+### Requried Options
 `-p {PORT}`
 `-d {DIRECTORY PATH}`
 

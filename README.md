@@ -1,15 +1,13 @@
 #Simple Java Web Server
-
-### Start
-To Start the Server:
-
+ 
+### Start Server
  cd my-app
 
-`java -jar Server.jar -p 5000 -d public`
+ `java -jar Server.jar -p 5000 -d public`
 
 ### Requried Options
-`-p {PORT}`
-`-d {DIRECTORY PATH}`
+ `-p {PORT}`
+ `-d {DIRECTORY PATH}`
 
 ### Example
  `java -jar Server.jar -p 5000 -d public`
@@ -17,3 +15,7 @@ To Start the Server:
 ### Resources
  Default directory resources are available in my-app/public
 
+### To Run Test
+ cd my-app
+ 
+ mvn clean test

@@ -50,7 +50,7 @@ public class GetPartialContent implements RestMethod {
   }
 
   private boolean hasRangeHeaders(Request request){
-    String expectedHeader = "Content-Range: bytes";
+    String expectedHeader = "Range:";
     return ((request.getHeaders() != null) && (request.getHeaders().contains(expectedHeader)));
   }
 
@@ -84,27 +84,27 @@ public class GetPartialContent implements RestMethod {
       new Exception("Could not write to file").printStackTrace();
       e.printStackTrace();
     }
-   return status.STATUSERROR.getBytes();
+    return status.STATUSERROR.getBytes();
   }
 
   private byte [] buildHeader (int fileLength) {
     return (status.PARTIAL+CRLF+TYPEHEADER
-            + contentType+CRLF+LENGTHHEADER
-            + fileLength +CRLF+CRLF).getBytes();
+        + contentType+CRLF+LENGTHHEADER
+        + fileLength +CRLF+CRLF).getBytes();
   }
 
   private void setRange(String header, int fileLength){
     String range = getRange(header);
-    int seperatorIndex = range.indexOf("-");
-    if(lowerBoundRequest(seperatorIndex)){
+    int separatorIndex = range.indexOf("-");
+    if(lowerBoundRequest(separatorIndex)){
       this.startIndex = (fileLength - (Integer.parseInt(range.substring(1)) - 1));
       this.endIndex = fileLength;
-    } else if(upperBoundRequest(seperatorIndex, range)) {
-      this.startIndex = Integer.parseInt(range.substring(0, seperatorIndex));
+    } else if(upperBoundRequest(separatorIndex, range)) {
+      this.startIndex = Integer.parseInt(range.substring(0, separatorIndex));
       this.endIndex = fileLength;
     }else {
-      this.startIndex = Integer.parseInt(range.substring(0, seperatorIndex));
-      this.endIndex = Integer.parseInt(range.substring((seperatorIndex + 1)));
+      this.startIndex = Integer.parseInt(range.substring(0, separatorIndex));
+      this.endIndex = Integer.parseInt(range.substring((separatorIndex + 1)));
     }
   }
 
@@ -112,11 +112,11 @@ public class GetPartialContent implements RestMethod {
     return header.substring((header.indexOf("=") + 1), header.indexOf(CRLF));
   }
 
-  private boolean lowerBoundRequest (int speratorIndex) {
-    return (speratorIndex == 0);
+  private boolean lowerBoundRequest (int separatorIndex) {
+    return (separatorIndex == 0);
   }
 
-  private boolean upperBoundRequest(int seperatorIndex, String range){
-    return ((seperatorIndex + 1) > (range.length() - 1));
+  private boolean upperBoundRequest(int separatorIndex, String range){
+    return ((separatorIndex + 1) > (range.length() - 1));
   }
 }

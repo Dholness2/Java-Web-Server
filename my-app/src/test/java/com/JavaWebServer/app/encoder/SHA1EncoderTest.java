@@ -1,5 +1,8 @@
 package com.JavaWebServer.app;
 
+import com.JavaWebServer.app.encoders.Encoder;
+import com.JavaWebServer.app.encoders.SHA1Encoder;
+
 import org.junit.Test;
 import org.junit.Before;
 import static org.junit.Assert.assertEquals;

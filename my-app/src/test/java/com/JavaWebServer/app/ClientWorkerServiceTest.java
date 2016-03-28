@@ -1,5 +1,10 @@
 package com.JavaWebServer.app;
 
+import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Get;
+import com.JavaWebServer.app.sockets.Socket;
+import com.JavaWebServer.app.sockets.ClientSocket;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -38,7 +43,7 @@ public class ClientWorkerServiceTest {
   @Test
   public void respondsToClientsRequest() throws Exception {
     mockSocket = new ClientSocketMock("localHost", 9999, "GET / HTTP/1.1");
-    wrapper = new Socket(mockSocket);
+    wrapper = new ClientSocket(mockSocket);
     testWorker = new ClientWorkerService(wrapper, testResponder, loggerMock);
     testWorker.run();
     String response = mockSocket.getOutputStream().toString().split(BREAK_LINE)[0];
@@ -48,7 +53,7 @@ public class ClientWorkerServiceTest {
   @Test
   public void respondsWith404() throws Exception {
     mockSocket = new ClientSocketMock("localHost",9999, "GET /foo HTTP/1.1");
-    wrapper = new Socket(mockSocket);
+    wrapper = new ClientSocket(mockSocket);
     testWorker = new ClientWorkerService(wrapper, testResponder, loggerMock);
     testWorker.run();
     String response = mockSocket.getOutputStream().toString().split(BREAK_LINE)[0];
@@ -59,7 +64,7 @@ public class ClientWorkerServiceTest {
   @Test
   public void logsRequest() throws Exception {
     mockSocket = new ClientSocketMock("localHost",9999, "GET /foo HTTP/1.1");
-    wrapper = new Socket(mockSocket);
+    wrapper = new ClientSocket(mockSocket);
     testWorker = new ClientWorkerService(wrapper, testResponder, loggerMock);
     testWorker.run();
     assertEquals(true ,loggerMock.requestLogged());

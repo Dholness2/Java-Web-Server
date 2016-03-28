@@ -1,5 +1,7 @@
 package com.JavaWebServer.app;
 
+import com.JavaWebServer.app.decoders.Base64Decoder;
+
 import org.junit.Test;
 import org.junit.Before;
 import static org.junit.Assert.assertEquals;

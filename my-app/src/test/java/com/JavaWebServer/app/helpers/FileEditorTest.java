@@ -1,5 +1,7 @@
 package com.JavaWebServer.app;
 
+import com.JavaWebServer.app.helpers.FileEditor;
+
 import java.util.Scanner;
 
 import java.io.File;

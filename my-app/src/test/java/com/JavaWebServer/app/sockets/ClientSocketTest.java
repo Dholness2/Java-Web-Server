@@ -1,5 +1,8 @@
 package com.JavaWebServer.app;
 
+import com.JavaWebServer.app.sockets.Socket;
+import com.JavaWebServer.app.sockets.ClientSocket;
+
 import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
@@ -12,16 +15,16 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 
-public class SocketTest {
+public class ClientSocketTest {
   private final String CRLF = System.getProperty("line.separator");
   private MockSocket mockSocket;
-  private Socket testSocket;
+  private ClientSocket testSocket;
   private StatusCodes codes;
-  
+
   @Before
   public void buildSockets() {
     mockSocket = new MockSocket();
-    testSocket = new Socket(mockSocket);
+    testSocket = new ClientSocket(mockSocket);
     codes = new StatusCodes();
   }
 
@@ -38,10 +41,10 @@ public class SocketTest {
   public void testGetRequestSecondaryHeaderTest() {
     String initalHeader = "POST /simplePost HTTP/1.1"+ CRLF;
     String additionalHeaders = "Host: test"+CRLF
-	                     +"Accept-Language: en-us"+ CRLF
-	                     +"Connection: Keep-Alive"+ CRLF
-	                     +"Content-type: text/html"+ CRLF
-	                     +"Content-Length:0 "+ CRLF;
+                     +"Accept-Language: en-us"+ CRLF
+                     +"Connection: Keep-Alive"+ CRLF
+                     +"Content-type: text/html"+ CRLF
+                     +"Content-Length:0 "+ CRLF;
     String fullRequest = initalHeader + additionalHeaders;
     mockSocket.setRequest(fullRequest);
     Request request = testSocket.getRequest();
@@ -52,17 +55,17 @@ public class SocketTest {
   public void testGetRequestBodyTest() {
     String initalHeader = "POST /simplePost HTTP/1.1"+ CRLF;
     String additionalHeaders = "Host: test"+CRLF
-	                     +"Accept-Language: en-us"+ CRLF
-	                     +"Connection: Keep-Alive"+ CRLF
-	                     +"Content-type: text/plain"+ CRLF
-	                     +"Content-Length: 11"+ CRLF+CRLF;
+                     +"Accept-Language: en-us"+ CRLF
+                     +"Connection: Keep-Alive"+ CRLF
+                     +"Content-type: text/plain"+ CRLF
+                     +"Content-Length: 11"+ CRLF+CRLF;
     String body = "Hello World";
     String fullRequest = initalHeader + additionalHeaders + body;
     mockSocket.setRequest(fullRequest);
     Request request = testSocket.getRequest();
     assertEquals(request.getBody(), body);
   }
-  
+
   @Test
   public void testsendResponse() {
     byte [] response = (codes.OK).getBytes();

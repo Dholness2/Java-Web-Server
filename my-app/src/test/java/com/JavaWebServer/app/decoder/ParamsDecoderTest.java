@@ -1,5 +1,7 @@
 package com.JavaWebServer.app;
 
+import com.JavaWebServer.app.decoders.ParamsDecoder;
+
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 

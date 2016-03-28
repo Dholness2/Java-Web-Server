@@ -1,6 +1,9 @@
-package com.JavaWebServer.app;
+package com.JavaWebServer.app.responses;
 
-public class Head  implements RestMethod {
+import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.Request;
+
+public class Head implements RestMethod {
   private String responseStatus;
 
   public Head(String response ) {

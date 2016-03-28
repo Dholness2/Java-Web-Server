@@ -1,4 +1,10 @@
-package com.JavaWebServer.app;
+package com.JavaWebServer.app.responses;
+
+import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.encoders.Encoder;
+import com.JavaWebServer.app.helpers.FileEditor;
+import com.JavaWebServer.app.StatusCodes;
+import com.JavaWebServer.app.Request;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;

@@ -1,4 +1,8 @@
-package com.JavaWebServer.app;
+package com.JavaWebServer.app.responses;
+
+import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.helpers.FileEditor;
+import com.JavaWebServer.app.Request;
 
 import java.io.PrintWriter;
 

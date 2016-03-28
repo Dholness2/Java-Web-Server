@@ -1,4 +1,7 @@
-package com.JavaWebServer.app;
+package com.JavaWebServer.app.responses;
+
+import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.Request;
 
 import java.util.HashMap;
 import java.util.ArrayList;

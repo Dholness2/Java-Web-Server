@@ -1,4 +1,8 @@
-package com.JavaWebServer.app;
+package com.JavaWebServer.app.responses;
+
+import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.StatusCodes;
+import com.JavaWebServer.app.Request;
 
 public class GetRedirect implements RestMethod {
 

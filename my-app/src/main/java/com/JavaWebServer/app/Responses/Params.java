@@ -1,4 +1,8 @@
-package com.JavaWebServer.app;
+package com.JavaWebServer.app.responses;
+
+import com.JavaWebServer.app.decoders.ParamsDecoder;
+import com.JavaWebServer.app.Request;
+import com.JavaWebServer.app.responses.RestMethod;
 
 import java.util.HashMap;
 import java.util.Map;

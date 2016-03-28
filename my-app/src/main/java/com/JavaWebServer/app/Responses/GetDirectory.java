@@ -1,11 +1,13 @@
-package com.JavaWebServer.app;
+package com.JavaWebServer.app.responses;
+
+import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.StatusCodes;
+import com.JavaWebServer.app.Request;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.io.File;
 import java.util.Arrays;
-
-
 
 public class GetDirectory implements RestMethod {
   private final String TYPE="text/html";

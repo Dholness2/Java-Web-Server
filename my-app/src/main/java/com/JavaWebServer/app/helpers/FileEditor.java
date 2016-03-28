@@ -1,4 +1,4 @@
-package com.JavaWebServer.app;
+package com.JavaWebServer.app.helpers;
 
 import java.io.File;
 import java.nio.file.Files;

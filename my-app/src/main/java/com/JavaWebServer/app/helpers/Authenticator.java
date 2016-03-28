@@ -1,5 +1,7 @@
 package com.JavaWebServer.app;
 
+import com.JavaWebServer.app.decoders.Base64Decoder;
+
 import java.io.File;
 import java.nio.charset.Charset;
 import java.io.IOException;

@@ -1,11 +1,13 @@
 #Simple Java Web Server
- 
+
 ### Start Server
- cd my-app
+ 1. cd my-app
 
- `java -jar Server.jar -p 5000 -d public`
+ 2. mvn package
 
-### Requried Options
+ 3. `java -jar Server.jar -p 5000 -d public`
+
+### Requried Flags
  `-p {PORT}`
  `-d {DIRECTORY PATH}`
 
@@ -13,9 +15,9 @@
  `java -jar Server.jar -p 5000 -d public`
 
 ### Resources
- Default directory resources are available in my-app/public
+  Default directory resources are available in my-app/public
 
 ### To Run Test
- cd my-app
- 
- mvn clean test
+  1. cd my-app
+
+  2. mvn clean test

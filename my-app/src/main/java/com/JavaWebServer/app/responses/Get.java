@@ -13,10 +13,10 @@ import java.util.Arrays;
 import java.io.ByteArrayOutputStream;
 
 public class Get implements Response {
-  private StatusCodes status;
-  private String fileName;
-  private String directory;
-  private String contentType;
+  StatusCodes status;
+  String fileName;
+  String directory;
+  String contentType;
   private String simpleResponse;
   private boolean protectedRoute;
   private static final String CRLF ="\r\n";

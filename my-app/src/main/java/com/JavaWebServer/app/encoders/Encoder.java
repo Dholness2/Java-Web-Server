@@ -1,4 +1,4 @@
-package com.JavaWebServer.app;
+package com.JavaWebServer.app.encoders;
 
 import java.io.UnsupportedEncodingException;
 

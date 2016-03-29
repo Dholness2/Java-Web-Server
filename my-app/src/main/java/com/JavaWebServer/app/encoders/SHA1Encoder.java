@@ -1,4 +1,6 @@
-package com.JavaWebServer.app;
+package com.JavaWebServer.app.encoders;
+
+import com.JavaWebServer.app.encoders.Encoder;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

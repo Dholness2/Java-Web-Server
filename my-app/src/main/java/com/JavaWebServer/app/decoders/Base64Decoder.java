@@ -1,4 +1,5 @@
-package com.JavaWebServer.app;
+package com.JavaWebServer.app.decoders;
+
 import java.util.Base64;
 
 public class Base64Decoder{

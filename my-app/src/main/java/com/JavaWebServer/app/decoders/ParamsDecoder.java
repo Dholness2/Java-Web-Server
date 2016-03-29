@@ -1,4 +1,4 @@
-package com.JavaWebServer.app;
+package com.JavaWebServer.app.decoders;
 
 import java.util.HashMap;
 import java.util.Map;

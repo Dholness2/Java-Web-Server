@@ -1,6 +1,6 @@
 package com.JavaWebServer.app;
 
-import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.sockets.ClientSocket;
 
 import com.JavaWebServer.app.serverSockets.ServerSocket;
@@ -28,7 +28,7 @@ public class ServerTest  {
 
   @Before
   public void setupServer () throws Exception {
-    HashMap<String, RestMethod> methods = new HashMap<String,RestMethod>();
+    HashMap<String, Response> methods = new HashMap<String,Response>();
     HashMap<String,ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();
     testLogger = new Logger(logPath);
     Responder testResponder =  new Responder(routes, methods);

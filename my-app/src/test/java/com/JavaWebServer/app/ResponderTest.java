@@ -1,7 +1,7 @@
 package com.JavaWebServer.app;
 
 import com.JavaWebServer.app.Request;
-import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.responses.Params;
 import com.JavaWebServer.app.responses.Get;
 import com.JavaWebServer.app.StatusCodes;
@@ -27,7 +27,7 @@ public class ResponderTest {
 
   @Before
   public void buildTestSetup()  {
-     HashMap<String, RestMethod> methods = new HashMap<String,RestMethod>();
+     HashMap<String, Response> methods = new HashMap<String,Response>();
      methods.put("GET /", new Get(codes.OK));
      methods.put("GET /paramaters?", new Params(codes.OK, "paramaters?"));
      ArrayList<String> routeMethods = new ArrayList<String>(); 

@@ -1,6 +1,6 @@
 package com.JavaWebServer.app;
 
-import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.responses.Get;
 import com.JavaWebServer.app.sockets.Socket;
 import com.JavaWebServer.app.sockets.ClientSocket;
@@ -30,8 +30,8 @@ public class ClientWorkerServiceTest {
 
   @Before
    public  void responderSertup() {
-    HashMap<String, RestMethod> methods = new HashMap<String,RestMethod>();
-    methods.put("GET /", new Get("HTTP/1.1 200 ok"));
+     HashMap<String, Response> methods = new HashMap<String,Response>();
+     methods.put("GET /", new Get("HTTP/1.1 200 ok"));
      ArrayList<String> routeMethods = new ArrayList<String>(); 
      routeMethods.add("GET");
      routes = new HashMap<String, ArrayList<String>>();

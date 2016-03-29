@@ -1,18 +1,21 @@
 package com.JavaWebServer.app;
 
+import com.JavaWebServer.app.sockets.Socket;
+import com.JavaWebServer.app.serverSockets.ServerSocket;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server implements Runnable{
   private int port;
   private boolean serverOn = true;
-  private InterfaceServerSocket serverSocket;
+  private ServerSocket serverSocket;
   private Responder responder;
-  private ClientSocket clientSocket;
+  private Socket clientSocket;
   private Logger logger;
   protected ExecutorService threadPool = Executors.newFixedThreadPool(120);
 
-  public Server (int port, InterfaceServerSocket socket, Responder responder, Logger logger) {
+  public Server (int port, ServerSocket socket, Responder responder, Logger logger) {
     this.port = port;
     this.serverSocket = socket;
     this.responder = responder;

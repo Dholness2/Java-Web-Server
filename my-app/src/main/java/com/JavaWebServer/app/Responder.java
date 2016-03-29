@@ -1,5 +1,7 @@
 package com.JavaWebServer.app;
 
+import com.JavaWebServer.app.responses.Response;
+
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
@@ -12,9 +14,9 @@ public class Responder {
   private String CRLF = System.getProperty("line.separator");
 
   private Map <String, ArrayList<String>> routeDirectory;
-  private Map <String, RestMethod> routes;
+  private Map <String, Response> routes;
 
-  public Responder(Map<String, ArrayList<String>> routeDirectory, Map<String, RestMethod> routes) {
+  public Responder(Map<String, ArrayList<String>> routeDirectory, Map<String, Response> routes) {
     this.routeDirectory = routeDirectory;
     this.routes = routes;
   }
@@ -45,7 +47,7 @@ public class Responder {
 
   private byte [] getMessage(Request request){
     String message = request.getRequest();
-    RestMethod currentRoute = routes.get(message);
+    Response currentRoute = routes.get(message);
     return currentRoute.handleRequest(request);
   }
 

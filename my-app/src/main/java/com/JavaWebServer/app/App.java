@@ -1,5 +1,28 @@
 package com.JavaWebServer.app;
 
+import com.JavaWebServer.app.responses.Get;
+import com.JavaWebServer.app.responses.PutPost;
+import com.JavaWebServer.app.responses.GetDirectory;
+import com.JavaWebServer.app.responses.GetPartialContent;
+import com.JavaWebServer.app.responses.GetRedirect;
+import com.JavaWebServer.app.responses.Params;
+import com.JavaWebServer.app.responses.Delete;
+import com.JavaWebServer.app.helpers.FileEditor;
+import com.JavaWebServer.app.responses.Head;
+import com.JavaWebServer.app.responses.Patch;
+import com.JavaWebServer.app.responses.Response;
+import com.JavaWebServer.app.responses.Options;
+
+import com.JavaWebServer.app.sockets.Socket;
+import com.JavaWebServer.app.sockets.ClientSocket;
+
+import com.JavaWebServer.app.serverSockets.ServerSocketWrapper;
+import com.JavaWebServer.app.serverSockets.ServerSocket;
+
+import com.JavaWebServer.app.Request;
+
+import com.JavaWebServer.app.encoders.SHA1Encoder;
+
 import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
@@ -42,7 +65,7 @@ public class App {
     boolean unprotected = false;
     boolean protectedRoute = true;
 
-    HashMap<String, RestMethod> routes = new HashMap<String,RestMethod>();
+    HashMap<String, Response> routes = new HashMap<String,Response>();
     routes.put("POST /file1",new PutPost(status.OK,"/file1",directory,new FileEditor()));
     routes.put("GET /", new GetDirectory(status,directory));
     routes.put("PUT /", new PutPost(status.OK, "/",directory,new FileEditor()));
@@ -80,10 +103,10 @@ public class App {
     String directory = Options.get(KEYS[DIR_INDEX]);
     int port = Integer.parseInt(Options.get(KEYS[PORT_INDEX]));
 
-    HashMap <String, RestMethod> routes = getRoutes(directory, port);
+    HashMap <String, Response> routes = getRoutes(directory, port);
     Responder responder = new Responder(routeDirectory, routes);
 
-    ServerSocket serverSocket = new ServerSocket(port);
+    ServerSocket serverSocket = new ServerSocketWrapper(port);
     Logger logger = new Logger(loggerPath);
 
     Server app = new Server(port,serverSocket,responder,logger);

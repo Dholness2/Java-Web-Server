@@ -1,14 +1,16 @@
 package com.JavaWebServer.app;
 
+import com.JavaWebServer.app.sockets.Socket;
+
 import java.util.ArrayList;
 
 public class ClientWorkerService implements Runnable {
-  private final ClientSocket client;
+  private final Socket client;
   private final Responder responder;
   private final Logger logger;
   private Request request;
 
-  public ClientWorkerService (ClientSocket client, Responder responder, Logger logger) {
+  public ClientWorkerService (Socket client, Responder responder, Logger logger) {
     this.client = client;
     this.responder = responder;
     this.logger = logger;

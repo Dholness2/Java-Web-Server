@@ -1,6 +1,6 @@
 package com.JavaWebServer.app;
 
-import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.responses.GetDirectory;
 import com.JavaWebServer.app.StatusCodes;
 import com.JavaWebServer.app.Request;
@@ -33,16 +33,16 @@ public class GetDirectoryTest {
 
   @Test
   public void handleResponseTest(){
-    RestMethod testGetDir = new GetDirectory(codes,directory);
+    Response testGetDir = new GetDirectory(codes,directory);
     byte [] response = testGetDir.handleRequest(new Request());
     String body = "<!DOCTYPE html><html><body><a href=\"/file1\">file1</a><br>"+CRLF+
                    "<a href=\"/file2\">file2</a><br>"+CRLF+
                    "<a href=\"/image.gif\">image.gif</a><br>"+CRLF+
                    "<a href=\"/image.jpeg\">image.jpeg</a><br>"+CRLF+
                    "<a href=\"/image.png\">image.png</a><br>"+CRLF+
-	           "<a href=\"/partial_content.txt\">partial_content.txt</a><br>"+CRLF+
+                   "<a href=\"/partial_content.txt\">partial_content.txt</a><br>"+CRLF+
                    "<a href=\"/patch-content.txt\">patch-content.txt</a><br>"+CRLF+
-		   "<a href=\"/text-file.txt\">text-file.txt</a><br></body></html>";
+    "<a href=\"/text-file.txt\">text-file.txt</a><br></body></html>";
     String expected = buildHeader(body, CONTENTYPE)+CRLF+CRLF+body;
     assertEquals(expected, new String(response));
   }

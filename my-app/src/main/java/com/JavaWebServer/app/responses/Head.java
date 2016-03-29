@@ -1,9 +1,9 @@
 package com.JavaWebServer.app.responses;
 
-import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.Request;
 
-public class Head implements RestMethod {
+public class Head implements Response {
   private String responseStatus;
 
   public Head(String response ) {

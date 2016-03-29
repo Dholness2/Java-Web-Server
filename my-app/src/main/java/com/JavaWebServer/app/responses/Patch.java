@@ -1,6 +1,6 @@
 package com.JavaWebServer.app.responses;
 
-import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.encoders.Encoder;
 import com.JavaWebServer.app.helpers.FileEditor;
 import com.JavaWebServer.app.StatusCodes;
@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 
 import java.io.IOException;
 
-public class Patch implements RestMethod {
+public class Patch implements Response {
   private StatusCodes status;
   private String fileName;
   private String directory;

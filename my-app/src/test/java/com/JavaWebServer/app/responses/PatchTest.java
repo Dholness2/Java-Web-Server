@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.Before;
 import static org.junit.Assert.assertEquals;
 
-import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.responses.Patch;
 
 import com.JavaWebServer.app.StatusCodes;
@@ -48,7 +48,7 @@ public class PatchTest {
     setRequest("PATCH","/patch-content.txt",15,"dc50a0d27dda2eee9f65644cd7e4c9cf11de8bec","patched content");
     FileEditorMock editorMock = new FileEditorMock();
     Encoder encoder = new SHA1Encoder();
-    RestMethod testPatch = new Patch(codes,fileName,directory,editorMock,encoder);
+    Response testPatch = new Patch(codes,fileName,directory,editorMock,encoder);
     String response = new String (testPatch.handleRequest(testRequest));
     assertEquals(true,editorMock.hasEditedFile);
     assertEquals(codes.NO_CONTENT, response);
@@ -59,7 +59,7 @@ public class PatchTest {
     setRequest("PATCH","/patch-content.txt",15,"5c36acad75b78b82be6d9cbbd6143ab7e0cc04b0","patched content");
     FileEditorMock editorMock = new FileEditorMock();
     Encoder encoder = new SHA1Encoder();
-    RestMethod testPatch = new Patch(codes,fileName,directory,editorMock,encoder);
+    Response testPatch = new Patch(codes,fileName,directory,editorMock,encoder);
     String response = new String (testPatch.handleRequest(testRequest));
     assertEquals(false,editorMock.hasEditedFile);
     assertEquals(codes.NOT_FOUND, response);

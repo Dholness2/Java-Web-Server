@@ -1,6 +1,6 @@
 package com.JavaWebServer.app;
 
-import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.responses.PutPost;
 import com.JavaWebServer.app.StatusCodes;
 import com.JavaWebServer.app.Request;

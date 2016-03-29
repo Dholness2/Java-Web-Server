@@ -4,14 +4,14 @@ import org.junit.Test;
 import org.junit.Before;
 import static org.junit.Assert.assertEquals;
 
-import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.responses.Delete;
 import com.JavaWebServer.app.StatusCodes;
 import com.JavaWebServer.app.Request;
 import com.JavaWebServer.app.helpers.FileEditor;
 
 public class DeleteTest {
- private  Request testRequest = new Request();
+ private Request testRequest = new Request();
  private StatusCodes codes = new StatusCodes();
  private FileEditorMock editorMock = new FileEditorMock();
  private String fileName = "/foobar";

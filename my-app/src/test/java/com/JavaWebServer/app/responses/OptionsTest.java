@@ -1,6 +1,6 @@
 package com.JavaWebServer.app;
 
-import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.responses.Options;
 import com.JavaWebServer.app.StatusCodes;
 import com.JavaWebServer.app.Request;
@@ -27,7 +27,7 @@ public class OptionsTest {
     testRequest.setMessage("OPTIONS /method_options HTTP/1.1");
     this.routeDirectory.put("/method_options",routeMethods(new String [] {"GET","HEAD","POST","OPTIONS","PUT"}));
     StatusCodes code = new StatusCodes();
-    RestMethod testOptions = new Options(code.OK, routeDirectory);
+    Response testOptions = new Options(code.OK, routeDirectory);
     String response = new String (testOptions.handleRequest(testRequest));
     assertEquals(code.OK+ System.lineSeparator() +"Allow: GET,HEAD,POST,OPTIONS,PUT,", response);
   }

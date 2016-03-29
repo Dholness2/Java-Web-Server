@@ -3,7 +3,7 @@ package com.JavaWebServer.app;
 import org.junit.Test;
 import org.junit.Before;
 
-import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.responses.GetRedirect;
 import com.JavaWebServer.app.StatusCodes;
 import com.JavaWebServer.app.Request;
@@ -19,12 +19,12 @@ private int port = 5000;
 private StatusCodes codes;
 private Request request = new Request();
 private String serverName = "http://localhost:";
-  
+
   @Test
   public void handleRequestTest(){
     request.setMessage("GET /redirect HTTP/1.1");
     String expectedResponse = codes.FOUND+CRLF+locationHeader;
-    RestMethod testRedirect = new GetRedirect(codes,port,serverName);
+    Response testRedirect = new GetRedirect(codes,port,serverName);
     String response = new String (testRedirect.handleRequest(request));
     assertEquals(response,expectedResponse);
   }

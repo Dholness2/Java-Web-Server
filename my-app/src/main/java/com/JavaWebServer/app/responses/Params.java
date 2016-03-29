@@ -2,12 +2,12 @@ package com.JavaWebServer.app.responses;
 
 import com.JavaWebServer.app.decoders.ParamsDecoder;
 import com.JavaWebServer.app.Request;
-import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Response;
 
 import java.util.HashMap;
 import java.util.Map;
 
- public class Params implements RestMethod {
+ public class Params implements Response {
   private String status;
   private String params;
   private Request request;

@@ -1,10 +1,10 @@
 package com.JavaWebServer.app.responses;
 
-import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.StatusCodes;
 import com.JavaWebServer.app.Request;
 
-public class GetRedirect implements RestMethod {
+public class GetRedirect implements Response {
 
 private StatusCodes status;
 private int port;
@@ -22,7 +22,7 @@ private String seperator = "/";
   public byte [] handleRequest(Request request) {
     return (status.FOUND +CRLF+ getLocation()).getBytes();
   }
-   
+
   private String  getLocation() {
     return (this.locationHeader+this.serverName + this.port +this.seperator);  
   }

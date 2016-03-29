@@ -1,12 +1,12 @@
 package com.JavaWebServer.app.responses;
 
-import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.helpers.FileEditor;
 import com.JavaWebServer.app.Request;
 
 import java.io.PrintWriter;
 
-public class Delete implements RestMethod {
+public class Delete implements Response {
   private String responseStatus;
   private String fileName;
   private String directory;

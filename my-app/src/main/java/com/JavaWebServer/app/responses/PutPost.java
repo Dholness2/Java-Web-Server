@@ -1,10 +1,10 @@
 package com.JavaWebServer.app.responses;
 
-import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.Request;
 import com.JavaWebServer.app.helpers.FileEditor;
 
-public class PutPost implements RestMethod {
+public class PutPost implements Response {
   private String responseStatus;
   private String path;
   private String fileName;

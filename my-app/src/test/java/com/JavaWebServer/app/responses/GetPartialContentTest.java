@@ -1,6 +1,6 @@
 package com.JavaWebServer.app;
 
-import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.responses.GetPartialContent;
 import com.JavaWebServer.app.StatusCodes;
 import com.JavaWebServer.app.Request;
@@ -52,7 +52,7 @@ public class GetPartialContentTest {
      String type = "txt/plain";
      testRequest.setMessage("GET /partial_content.txt HTTP/ 1.1");
      testRequest.setHeaders("Content-Range: bytes=0-4"+CRLF+CRLF);
-     RestMethod testGetPartial = new GetPartialContent(codes,fileName,type, directory);
+     Response testGetPartial = new GetPartialContent(codes,fileName,type, directory);
      byte [] testResponse = testGetPartial.handleRequest(testRequest);
      String responseBody = getResponseBody(testResponse);
      String expectedResponse = getPartialContent(getFile(fileName),0,5);
@@ -65,7 +65,7 @@ public class GetPartialContentTest {
      String fileName = "/partial_content.txt";
      String type = "txt/plain";
      simpleGetRequest.setMessage("GET /partial_content.txt HTTP/ 1.1");
-     RestMethod testGetPartial = new GetPartialContent(codes,fileName,type, directory);
+     Response testGetPartial = new GetPartialContent(codes,fileName,type, directory);
      byte [] testResponse = testGetPartial.handleRequest(simpleGetRequest);
      String responseBody = getResponseBody(testResponse);
      String expectedResponse = new String(getFile(fileName));
@@ -78,7 +78,7 @@ public class GetPartialContentTest {
      String type = "txt/plain";
      testRequest.setMessage("GET /partial_content.txt HTTP/ 1.1");
      testRequest.setHeaders("Content-Range: bytes=-6"+CRLF+CRLF);
-     RestMethod testGetPartial = new GetPartialContent(codes,fileName,type, directory);
+     Response testGetPartial = new GetPartialContent(codes,fileName,type, directory);
      byte [] testResponse = testGetPartial.handleRequest(testRequest);
      String responseBody = getResponseBody(testResponse);
      String expectedResponse = getPartialContent(getFile(fileName),71,77);
@@ -91,7 +91,7 @@ public class GetPartialContentTest {
      String type = "txt/plain";
      testRequest.setMessage("GET /partial_content.txt HTTP/ 1.1");
      testRequest.setHeaders("Content-Range: bytes=4-"+CRLF+CRLF);
-     RestMethod testGetPartial = new GetPartialContent(codes,fileName,type, directory);
+     Response testGetPartial = new GetPartialContent(codes,fileName,type, directory);
      byte [] testResponse = testGetPartial.handleRequest(testRequest);
      String responseBody = getResponseBody(testResponse);
      String expectedResponse = getPartialContent(getFile(fileName),4,77);
@@ -104,7 +104,7 @@ public class GetPartialContentTest {
      String type = "txt/plain";
      testRequest.setMessage("GET /partial_content.txt HTTP/ 1.1");
      testRequest.setHeaders("Content-Range: bytes=4-100"+CRLF+CRLF);
-     RestMethod testGetPartial = new GetPartialContent(codes,fileName,type, directory);
+     Response testGetPartial = new GetPartialContent(codes,fileName,type, directory);
      byte [] testResponse = testGetPartial.handleRequest(testRequest);
      String response = new String(testResponse);
      String expectedResponse = "HTTP/1.1 416 Range Not Satisfiable"+CRLF+"Content-Range: bytes */77";
@@ -117,7 +117,7 @@ public class GetPartialContentTest {
      String type = "txt/plain";
      testRequest.setMessage("GET /foo_content.txt HTTP/ 1.1");
      testRequest.setHeaders("Content-Range: bytes=4-100"+CRLF+CRLF);
-     RestMethod testGetPartial = new GetPartialContent(codes,fileName,type, directory);
+     Response testGetPartial = new GetPartialContent(codes,fileName,type, directory);
      byte [] testResponse = testGetPartial.handleRequest(testRequest);
      String response = new String (testResponse);
      String expectedResponse = codes.STATUSERROR;

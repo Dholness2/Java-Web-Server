@@ -1,6 +1,6 @@
 package com.JavaWebServer.app.responses;
 
-import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.StatusCodes;
 import com.JavaWebServer.app.Request;
 
@@ -13,7 +13,7 @@ import java.io.ByteArrayOutputStream;
 
 import java.util.Arrays;
 
-public class GetPartialContent implements RestMethod {
+public class GetPartialContent implements Response {
   private StatusCodes status;
   private String fileName;
   private String directory;

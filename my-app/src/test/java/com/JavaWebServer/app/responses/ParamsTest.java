@@ -3,7 +3,7 @@ package com.JavaWebServer.app;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.responses.Params;
 import com.JavaWebServer.app.StatusCodes;
 import com.JavaWebServer.app.Request;
@@ -27,7 +27,7 @@ public class ParamsTest {
     testRequest = new Request();
     testRequest.setMessage (request);
     String params = testRequest.getParams();
-     testParams = new Params(codes.OK,"paramaters?");
+    testParams = new Params(codes.OK,"paramaters?");
   }
 
   @Test

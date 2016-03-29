@@ -5,7 +5,7 @@ import org.junit.Before;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.responses.Get;
 import com.JavaWebServer.app.StatusCodes;
 import com.JavaWebServer.app.Request;

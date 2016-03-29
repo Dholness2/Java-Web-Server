@@ -1,6 +1,6 @@
 package com.JavaWebServer.app.responses;
 
-import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.StatusCodes;
 import com.JavaWebServer.app.Request;
 import com.JavaWebServer.app.Authenticator;
@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.io.ByteArrayOutputStream;
 
-public class Get implements RestMethod {
+public class Get implements Response {
   private StatusCodes status;
   private String fileName;
   private String directory;

@@ -1,18 +1,17 @@
 package com.JavaWebServer.app.responses;
 
-import com.JavaWebServer.app.responses.RestMethod;
+import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.Request;
 
 import java.util.HashMap;
 import java.util.ArrayList;
 
-public class Options implements RestMethod {
+public class Options implements Response {
   private String status;
   private String allowHeader= "Allow: ";
   private HashMap<String,ArrayList<String>> directory;
   private String CRLF = System.getProperty("line.separator");
-  
-  
+
   public Options(String response,HashMap<String,ArrayList<String>> directory ) {
     this.status = response;
     this. directory = directory;

@@ -1,6 +1,7 @@
 ### maven ###
 target/
 my-app/Server.jar
+my-app/logs
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup

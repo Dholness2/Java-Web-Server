@@ -5,4 +5,5 @@ public interface ResponseBuilder {
   public void addHeader(String header,String headerValue);
   public void addBody (byte [] body);
   public void addStatus(String status);
+  public void clearBuilder();
 }

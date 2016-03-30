@@ -1,5 +1,8 @@
 package com.JavaWebServer.app;
 
+import com.JavaWebServer.app.responseBuilders.ResponseBuilder;
+import com.JavaWebServer.app.responseBuilders.HttpResponseBuilder;
+
 import org.junit.Test;
 import org.junit.After;
 
@@ -45,7 +48,7 @@ public class HttpResponseBuilderTest {
     testResponseBuilder.addHeader(header,value);
     testResponseBuilder.addBody(body);
     String response = (new String (testResponseBuilder.getResponse()));
-    String expectedResponse = "HTTP/1.1 200 OK"+CRLF+"Content-Length: 11"+CRLF+CRLF+CRLF+"Hello World";
+    String expectedResponse = "HTTP/1.1 200 OK"+CRLF+"Content-Length: 11"+CRLF+CRLF+"Hello World";
     assertEquals(expectedResponse, response);
   }
 

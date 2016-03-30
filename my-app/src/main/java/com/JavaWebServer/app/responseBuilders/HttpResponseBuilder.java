@@ -1,4 +1,6 @@
-package com.JavaWebServer.app;
+package com.JavaWebServer.app.responseBuilders;
+
+import com.JavaWebServer.app.responseBuilders.ResponseBuilder;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -43,7 +45,7 @@ public class HttpResponseBuilder implements ResponseBuilder {
     try{
       output.reset();
       output.write(getHeaders());
-      output.write((CRLF+CRLF).getBytes());
+      output.write((CRLF).getBytes());
       output.write(this.body);
       return output.toByteArray();
     } catch (IOException e) {

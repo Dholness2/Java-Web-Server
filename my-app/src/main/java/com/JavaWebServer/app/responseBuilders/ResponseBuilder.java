@@ -1,4 +1,4 @@
-package com.JavaWebServer.app;
+package com.JavaWebServer.app.responseBuilders;
 
 public interface ResponseBuilder {
   public byte [] getResponse();

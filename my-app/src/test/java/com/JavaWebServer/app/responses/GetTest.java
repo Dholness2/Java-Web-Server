@@ -7,7 +7,8 @@ import static org.junit.Assert.assertTrue;
 
 import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.responses.Get;
-import com.JavaWebServer.app.StatusCodes;
+import com.JavaWebServer.app.responseBuilders.ResponseBuilder;
+import com.JavaWebServer.app.responseBuilders.HttpResponseBuilder;
 import com.JavaWebServer.app.Request;
 
 import java.nio.file.Files;
@@ -18,23 +19,21 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 public class GetTest {
-  private StatusCodes codes = new StatusCodes();
+  private ResponseBuilder response = new HttpResponseBuilder();
   private String directory = System.getProperty("user.dir")+"/public/";
-  private String CRLF = "\r\n";
+  private String CRLF = System.getProperty("line.separator");
   private boolean protectedRoute = false;
-
-  private String rootPath(String path) {
-    int indexOfLastFolder = path.lastIndexOf("/",((path.length())-2));
-    return ((path.substring(0 ,indexOfLastFolder)) + "/");
-  }
 
   private String buildHeader (String path, String contentType) throws IOException{
     String typeHeader = "Content-Type: ";
-    String contentLength = "Content-Length:";
-    int fileLength = getFile(path).length;
-    return (codes.OK +CRLF+typeHeader
-        + contentType+CRLF+contentLength
-        + fileLength);
+    String contentLength = "Content-Length: ";
+    String fileLength = String.valueOf(getFile(path).length);
+    this.response.addStatus("OK");
+    this.response.addHeader(typeHeader, contentType);
+    this.response.addHeader(contentLength,(fileLength));
+    String header = new String (this.response.getResponse());
+    this.response.clearBuilder();
+    return header.trim();
   }
 
   private byte [] getFile(String path) throws IOException {
@@ -44,9 +43,10 @@ public class GetTest {
 
   @Test
   public void handleSimepleRequestTest() {
-    Get testGet = new Get(codes.OK);
+    String simpleResponse = "HTTP/1.1 200 OK";
+    Get testGet = new Get(simpleResponse);
     byte [] response = testGet.handleRequest(new Request());
-    assertEquals(codes.OK, new String(response));
+    assertEquals(simpleResponse, new String(response));
   }
 
   @Test
@@ -54,9 +54,9 @@ public class GetTest {
     String type = "text/plain";
     String fileName = "logs";
     boolean protectedRoute = true;
-    Get testGet = new Get(codes,fileName,type,directory,true);
+    Get testGet = new Get(response,fileName,type,directory,true);
     String response = (new String(testGet.handleRequest(new Request())));
-    String expectedResponse = (codes.UNAUTHORIZED+CRLF+"WWW-Authenticate: Basic realm=logs"+CRLF);
+    String expectedResponse = ("HTTP/1.1 401 Unauthorized"+CRLF+"WWW-Authenticate: Basic realm=logs"+CRLF);
     assertEquals(expectedResponse,response);
   }
 
@@ -65,7 +65,7 @@ public class GetTest {
      String fileName = "image.jpeg";
      String type = "image/jpeg";
      String path = directory + fileName;
-     Get testGet = new Get(codes,fileName,type, directory, protectedRoute);
+     Get testGet = new Get(response,fileName,type, directory, protectedRoute);
      byte [] testResponse = testGet.handleRequest(new Request());
      String expectedResponse = buildHeader(path,type);
      String response =((new String(testResponse)).split((CRLF +CRLF))[0]);
@@ -77,7 +77,7 @@ public class GetTest {
      String fileName = "image.png";
      String type = "image/png";
      String path = directory + fileName;
-     Get testGet = new Get(codes,fileName,type, directory,protectedRoute);
+     Get testGet = new Get(response,fileName,type, directory,protectedRoute);
      byte [] testResponse = testGet.handleRequest(new Request());
      String expectedResponse = buildHeader(path,type);
      String response =((new String(testResponse)).split((CRLF +CRLF))[0]);
@@ -89,7 +89,7 @@ public class GetTest {
      String fileName = "image.gif";
      String type = "image/gif";
      String path = directory + fileName;
-     Get testGet = new Get(codes,fileName,type, directory, protectedRoute);
+     Get testGet = new Get(response,fileName,type, directory, protectedRoute);
      byte [] testResponse = testGet.handleRequest(new Request());
      String expectedResponse = buildHeader(path,type);
      String response =((new String(testResponse)).split((CRLF +CRLF))[0]);
@@ -101,7 +101,7 @@ public class GetTest {
      String fileName = "file1";
      String type = "txt/plain";
      String path = directory + fileName;
-     Get testGet = new Get(codes,fileName,type, directory, protectedRoute);
+     Get testGet = new Get(response,fileName,type, directory, protectedRoute);
      byte [] testResponse = testGet.handleRequest(new Request());
      String expectedResponse = buildHeader(path,type);
      String response =((new String(testResponse)).split((CRLF +CRLF))[0]);
@@ -110,10 +110,10 @@ public class GetTest {
 
   @Test
   public void handleRequestMissingFileTest() {
-    Get testGet = new Get(codes,"images.gif","image/gif", directory, protectedRoute);
+    Get testGet = new Get(response,"images.gif","image/gif", directory, protectedRoute);
     byte [] response = testGet.handleRequest(new Request());
     String testResponse = new String(response);
-    String expectedResponse = "HTTP/1.1 500 Internal Server Error";
+    String expectedResponse = "HTTP/1.1 500 Internal Server Error"+CRLF;
     assertEquals(expectedResponse,testResponse);
   }
 }

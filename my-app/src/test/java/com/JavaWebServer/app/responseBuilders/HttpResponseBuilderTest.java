@@ -6,7 +6,7 @@ import org.junit.After;
 import static org.junit.Assert.assertEquals;
 
 public class HttpResponseBuilderTest {
-  private HttpResponseBuilder testResponseBuilder = new HttpResponseBuilder();
+  private ResponseBuilder testResponseBuilder = new HttpResponseBuilder();
   private String CRLF = System.getProperty("line.separator");
 
   @After

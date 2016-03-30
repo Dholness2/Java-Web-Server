@@ -7,36 +7,35 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class HttpResponseBuilder implements ResponseBuilder {
+  private StringBuilder headerBuilder = new StringBuilder();
   private String CRLF = System.getProperty("line.separator");
   private byte [] body;
-  private StringBuilder responseHeaders = new StringBuilder(); 
 
   private static final  Map<String, String> statusCodes;
   static {
     statusCodes = new HashMap<String, String>();
     statusCodes.put("OK","HTTP/1.1 200 OK");
     statusCodes.put("NOT_FOUND","HTTP/1.1 404 Not Found");
-    statusCodes.put("FOUND", "HTTP/1.1 302 FOUND");
+    statusCodes.put("FOUND", "HTTP/1.1 302 Found");
     statusCodes.put("PARTIAL", "HTTP/1.1 206 Partial Content");
-    statusCodes.put("RANGE_NOT_SATSIFIABLE","HTTP/1.1 416 Range Not Satisfiable");
+    statusCodes.put("RANGE_NOT_SATISFIABILITY","HTTP/1.1 416 Range Not Satisfiable");
     statusCodes.put("STATUSERROR","HTTP/1.1 500 Internal Server Error");
-    statusCodes.put("NO_CONTENT","HTTP/1.1 204 NO CONTENT");
-    statusCodes.put("UNAUTHORIZED","HTTP/1.1 401 UNAUTHORIZED");
+    statusCodes.put("NO_CONTENT","HTTP/1.1 204 No Content");
+    statusCodes.put("UNAUTHORIZED","HTTP/1.1 401 Unauthorized");
   };
 
   public HttpResponseBuilder () {}
 
   public byte [] getResponse(){
-   if (body != null){
-     return fileResponse();
-   }
-   return getHeaders();
+    if (body != null){
+      return fileResponse();
+    }
+    return getHeaders();
   }
 
   private byte [] getHeaders(){
-   byte[] response =  this.responseHeaders.toString().getBytes();
-   clearBuilder();
-   return response;
+    byte[] response =  this.headerBuilder.toString().getBytes();
+    return response;
   }
 
   private byte [] fileResponse() {
@@ -46,7 +45,6 @@ public class HttpResponseBuilder implements ResponseBuilder {
       output.write(getHeaders());
       output.write((CRLF+CRLF).getBytes());
       output.write(this.body);
-      clearBuilder();
       return output.toByteArray();
     } catch (IOException e) {
       new Exception("could not write to Strem").printStackTrace();
@@ -56,23 +54,24 @@ public class HttpResponseBuilder implements ResponseBuilder {
   }
 
   public void addHeader(String header, String value) {
-    responseHeaders.append(header+value+CRLF);
+    headerBuilder.append(header+value+CRLF);
   }
 
   public void addBody(byte[] body) {
-   this.body = body;
+    this.body = body;
   }
 
   public void addStatus(String status) {
     String statusHeader = getStatusHeader(status);
-    responseHeaders.append(statusHeader + CRLF);
+    headerBuilder.append(statusHeader + CRLF);
   }
 
-  private void clearBuilder() {
-   this.responseHeaders.setLength(0);
-   this.responseHeaders.trimToSize();
+  public void clearBuilder() {
+    this.headerBuilder.delete(0, this.headerBuilder.length());
+    this.body = null;
   }
+
   private String getStatusHeader(String statusCode){
-   return this.statusCodes.get(statusCode);
+    return this.statusCodes.get(statusCode);
   }
 }

@@ -7,23 +7,23 @@ import com.JavaWebServer.app.Authenticator;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.Path;
+
 import java.io.IOException;
 import java.util.Arrays;
-import java.io.ByteArrayOutputStream;
 
 public class Get implements Response {
-  ResponseBuilder response;
-  String fileName;
-  String directory;
-  String contentType;
-  private String simpleResponse;
-  private boolean protectedRoute;
-  private static final String TYPEHEADER = "Content-Type: ";
-  String LENGTHHEADER = "Content-Length: ";
-  private static final String AUTHHEADER ="WWW-Authenticate: Basic realm=";
+  protected ResponseBuilder response;
+  protected String fileName;
+  protected String directory;
+  protected String contentType;
+  protected String simpleResponse;
+  protected boolean protectedRoute;
 
-  public Get (ResponseBuilder response, String fileName, String contentType, String directory, boolean protectedRoute) {
+  private static final String TYPE_HEADER = "Content-Type: ";
+  private static final String LENGTH_HEADER = "Content-Length: ";
+  private static final String AUTH_HEADER ="WWW-Authenticate: Basic realm=";
+
+  public Get (ResponseBuilder response, String fileName, String contentType, String directory, boolean enabledProtection) {
     this.response = response;
     this.fileName = fileName;
     this.contentType = contentType;
@@ -65,8 +65,8 @@ public class Get implements Response {
 
   private byte [] fileResponse (byte [] file) {
     this.response.addStatus("OK");
-    this.response.addHeader(TYPEHEADER,contentType);
-    this.response.addHeader(LENGTHHEADER,String.valueOf(file.length));
+    this.response.addHeader(TYPE_HEADER,contentType);
+    this.response.addHeader(LENGTH_HEADER,String.valueOf(file.length));
     this.response.addBody(file);
     byte [] fileResponse = this.response.getResponse();
     this.response.clearBuilder();
@@ -75,7 +75,7 @@ public class Get implements Response {
 
   private byte [] noAccessResponse() {
     this.response.addStatus("UNAUTHORIZED");
-    this.response.addHeader(AUTHHEADER, this.fileName);
+    this.response.addHeader(AUTH_HEADER, this.fileName);
     byte[] noAccessResponse = this.response.getResponse();
     this.response.clearBuilder();
     return noAccessResponse;

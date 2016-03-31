@@ -47,6 +47,14 @@ public class RouteConfigurationTest {
     routeConfig = new RouteConfiguration();
   }
 
+  @After
+  public void removeTempDirectory () {
+    tempHTML.delete();
+    tempTXT.delete();
+    testSubDirectory.delete();
+    testDirectory.delete();
+  }
+
   @Test
   public void addRouteTest() {
     routeConfig.addRoute(this.path,this.response);

@@ -1,20 +1,18 @@
 package com.JavaWebServer.app;
 
-import com.JavaWebServer.app.responseBuilders.ResponseBuilder;
-import com.JavaWebServer.app.responseBuilders.HttpResponseBuilder;
-
 import org.junit.Test;
 import org.junit.After;
 
 import static org.junit.Assert.assertEquals;
 
 public class HttpResponseBuilderTest {
-  private ResponseBuilder testResponseBuilder = new HttpResponseBuilder();
+  private ResponseBuilder testResponseBuilder = new HttpResponseBuilder(); 
   private String CRLF = System.getProperty("line.separator");
+
 
   @After
   public void resetResponse(){
-    testResponseBuilder.clearBuilder();
+    testResponseBuilder = new HttpResponseBuilder();
   }
 
   @Test
@@ -48,23 +46,7 @@ public class HttpResponseBuilderTest {
     testResponseBuilder.addHeader(header,value);
     testResponseBuilder.addBody(body);
     String response = (new String (testResponseBuilder.getResponse()));
-    String expectedResponse = "HTTP/1.1 200 OK"+CRLF+"Content-Length: 11"+CRLF+CRLF+"Hello World";
-    assertEquals(expectedResponse, response);
-  }
-
-  @Test
-  public void clearBuilderTest() {
-    String OK = "OK";
-    byte[] body = ("First Response").getBytes();
-    String header ="Content-Length: ";
-    String value = Integer.toString(body.length);
-    testResponseBuilder.addStatus(OK);
-    testResponseBuilder.addHeader(header,value);
-    testResponseBuilder.addBody(body);
-    testResponseBuilder.clearBuilder();
-    testResponseBuilder.addStatus("NOT_FOUND");
-    String response = (new String (testResponseBuilder.getResponse()));
-    String expectedResponse = "HTTP/1.1 404 Not Found"+ CRLF;
+    String expectedResponse = "HTTP/1.1 200 OK"+CRLF+"Content-Length: 11"+CRLF+CRLF+CRLF+"Hello World";
     assertEquals(expectedResponse, response);
   }
 }

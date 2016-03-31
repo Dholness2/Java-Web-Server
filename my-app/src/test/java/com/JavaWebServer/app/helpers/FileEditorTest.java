@@ -29,13 +29,14 @@ public class FileEditorTest {
  }
 
  @After
- public void undoChanges() throws IOException{
-   File file = new File(path);
-   file.delete();
+ public void undoChanges(){
+   String edit = "";
+   String replace = "data=helloworld";
+   new FileEditor().edit(path,edit);
  }
 
  @Test
-   public void EditfileTest () throws IOException {
+ public void EditfileTest () throws IOException {
    String edit = "data=helloworld";
    new FileEditor().edit(path,edit);
    currentFile = new File(path);

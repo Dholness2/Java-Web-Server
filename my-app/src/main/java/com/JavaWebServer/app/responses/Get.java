@@ -1,34 +1,35 @@
 package com.JavaWebServer.app.responses;
 
 import com.JavaWebServer.app.responses.Response;
-import com.JavaWebServer.app.responseBuilders.ResponseBuilder;
+import com.JavaWebServer.app.StatusCodes;
 import com.JavaWebServer.app.Request;
 import com.JavaWebServer.app.Authenticator;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
+import java.nio.file.Path;
 import java.io.IOException;
 import java.util.Arrays;
+import java.io.ByteArrayOutputStream;
 
 public class Get implements Response {
-  protected ResponseBuilder response;
-  protected String fileName;
-  protected String directory;
-  protected String contentType;
-  protected String simpleResponse;
-  protected boolean enabledProtection;
+  private StatusCodes status;
+  private String fileName;
+  private String directory;
+  private String contentType;
+  private String simpleResponse;
+  private boolean protectedRoute;
+  private static final String CRLF ="\r\n";
+  private static final String AUTHHEADER ="WWW-Authenticate: Basic realm=";
+  private static final String TYPEHEADER = "Content-Type: ";
+  private static final String LENGTHHEADER = "Content-Length:";
 
-  private static final String TYPE_HEADER = "Content-Type: ";
-  private static final String LENGTH_HEADER = "Content-Length: ";
-  private static final String AUTH_HEADER ="WWW-Authenticate: Basic realm=";
-
-  public Get (ResponseBuilder response, String fileName, String contentType, String directory, boolean enabledProtection) {
-    this.response = response;
+  public Get (StatusCodes status, String fileName, String contentType, String directory, boolean protectedRoute) {
+    this.status = status;
     this.fileName = fileName;
     this.contentType = contentType;
     this.directory = directory;
-    this.enabledProtection = enabledProtection;
+    this.protectedRoute = protectedRoute;
   }
 
   public Get (String simpleResponse){
@@ -37,7 +38,7 @@ public class Get implements Response {
 
   public byte[] handleRequest(Request request) {
     if (this.fileName != null ) {
-      if (enabledProtection){
+      if(protectedRoute){
         return getProtectedResponse(request);
       }
       return getResponse();
@@ -46,7 +47,7 @@ public class Get implements Response {
   }
 
   private byte [] getProtectedResponse(Request request) {
-    if (Authenticator.canAuthenticate(request)) {
+    if(Authenticator.canAuthenticate(request)) {
       return getResponse();
     }
     return noAccessResponse();
@@ -54,38 +55,37 @@ public class Get implements Response {
 
   private byte [] getResponse() {
     try {
-      byte[] file = Files.readAllBytes(Paths.get(getLocation()));
-      return fileResponse(file);
+      byte[] fileBytes = Files.readAllBytes(Paths.get(getLocation()));
+      return fileResponse(fileBytes);
     }catch (IOException e) {
      new Exception("could not readfile").printStackTrace();
       e.printStackTrace();
     }
-    return failedFileReadResponse();
+    return status.STATUSERROR.getBytes();
   }
 
-  private byte [] fileResponse (byte [] file) {
-    this.response.addStatus("OK");
-    this.response.addHeader(TYPE_HEADER,contentType);
-    this.response.addHeader(LENGTH_HEADER,String.valueOf(file.length));
-    this.response.addBody(file);
-    byte [] fileResponse = this.response.getResponse();
-    this.response.clearBuilder();
-    return fileResponse;
+  private byte [] fileResponse(byte [] file) {
+    ByteArrayOutputStream output= new ByteArrayOutputStream();
+    try{
+      output.write(buildHeader(file.length));
+      output.write(file);
+      return output.toByteArray();
+    } catch (IOException e) {
+      new Exception("could not write to Strem").printStackTrace();
+      e.printStackTrace();
+    }
+    return status.STATUSERROR.getBytes();
+  }
+
+  private byte [] buildHeader (int fileLength) {
+    return (status.OK +CRLF+TYPEHEADER
+        + contentType+CRLF+LENGTHHEADER
+        + fileLength +CRLF+CRLF).getBytes();
   }
 
   private byte [] noAccessResponse() {
-    this.response.addStatus("UNAUTHORIZED");
-    this.response.addHeader(AUTH_HEADER, this.fileName);
-    byte[] noAccessResponse = this.response.getResponse();
-    this.response.clearBuilder();
-    return noAccessResponse;
-  }
-
-  private byte [] failedFileReadResponse() {
-    this.response.addStatus("STATUSERROR");
-    byte [] failedResponse = this.response.getResponse();
-    this.response.clearBuilder();
-    return failedResponse;
+    return (this.status.UNAUTHORIZED + CRLF
+        + AUTHHEADER + this.fileName +CRLF).getBytes();
   }
 
   private String getLocation()  {

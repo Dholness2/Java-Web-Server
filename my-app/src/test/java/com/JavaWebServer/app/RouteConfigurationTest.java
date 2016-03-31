@@ -12,6 +12,7 @@ import org.junit.rules.TemporaryFolder;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -30,6 +31,7 @@ public class RouteConfigurationTest {
   private Path tempHTML;
   private Path tempTXT;
   private String tempDirectoryPath;
+
   @Before
   public void buildTempDirectory() throws Exception {
     directory = Files.createTempDirectory("tempFiles");
@@ -60,5 +62,22 @@ public class RouteConfigurationTest {
     ArrayList <File> results = routeConfig.getPaths(tempDirectoryPath);
     assertTrue(results.contains(tempHTML.toFile()));
     assertTrue(results.contains(tempTXT.toFile()));
+  }
+/*
+  @Test
+  public void buildStandardRoutes() {
+    routeConfig.buildStandardRoutes(this.tempDirectoryPath);
+    String pathKey = "GET /"+ this.tempHTMl.getFileName();
+    HashMap <String,Response> currentRoutes = routeConfig.getRoutes();
+    Response response = currentRoutes.get(pathKey);
+    assertThat(instanceOf(Get.class),response);
+  }*/
+
+  @Test
+  public void getFileTypeTest() throws Exception {
+    Path testFile = Files.createTempFile(directory, "tempTXT", ".txt");
+    String resultType = routeConfig.getFileType(testFile);
+    String expectedType = "text/plain";
+    assertEquals(null,resultType);
   }
 }

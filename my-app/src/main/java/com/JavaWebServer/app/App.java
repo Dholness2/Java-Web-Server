@@ -1,17 +1,19 @@
 package com.JavaWebServer.app;
 
 import com.JavaWebServer.app.responses.Get;
+import com.JavaWebServer.app.responses.GetForm;
 import com.JavaWebServer.app.responses.PutPost;
 import com.JavaWebServer.app.responses.GetDirectory;
 import com.JavaWebServer.app.responses.GetPartialContent;
 import com.JavaWebServer.app.responses.GetRedirect;
 import com.JavaWebServer.app.responses.Params;
 import com.JavaWebServer.app.responses.Delete;
-import com.JavaWebServer.app.helpers.FileEditor;
 import com.JavaWebServer.app.responses.Head;
 import com.JavaWebServer.app.responses.Patch;
 import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.responses.Options;
+
+import com.JavaWebServer.app.helpers.FileEditor;
 
 import com.JavaWebServer.app.responseBuilders.HttpResponseBuilder;
 
@@ -85,7 +87,7 @@ public class App {
     routes.put("GET /file1", new Get(new HttpResponseBuilder(),"/file1","text/plain", directory,unprotected));
     routes.put("GET /file2", new Get(new HttpResponseBuilder(),"/file2","text/plain", directory,unprotected));
     routes.put("GET /parameters?", new Params(status.OK,"parameters?"));
-    routes.put("GET /form", new Get(new HttpResponseBuilder(),"/form", "text/plain",currentDirectory,unprotected));
+    routes.put("GET /form", new GetForm(new HttpResponseBuilder(),"/form", "text/plain", currentDirectory, unprotected, "My=Data"));
     routes.put("POST /form", new PutPost(status.OK,"/form",currentDirectory,new FileEditor()));
     routes.put("PUT /form", new PutPost(status.OK,"/form",currentDirectory,new FileEditor()));
     routes.put("DELETE /form", new Delete(status.OK,"/form",currentDirectory,new FileEditor()));

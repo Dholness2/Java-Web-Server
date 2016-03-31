@@ -17,7 +17,7 @@ public class Get implements Response {
   protected String directory;
   protected String contentType;
   protected String simpleResponse;
-  protected boolean protectedRoute;
+  protected boolean enabledProtection;
 
   private static final String TYPE_HEADER = "Content-Type: ";
   private static final String LENGTH_HEADER = "Content-Length: ";
@@ -28,7 +28,7 @@ public class Get implements Response {
     this.fileName = fileName;
     this.contentType = contentType;
     this.directory = directory;
-    this.protectedRoute = protectedRoute;
+    this.enabledProtection = enabledProtection;
   }
 
   public Get (String simpleResponse){
@@ -37,7 +37,7 @@ public class Get implements Response {
 
   public byte[] handleRequest(Request request) {
     if (this.fileName != null ) {
-      if (protectedRoute){
+      if (enabledProtection){
         return getProtectedResponse(request);
       }
       return getResponse();

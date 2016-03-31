@@ -3,6 +3,7 @@ package com.JavaWebServer.app;
 import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.responses.Get;
 import com.JavaWebServer.app.responses.GetDirectory;
+import com.JavaWebServer.app.responseBuilders.HttpResponseBuilder;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -18,8 +19,8 @@ public class RouteConfiguration {
   private HashMap<String,Response> routes = new HashMap();
   private String directory;
   private boolean enableProtection = false;
-  private String getRoute = "GET ";
-    public RouteConfiguration () {}
+
+  public RouteConfiguration () {}
 
   public void addRoute(String path ,Response response) {
     this.routes.put(path,response);
@@ -35,20 +36,21 @@ public class RouteConfiguration {
     return new ArrayList<File>(Arrays.asList(files));
   }
 
-  public void buildStandardroutes(String directory) throws Exception {
+  public void buildStandardRoutes(String directory) throws Exception {
     ArrayList<File> filesList = getPaths(directory);
     for (File file : filesList) {
       if (! file.isHidden()) {
         if(file.isFile()){
           String fileName = "/"+ file.getName();
-          String pathKey = this.getRoute + fileName;
+          String pathKey = "GET " + fileName;
           String fileType = getFileType(file.toPath());
-          addRoute(pathKey,(new Get (new StatusCodes(),fileName,fileType,directory,enableProtection)));
+          addRoute(pathKey,(new Get (new HttpResponseBuilder(), fileName, fileType, directory, enableProtection)));
         }else if (file.isDirectory()) {
           String directoryName = "/"+ file.getName();
-          String pathKey = "/"+ (file.getParentFile().getName()) + directoryName;
+          String pathKey = "GET /"+ (file.getParentFile().getName()) + directoryName;
+          System.out.println(pathKey);
           String directoryPath = file.getPath();
-          addRoute(pathKey,new GetDirectory (new StatusCodes(),directoryPath));
+          addRoute(pathKey,new GetDirectory (new StatusCodes(), directoryPath));
         }
       }
     }

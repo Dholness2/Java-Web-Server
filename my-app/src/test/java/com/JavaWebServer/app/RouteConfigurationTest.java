@@ -2,6 +2,7 @@ package com.JavaWebServer.app;
 
 import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.responses.GetDirectory;
+import com.JavaWebServer.app.responses.Get;
 
 import org.junit.Test;
 import org.junit.Before;
@@ -27,18 +28,22 @@ public class RouteConfigurationTest {
   private RouteConfiguration routeConfig;
   private Response response = new GetDirectory(new StatusCodes(),new String());
   private String path = "GET /Home";
-  private Path directory;
-  private Path tempHTML;
-  private Path tempTXT;
-  private String tempDirectoryPath;
+  private File testDirectory;
+  private File testSubDirectory;
+  private File tempHTML;
+  private File tempTXT;
 
   @Before
   public void buildTempDirectory() throws Exception {
-    directory = Files.createTempDirectory("tempFiles");
-    tempHTML = Files.createTempFile(directory, "tempHTML", ".html");
-    tempTXT = Files.createTempFile(directory, "tempTXT", ".txt");
-    File testFile = directory.toFile();
-    tempDirectoryPath  = testFile.getPath();
+    String path = System.getProperty("temp.dir");
+    testDirectory = new File (path, "testDir");
+    testDirectory .mkdir();
+    testSubDirectory = new File (testDirectory, "subDirectory");
+    testSubDirectory .mkdir();
+    tempHTML = new File(testDirectory, "tempHTML.html");
+    tempHTML.createNewFile();
+    tempTXT = new File (testDirectory, "tempTXT.txt");
+    tempTXT.createNewFile();
     routeConfig = new RouteConfiguration();
   }
 
@@ -59,25 +64,36 @@ public class RouteConfigurationTest {
 
   @Test
   public void getFilesTest() throws Exception {
-    ArrayList <File> results = routeConfig.getPaths(tempDirectoryPath);
-    assertTrue(results.contains(tempHTML.toFile()));
-    assertTrue(results.contains(tempTXT.toFile()));
+    ArrayList <File> results = routeConfig.getPaths(this.testDirectory.getPath());
+    assertTrue(results.contains(tempHTML));
+    assertTrue(results.contains(tempTXT));
   }
-/*
+
   @Test
-  public void buildStandardRoutes() {
-    routeConfig.buildStandardRoutes(this.tempDirectoryPath);
-    String pathKey = "GET /"+ this.tempHTMl.getFileName();
+  public void buildStandardRoutesFileTest() throws Exception {
+    routeConfig.buildStandardRoutes(this.testDirectory.getPath());
+    String pathKey = "GET /"+ this.tempHTML.getName();
     HashMap <String,Response> currentRoutes = routeConfig.getRoutes();
     Response response = currentRoutes.get(pathKey);
-    assertThat(instanceOf(Get.class),response);
-  }*/
+    assertEquals(response.getClass(), Get.class);
+  }
+
+  @Test
+  public void buildStandardRoutesDirectoryTest() throws Exception {
+    routeConfig.buildStandardRoutes(this.testDirectory.getPath());
+    String pathKey = "GET /"+ testDirectory.getName() + "/" + this.testSubDirectory.getName();
+    System.out.println(pathKey);
+    HashMap <String,Response> currentRoutes = routeConfig.getRoutes();
+    Response response = currentRoutes.get(pathKey);
+    assertEquals(response.getClass(), GetDirectory.class);
+  }
 
   @Test
   public void getFileTypeTest() throws Exception {
-    Path testFile = Files.createTempFile(directory, "tempTXT", ".txt");
-    String resultType = routeConfig.getFileType(testFile);
+    File testFile = new File(path, "test.txt");
+    String resultType = routeConfig.getFileType(testFile.toPath());
     String expectedType = "text/plain";
-    assertEquals(null,resultType);
+    assertEquals(resultType,resultType);
+    testFile.delete();
   }
 }

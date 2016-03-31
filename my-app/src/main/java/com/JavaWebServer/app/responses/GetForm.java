@@ -1,48 +1,53 @@
 package com.JavaWebServer.app.responses;
 
 import com.JavaWebServer.app.responses.Response;
-import com.JavaWebServer.app.StatusCodes;
+import com.JavaWebServer.app.responseBuilders.ResponseBuilder;
 import com.JavaWebServer.app.Request;
-import com.JavaWebServer.app.Authenticator;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.io.IOException;
-import java.util.Arrays;
-import java.io.ByteArrayOutputStream;
+import java.nio.file.Path;
+import java.nio.file.Files;
 
 public class GetForm extends Get {
   private String path;
+  private File currentFile;
+  private String form;
 
-  public GetForm (StatusCodes status, String fileName, String contentType, String directory, boolean protectedRoute, String form) {
-    super(status,fileName,contentType,directory,protectedRoute);
+  public GetForm (ResponseBuilder response, String fileName, String contentType, String directory, boolean protectedRoute, String form) {
+    super(response, fileName, contentType, directory, protectedRoute);
+    this.form = form;
   }
 
   public byte [] handleRequest (Request request){
-    if  (hasFile()){
+    buildPath();
+    if (hasFile()){
       return super.handleRequest(request);
     }
-    return null;
+    return getNewFormResponse(request);
+  }
+
+  public void buildPath() {
+    this.path = this.directory + this.fileName;
+    this.currentFile = new File(path);
   }
 
   public boolean hasFile() {
-    this.path = this.directory + this.fileName;
-    File file = new File(path);
-    return (file.exists());
+    return (this.currentFile.exists());
   }
 
-  public getNewFormResponse () {
-    editFile();
-
+  public byte [] getNewFormResponse (Request request) {
+    buildFormFile();
+    return super.handleRequest(request);
   }
 
-  private editFile() {
-
+  public void buildFormFile() {
+    try {
+      byte [] formData = this.form.getBytes("UTF-8");
+      Path file = this.currentFile.toPath();
+      Files.write(file,formData);
+    } catch (Exception e) {
+      System.out.println("can not write new file" + e);
+    }
   }
-
-  private byte [] buildResponse () {
-    String file = this.file.toString()
-    return (status.OK +CRLF+TYPEHEADER
-        + this.contentType+CRLF+LENGTHHEADER
-        + file.length() +CRLF+CRLF+file).getBytes();
-  }
+}

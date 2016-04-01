@@ -2,30 +2,70 @@ package com.JavaWebServer.app;
 
 import com.JavaWebServer.app.decoders.ParamsDecoder;
 
+import java.util.HashMap;
+
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class ParamsDecoderTest {
+  private HashMap<String, String> paramsKey = getParamsKey();
 
   @Test
-  public void decodeTest () {
-    String expected = "variable_1 = Operators <, >, =, !=; +, -, *, &, @, #, $,"
-                      +" [, ]: \"is that all\"?";
-    String encoded="variable_1=Operators%20%3C%2C%20%3E%2C%20%3D%2C%20!%3D%3B%20%2B%2C%20"
-                  +"-%2C%20*%2C%20%26%2C%20%40%2C%20%23%2C%20%24%2C%20%5B%2C%20%5D%3A%20%22"+
-                   "is%20that%20all%22%3F";
-    assertEquals(expected, ParamsDecoder.decode(encoded));
+  public void canDecodeParamsBasedOnParamsKey() {
+    String[] expectedDecodings = new String[] {
+                                   "<", ">", "=",
+                                   ",", "!", ";",
+                                   "+", "-", "*",
+                                   "&", "@", "#",
+                                   "$", " "
+                                   };
+    String[] encoded = new String[] {
+                         "%3C", "%3E", "%3D",
+                         "%2C", "%21", "%3B",
+                         "%2B", "%2D", "%2A",
+                         "%26", "%40", "%23",
+                         "%24", "%20"
+                         };
+    for(int index = 0; index < encoded.length; index++){
+      assertEquals(expectedDecodings[index], ParamsDecoder.decodeParams(paramsKey, encoded[index]));
+    }
   }
 
   @Test
-  public void decodeMultipleParamsTest () {
-    String expected = "variable_1 = Operators <, >, =, !=; +, -, *, &, @, #, $,"
-                      +" [, ]: \"is that all\"?&variable_2 = stuff";
-    String varOne="variable_1=Operators%20%3C%2C%20%3E%2C%20%3D%2C%20!%3D%3B%20%2B%2C%20"
-                 +"-%2C%20*%2C%20%26%2C%20%40%2C%20%23%2C%20%24%2C%20%5B%2C%20%5D%3A%20%22"+
-                   "is%20that%20all%22%3F";
-    String varTwo= "variable_2=stuff";
-    String encoded = varOne+ "&"+varTwo;
-    assertEquals(expected, ParamsDecoder.decode(encoded));
+  public void canDecodeFullyEncodedString() {
+    String encoded = "-%2C%20*%2C%20%26%2C%20%40%2C%20%23%2C%20%24";
+    String expected = "-, *, &, @, #, $";
+    assertEquals(expected, ParamsDecoder.decodeParams(paramsKey, encoded));
+  }
+
+  @Test
+  public void canDecodeMixedString() {
+    String encoded = "-%2C%20*%2C%20%26%2C%20%40%2C%20%23%2C%20%24";
+    String expected = "-, *, &, @, #, $";
+    assertEquals(expected, ParamsDecoder.decodeParams(paramsKey, encoded));
+  }
+
+  private static HashMap <String, String>  getParamsKey() {
+    HashMap<String, String> encode = new HashMap<String, String>();
+    encode.put("%3C","<");
+    encode.put("%3E",">");
+    encode.put("%3D","=");
+    encode.put("%2C",",");
+    encode.put("%21","!" );
+    encode.put("%2B","+");
+    encode.put("%2D","-");
+    encode.put("%20"," ");
+    encode.put("%22", "\"");
+    encode.put("%3B",";");
+    encode.put("%2A","*");
+    encode.put("%26","&");
+    encode.put("%40","@");
+    encode.put("%23","#");
+    encode.put("%24","\\$");
+    encode.put("%5B","[");
+    encode.put("%5D","]");
+    encode.put("%3A",":");
+    encode.put("%3F","?");
+    return encode;
   }
 }

@@ -36,7 +36,7 @@ public class HttpResponseBuilder implements ResponseBuilder {
   }
 
   private byte [] getHeaders(){
-    byte[] response =  this.headerBuilder.toString().getBytes();
+    byte[] response = this.headerBuilder.toString().getBytes();
     return response;
   }
 

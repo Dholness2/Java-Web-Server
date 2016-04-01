@@ -9,54 +9,65 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Files;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
 
 public class RouteConfiguration {
-  private HashMap<String,Response> routes = new HashMap();
   private String directory;
   private boolean enableProtection = false;
+  private HashMap<String,Response> routes = new HashMap();
 
   public RouteConfiguration () {}
 
-  public void addRoute(String path ,Response response) {
-    this.routes.put(path,response);
+  public void addRoute (String path, Response response) {
+    this.routes.put(path, response);
   }
 
-  public HashMap<String,Response> getRoutes() {
+  public HashMap<String,Response> getRoutes () {
     return this.routes;
   }
 
-  public ArrayList<File> getPaths(String path) {
+  public ArrayList<File> getFileList (String path) {
     File currentDirectory = new File(path);
     File [] files = currentDirectory.listFiles();
     return new ArrayList<File>(Arrays.asList(files));
   }
 
-  public void buildStandardRoutes(String directory) throws Exception {
-    ArrayList<File> filesList = getPaths(directory);
+  public void buildStandardRoutes (String directoryPath) throws Exception {
+    ArrayList<File> filesList = getFileList(directoryPath);
     for (File file : filesList) {
       if (! file.isHidden()) {
-        if(file.isFile()){
-          String fileName = "/"+ file.getName();
-          String pathKey = "GET " + fileName;
-          String fileType = getFileType(file.toPath());
-          addRoute(pathKey,(new Get (new HttpResponseBuilder(), fileName, fileType, directory, enableProtection)));
+        if (file.isFile()){
+          buildFileRoute(file, directoryPath);
         }else if (file.isDirectory()) {
-          String directoryName = "/"+ file.getName();
-          String pathKey = "GET /"+ (file.getParentFile().getName()) + directoryName;
-          System.out.println(pathKey);
-          String directoryPath = file.getPath();
-          addRoute(pathKey,new GetDirectory (new StatusCodes(), directoryPath));
+          buildDirectoryRoute(file);
         }
       }
     }
   }
+    private void buildFileRoute (File file, String directoryPath) throws Exception {
+      String fileName = "/"+ file.getName();
+      String pathKey = "GET " + fileName;
+      String fileType = getFileType(file.toPath());
+      addRoute(pathKey, (new Get(new HttpResponseBuilder(), fileName, fileType, fileDirectory(file), enableProtection)));
+    }
 
-  public String getFileType(Path path)throws Exception {
-    return Files.probeContentType(path);
-  }
+    private void buildDirectoryRoute (File directory) throws Exception {
+      String directoryName = "/"+ directory.getName();
+      String pathKey = "GET "+ directoryName;
+      String directoryPath = directory.getAbsolutePath();
+      addRoute(pathKey, new GetDirectory (new StatusCodes(), directoryPath));
+      buildStandardRoutes(directoryPath);
+    }
+
+    public String getFileType (Path path) throws Exception {
+     return Files.probeContentType(path);
+    }
+
+   private String fileDirectory (File file) {
+     String path =  file.getAbsolutePath();
+     return path.substring(0, path.lastIndexOf(File.separator));
+   }
 }

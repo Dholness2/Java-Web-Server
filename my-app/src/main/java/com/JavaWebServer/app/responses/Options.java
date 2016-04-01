@@ -1,38 +1,38 @@
 package com.JavaWebServer.app.responses;
 
 import com.JavaWebServer.app.responses.Response;
-import com.JavaWebServer.app.Request;
 
-import java.util.HashMap;
-import java.util.ArrayList;
+import com.JavaWebServer.app.Request;
+import com.JavaWebServer.app.responseBuilders.ResponseBuilder;
+
+import java.util.Arrays;
 
 public class Options implements Response {
-  private String status;
-  private String allowHeader= "Allow: ";
-  private HashMap<String,ArrayList<String>> directory;
-  private String CRLF = System.getProperty("line.separator");
+  private ResponseBuilder response;
+  private String[] options;
+  private static final String ALLOW_HEADER = "Allow: ";
 
-  public Options(String response,HashMap<String,ArrayList<String>> directory ) {
-    this.status = response;
-    this. directory = directory;
+  public Options(ResponseBuilder response, String[] options) {
+    this.response = response;
+    this.options = options;
   }
 
   public byte [] handleRequest(Request request) {
-    ArrayList methods = getAllowedMethods(request);
-    return (status+ CRLF + buildAllowedHeader(methods)).getBytes();
+    byte[] responseMessage = getResponse();
+    this.response.clearBuilder();
+    return responseMessage;
   }
 
-  private ArrayList<String> getAllowedMethods(Request request) {
-    String route = request.getRoute();
-    return directory.get(route);
- }
+  private String getMethods() {
+    StringBuilder optionBuilder = new StringBuilder();
+    for(String methods : this.options)
+      optionBuilder.append(methods +",");
+    return optionBuilder.toString();
+  }
 
-  private String buildAllowedHeader(ArrayList<String> methods) {
-    StringBuilder allowed = new StringBuilder();
-    allowed.append(this.allowHeader);
-    for (String  restMethod : methods) {   
-      allowed.append(restMethod+",");
-    }
-    return allowed.toString();
- }
+  private byte[] getResponse() {
+    this.response.addStatus("OK");
+    this.response.addHeader(ALLOW_HEADER, getMethods());
+    return this.response.getResponse();
+  }
 }

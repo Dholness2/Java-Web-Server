@@ -2,12 +2,10 @@ package com.JavaWebServer.app;
 
 import com.JavaWebServer.app.responses.Response;
 import com.JavaWebServer.app.responses.Options;
-import com.JavaWebServer.app.StatusCodes;
+import com.JavaWebServer.app.responseBuilders.HttpResponseBuilder;
 import com.JavaWebServer.app.Request;
 
-
 import java.util.HashMap;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -15,20 +13,16 @@ import org.junit.Before;
 import static org.junit.Assert.assertEquals;
 
 public class OptionsTest {
-  private HashMap<String, ArrayList<String>> routeDirectory = new HashMap<String, ArrayList<String>>();
   private Request testRequest = new Request();
-
-  private  ArrayList<String> routeMethods(String [] methods) {
-    return new ArrayList<String>(Arrays.asList(methods));
-  }
+  private static final String CRLF = System.lineSeparator();
 
   @Test
-  public void handleRequestTest() {
+  public void handlesOptionsRequestTest() {
     testRequest.setMessage("OPTIONS /method_options HTTP/1.1");
-    this.routeDirectory.put("/method_options",routeMethods(new String [] {"GET","HEAD","POST","OPTIONS","PUT"}));
-    StatusCodes code = new StatusCodes();
-    Response testOptions = new Options(code.OK, routeDirectory);
+    String[] options = new String [] {"GET","HEAD","POST","OPTIONS","PUT"};
+    Response testOptions = new Options (new HttpResponseBuilder(), options);
     String response = new String (testOptions.handleRequest(testRequest));
-    assertEquals(code.OK+ System.lineSeparator() +"Allow: GET,HEAD,POST,OPTIONS,PUT,", response);
+    String expectedResponse = "HTTP/1.1 200 OK" + CRLF + "Allow: GET,HEAD,POST,OPTIONS,PUT," + CRLF;
+    assertEquals(expectedResponse, response);
   }
 }

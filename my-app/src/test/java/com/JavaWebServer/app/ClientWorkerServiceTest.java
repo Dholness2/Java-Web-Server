@@ -30,13 +30,9 @@ public class ClientWorkerServiceTest {
 
   @Before
    public  void responderSertup() {
-     HashMap<String, Response> methods = new HashMap<String,Response>();
-     methods.put("GET /", new Get("HTTP/1.1 200 ok"));
-     ArrayList<String> routeMethods = new ArrayList<String>(); 
-     routeMethods.add("GET");
-     routes = new HashMap<String, ArrayList<String>>();
-     routes.put("/",routeMethods);
-     testResponder =  new Responder(routes, methods);
+     HashMap<String, Response> routes = new HashMap<String,Response>();
+     routes.put("GET /", new Get("HTTP/1.1 200 ok"));
+     testResponder =  new Responder(routes);
      loggerMock = new LoggerMock("/foobar");
    }
 

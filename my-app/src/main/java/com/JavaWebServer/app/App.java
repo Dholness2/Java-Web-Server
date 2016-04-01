@@ -31,75 +31,38 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 public class App {
   private static final int PORT_INDEX = 0;
   private static final int DIR_INDEX = 1;
   private static final String [] KEYS = {"-p","-d"};
 
-  private static HashMap<String,ArrayList<String>> routeDirectory = routeDirectory();
   private static String currentDirectory = System.getProperty("user.dir");
   private static String loggerPath = currentDirectory + "/logs";
-  private static  StatusCodes status = new StatusCodes ();
-  private static String serverName = "http://localhost:";
+  private static StatusCodes status = new StatusCodes ();
 
-  public static HashMap routeDirectory(){
-    HashMap<String, ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();
-    routes.put("/file1",routeMethods(new String [] {"GET", "POST"}));
-    routes.put("/",routeMethods(new String [] {"GET","PUT"}));
-    routes.put("/text-file.txt",routeMethods(new String [] {"GET","PUT"}));
-    routes.put("/form",routeMethods(new String [] {"POST","PUT"}));
-    routes.put("/method_options",routeMethods(new String [] {"GET","HEAD","POST","OPTIONS","PUT"}));
-    routes.put("/redirect",routeMethods(new String [] {"GET"}));
-    routes.put("/image.jpeg",routeMethods(new String[] {"GET"}));
-    routes.put("/image.gif",routeMethods(new String[] {"GET"}));
-    routes.put("/image.png",routeMethods(new String[] {"GET"}));
-    routes.put("/file1",routeMethods(new String[] {"GET"}));
-    routes.put("/file2",routeMethods(new String[] {"GET"}));
-    routes.put("/parameters?",routeMethods(new String[] {"GET"}));
-    routes.put("/form",routeMethods(new String[] {"GET","POST","PUT","DELETE"}));
-    routes.put("/patch-content.txt", routeMethods(new String [] {"PATCH", "GET"}));
-    routes.put("/logs", routeMethods(new String[] {"GET"}));
-    routes.put("/partial_content.txt", routeMethods(new String[] {"GET"}));
-    return routes;
-  }
-
-  public static HashMap getRoutes (String directory, int port) {
+  public static void addCustomRoutes (RouteConfiguration routes, String directory, int port) {
     boolean unprotected = false;
     boolean protectedRoute = true;
 
-    HashMap<String, Response> routes = new HashMap<String,Response>();
-    routes.put("POST /file1",new PutPost(status.OK,"/file1",directory,new FileEditor()));
-    routes.put("GET /", new GetDirectory(status,directory));
-    routes.put("PUT /", new PutPost(status.OK, "/",directory,new FileEditor()));
-    routes.put("GET /image.jpeg", new Get(new HttpResponseBuilder(),"/image.jpeg","image/jpeg",directory,unprotected));
-    routes.put("GET /image.gif", new Get(new HttpResponseBuilder() ,"/image.gif","image/gif",directory,unprotected));
-    routes.put("GET /image.png", new Get(new HttpResponseBuilder(),"/image.png","image/png",directory,unprotected));
-    routes.put("GET /text-file.txt", new Get(new HttpResponseBuilder(), "/text-file.txt","text/plain",directory,unprotected));
-    routes.put("Put /text-file.txt", new PutPost(status.OK,"text",directory,new FileEditor()));
-    routes.put("OPTIONS /method_options", new Options(status.OK,routeDirectory));
-    routes.put("GET /method_options", new Get(status.OK));
-    routes.put("POST /method_options", new PutPost(status.OK,"/method",directory,new FileEditor()));
-    routes.put("HEAD /method_options", new Head(status.OK));
-    routes.put("PUT /method_options", new PutPost(status.OK,"/method",directory,new FileEditor()));
-    routes.put("GET /redirect", new GetRedirect(status,port,serverName));
-    routes.put("GET /file1", new Get(new HttpResponseBuilder(),"/file1","text/plain", directory,unprotected));
-    routes.put("GET /file2", new Get(new HttpResponseBuilder(),"/file2","text/plain", directory,unprotected));
-    routes.put("GET /parameters?", new Params(status.OK,"parameters?"));
-    routes.put("GET /form", new GetForm(new HttpResponseBuilder(),"/form", "text/plain", currentDirectory, unprotected, "My=Data"));
-    routes.put("POST /form", new PutPost(status.OK,"/form",currentDirectory,new FileEditor()));
-    routes.put("PUT /form", new PutPost(status.OK,"/form",currentDirectory,new FileEditor()));
-    routes.put("DELETE /form", new Delete(status.OK,"/form",currentDirectory,new FileEditor()));
-    routes.put("GET /partial_content.txt", new GetPartialContent(status,"/partial_content.txt","text/plain",directory));
-    routes.put("GET /patch-content.txt", new Get(new HttpResponseBuilder(),"/patch-content.txt","text/plain",directory,unprotected));
-    routes.put("PATCH /patch-content.txt", new Patch(status,"/patch-content.txt",directory,new FileEditor(), new SHA1Encoder()));
-    routes.put("GET /logs", new Get(new HttpResponseBuilder(),"/logs","text/plain",currentDirectory, protectedRoute));
-    return routes;
-  }
-
-  private static ArrayList<String> routeMethods(String [] methods) {
-    return new ArrayList<String>(Arrays.asList(methods));
+    routes.addRoute("POST /file1",new PutPost(status.OK,"/file1",directory,new FileEditor()));
+    routes.addRoute("GET /", new GetDirectory(status,directory));
+    routes.addRoute("PUT /", new PutPost(status.OK, "/",directory,new FileEditor()));
+    routes.addRoute("Put /text-file.txt", new PutPost(status.OK,"text",directory,new FileEditor()));
+    routes.addRoute("OPTIONS /method_options", new Options(new HttpResponseBuilder(), new String [] {"GET","HEAD","POST","OPTIONS","PUT"}));
+    routes.addRoute("GET /method_options", new Get(status.OK));
+    routes.addRoute("POST /method_options", new PutPost(status.OK,"/method",directory,new FileEditor()));
+    routes.addRoute("HEAD /method_options", new Head(status.OK));
+    routes.addRoute("PUT /method_options", new PutPost(status.OK,"/method",directory,new FileEditor()));
+    routes.addRoute("GET /redirect", new GetRedirect(status,port,"http://localhost:"));
+    routes.addRoute("GET /parameters?", new Params(new HttpResponseBuilder(),"parameters?"));
+    routes.addRoute("GET /form", new GetForm(new HttpResponseBuilder(),"/form", "text/plain", currentDirectory, unprotected, "My=Data"));
+    routes.addRoute("POST /form", new PutPost(status.OK,"/form",currentDirectory,new FileEditor()));
+    routes.addRoute("PUT /form", new PutPost(status.OK,"/form",currentDirectory,new FileEditor()));
+    routes.addRoute("DELETE /form", new Delete(status.OK,"/form",currentDirectory,new FileEditor()));
+    routes.addRoute("GET /partial_content.txt", new GetPartialContent(status,"/partial_content.txt","text/plain",directory));
+    routes.addRoute("PATCH /patch-content.txt", new Patch(status,"/patch-content.txt",directory,new FileEditor(), new SHA1Encoder()));
+    routes.addRoute("GET /logs", new Get(new HttpResponseBuilder(),"/logs","text/plain",currentDirectory, protectedRoute));
   }
 
   public static void main( String[] args) throws Exception {
@@ -107,13 +70,15 @@ public class App {
     String directory = Options.get(KEYS[DIR_INDEX]);
     int port = Integer.parseInt(Options.get(KEYS[PORT_INDEX]));
 
-    HashMap <String, Response> routes = getRoutes(directory, port);
-    Responder responder = new Responder(routeDirectory, routes);
+    RouteConfiguration routes  = new RouteConfiguration();
+    routes.buildStandardRoutes(directory);
+    addCustomRoutes(routes,directory,port);
 
+    Responder responder = new Responder(routes.getRoutes());
     ServerSocket serverSocket = new ServerSocketWrapper(port);
     Logger logger = new Logger(loggerPath);
+    Server server = new Server(port,serverSocket,responder,logger);
 
-    Server app = new Server(port,serverSocket,responder,logger);
-    app.run();
+    server.run();
   }
 }

@@ -28,10 +28,9 @@ public class ServerTest  {
 
   @Before
   public void setupServer () throws Exception {
-    HashMap<String, Response> methods = new HashMap<String,Response>();
-    HashMap<String,ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();
+    HashMap<String, Response> routes = new HashMap<String,Response>();
     testLogger = new Logger(logPath);
-    Responder testResponder =  new Responder(routes, methods);
+    Responder testResponder =  new Responder(routes);
     int  port = 9094;
     serverSocketMock =  new ServerSocketMock(port);
     testServer = new Server(port,serverSocketMock,testResponder, testLogger);

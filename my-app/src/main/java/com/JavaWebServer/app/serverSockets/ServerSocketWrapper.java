@@ -25,7 +25,6 @@ public class ServerSocketWrapper implements ServerSocket {
     try {
       return new ClientSocket(serverSocket.accept());
     } catch(IOException e) {
-      new Exception("Can not accept Client Connection").printStackTrace();
       e.printStackTrace();
     }
     return failedAccept;
@@ -39,7 +38,6 @@ public class ServerSocketWrapper implements ServerSocket {
     try {
       serverSocket.close();
     } catch(IOException e) {
-      new Exception("Can not close ServerSocket").printStackTrace();
       e.printStackTrace();
     }
   }

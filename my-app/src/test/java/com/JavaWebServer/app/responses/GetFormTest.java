@@ -53,7 +53,7 @@ public class GetFormTest {
   }
 
   @Test
-  public void hasFilePresentFileTest() {
+  public void hasPresentFileTest() {
     Request request = new Request();
     this.testGetForm.handleRequest(request);
     assertTrue(testGetForm.hasFile());

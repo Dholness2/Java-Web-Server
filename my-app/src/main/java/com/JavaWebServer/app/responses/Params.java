@@ -1,48 +1,90 @@
 package com.JavaWebServer.app.responses;
 
-import com.JavaWebServer.app.decoders.ParamsDecoder;
-import com.JavaWebServer.app.Request;
 import com.JavaWebServer.app.responses.Response;
+import com.JavaWebServer.app.Request;
+import com.JavaWebServer.app.responseBuilders.ResponseBuilder;
+import com.JavaWebServer.app.decoders.ParamsDecoder;
 
 import java.util.HashMap;
 import java.util.Map;
 
- public class Params implements Response {
-  private String status;
+public class Params implements Response {
+  private ResponseBuilder response;
   private String params;
   private Request request;
-  private String CRLF ="\r\n";
-  private String typeHeader = "Content-Type: ";
-  private String contentLength = "Content-Length:";
+  private static final String CRLF = System.getProperty("line.separator");
+  private static final String TYPE_HEADER = "Content-Type: ";
+  private static final String CONTENT_LENGTH = "Content-Length: ";
 
-  public Params (String status, String params) {
-    this.status = status;
+  public Params (ResponseBuilder response, String params) {
+    this.response = response;
     this.params = params;
   }
 
-  public byte [] handleRequest (Request request) {
+  public byte[] handleRequest(Request request) {
     this.request = request;
-    String body = decodeParams();
-    int size = body.getBytes().length;
-    String response = (status+CRLF+typeHeader+"text/plain"+CRLF+contentLength+size+CRLF+CRLF+body);
-    return response.getBytes();
+    byte [] response = getResponse();
+    this.response.clearBuilder();
+    return response;
   }
 
-  private String decodeParams () {
-    String [] variables =  this.request.getParams().split("&");
-    int length = variables.length;
-    for (int index = 0; index < length; index++) {
-      variables[index] = ParamsDecoder.decode(variables[index])+CRLF;
+  private byte[] getResponse() {
+    byte[] responseBody = decodeParams().getBytes();
+    this.response.addStatus("OK");
+    this.response.addHeader(TYPE_HEADER,"text/plain");
+    this.response.addHeader(CONTENT_LENGTH, Integer.toString(responseBody.length));
+    this.response.addBody(responseBody);
+    return response.getResponse();
+  }
+
+  private String decodeParams() {
+    HashMap<String, String> paramKey = getParamKey();
+    String[] variables = getParamVariables();
+    decodeVariables(variables);
+    return buildParamsString(variables).trim();
+  }
+
+  private String[] getParamVariables() {
+    String params = this.request.getParams();
+    params = params.replaceAll("=", " = ");
+    return params.split("&");
+  }
+
+  private void decodeVariables(String[] variables) {
+    for (int index = 0; index < variables.length; index++) {
+      variables[index] = ParamsDecoder.decodeParams(getParamKey(), variables[index]);
     }
-    return buildString(variables).trim();
   }
 
-  private String buildString(String [] stringArray) {
+  private String buildParamsString(String[] params) {
     StringBuilder strBuilder = new StringBuilder();
-    int size = stringArray.length;
-    for (int i = 0; i<size; i++) {
-      strBuilder.append(stringArray[i]);
+    for (String decodedParam: params){
+      strBuilder.append(decodedParam + CRLF);
     }
     return  strBuilder.toString();
+  }
+
+  private static HashMap <String, String>  getParamKey() {
+    HashMap<String, String> encode = new HashMap<String, String>();
+    encode.put("%3C","<");
+    encode.put("%3E",">");
+    encode.put("%3D","=");
+    encode.put("%2C",",");
+    encode.put("%21","!" );
+    encode.put("%2B","+");
+    encode.put("%2D","-");
+    encode.put("%20"," ");
+    encode.put("%22", "\"");
+    encode.put("%3B",";");
+    encode.put("%2A","*");
+    encode.put("%26","&");
+    encode.put("%40","@");
+    encode.put("%23","#");
+    encode.put("%24","\\$");
+    encode.put("%5B","[");
+    encode.put("%5D","]");
+    encode.put("%3A",":");
+    encode.put("%3F","?");
+    return encode;
   }
 }

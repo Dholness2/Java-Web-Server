@@ -1,0 +1,19 @@
+package com.javawebserver.app;
+
+import com.javawebserver.app.decoders.Base64Decoder;
+
+import org.junit.Test;
+import org.junit.Before;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+public class Base64DecoderTest {
+
+  @Test
+  public void decodeTest() {
+    String encodedCredential = "dXNlcm5hbWU6cGFzc3dvcmQ=";
+    String decodedCredentials = "username:password";
+    String results = Base64Decoder.decode(encodedCredential);
+    assertEquals(decodedCredentials, results);
+  }
+}

@@ -6,11 +6,12 @@ import java.io.File;
 
 import org.junit.Test;
 import org.junit.Before;
+import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 
 public class LoggerTest {
 
- private String logPath = System.getProperty("user.dir")+"/logs";
+ private static String logPath = System.getProperty("user.dir")+"/logs";
  private Logger testlogger = new Logger(logPath);
  private Request testRequest = new Request();
 
@@ -27,18 +28,24 @@ public class LoggerTest {
    }
    return false;
  }
+ 
+ @AfterClass
+ public static void removeTestData() {
+   File testLogs = new File(logPath);
+   testLogs.delete();
+ }
 
-  @Test
-  public void logRequestTest() throws IOException {
-    String routeRequest = "GET /foobar HTTP/1.1";
-    testRequest.setMessage(routeRequest);
-    testlogger.logRequest(testRequest);
-    assertEquals(true,containsEdit(routeRequest));
-  }
+ @Test
+ public void logRequestTest() throws IOException {
+   String routeRequest = "GET /foobar HTTP/1.1";
+   testRequest.setMessage(routeRequest);
+   testlogger.logRequest(testRequest);
+   assertEquals(true,containsEdit(routeRequest));
+ }
 
-  @Test
-  public void clearLogsTest() throws IOException {
-    testlogger.clearLogs();
-    assertEquals(false, containsEdit("GET /foobar HTTP/1.1"));
-  }
+ @Test
+ public void clearLogsTest() throws IOException {
+   testlogger.clearLogs();
+   assertEquals(false, containsEdit("GET /foobar HTTP/1.1"));
+ }
 }

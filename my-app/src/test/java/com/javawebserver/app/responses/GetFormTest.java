@@ -2,6 +2,7 @@ package com.javawebserver.app;
 
 import org.junit.Test;
 import org.junit.Before;
+import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
@@ -22,9 +23,9 @@ import java.io.File;
 public class GetFormTest {
   private ResponseBuilder response = new HttpResponseBuilder();
   private String formData = "My=Data";
-  private String fileName ="/form";
-  private  String fileType = "text/plain";
-  private String directory = System.getProperty("user.dir");
+  private static String fileName ="/form";
+  private String fileType = "text/plain";
+  private static String directory = System.getProperty("user.dir");
   private boolean authenticationEnabled = false;
   private GetForm testGetForm = new GetForm(response,fileName,fileType,directory,authenticationEnabled,formData);
 
@@ -46,6 +47,12 @@ public class GetFormTest {
     return Files.readAllBytes(location);
   }
 
+  @AfterClass
+  public static void removeTestData() {
+    File testForm = new File(directory + fileName);
+    testForm.delete();
+  }
+  
   @Test
   public void hasFileNonExistantFileTest() {
     testGetForm.buildPath();

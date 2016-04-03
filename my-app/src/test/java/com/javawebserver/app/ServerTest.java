@@ -15,16 +15,18 @@ import static org.junit.Assert.assertFalse;
 
 import java.net.Socket;
 
+import java.io.File;
+
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
 public class ServerTest  {
- private Server testServer;
- private ServerSocketMock serverSocketMock;
- private SocketMock socketMock = new SocketMock(new Socket());
- private String logPath = System.getProperty("user.dir")+"/logs";
- private Logger testLogger;
+  private Server testServer;
+  private ServerSocketMock serverSocketMock;
+  private SocketMock socketMock = new SocketMock(new Socket());
+  private String logPath = System.getProperty("user.dir")+"/logs";
+  private Logger testLogger;
 
   @Before
   public void setupServer () throws Exception {
@@ -40,6 +42,8 @@ public class ServerTest  {
   public void turnOffServer() {
     testLogger.clearLogs();
     testServer.off();
+    File testForm = new File(logPath);
+    testForm.delete();
   }
 
   @Test

@@ -56,8 +56,8 @@ public class Responder {
   }
 
   private boolean hasPath (String path) {
-    String standardRoute ="GET " + path;
-    return this.routes.containsKey(standardRoute);
+    String routesKeys = this.routes.keySet().toString();
+    return routesKeys.contains(path);
   }
 
   private boolean checkMethod(Request request) {

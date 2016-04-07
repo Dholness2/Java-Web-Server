@@ -1,6 +1,7 @@
 package com.javawebserver.app;
 
 import com.javawebserver.app.sockets.Socket;
+import com.javawebserver.app.helpers.Logger;
 
 import java.util.ArrayList;
 

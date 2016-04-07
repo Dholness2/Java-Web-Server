@@ -1,4 +1,4 @@
-package com.javawebserver.app;
+package com.javawebserver.app.responses;
 
 import com.javawebserver.app.responses.Response;
 import com.javawebserver.app.responses.PutPost;

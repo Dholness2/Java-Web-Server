@@ -1,4 +1,4 @@
-package com.javawebserver.app;
+package com.javawebserver.app.responses;
 
 import com.javawebserver.app.responses.Response;
 import com.javawebserver.app.responses.GetDirectory;
@@ -33,7 +33,8 @@ public class GetDirectoryTest {
 
   @Test
   public void handleResponseTest(){
-    Response testGetDir = new GetDirectory(codes,directory);
+    GetDirectory testGetDir = new GetDirectory(codes,directory);
+    testGetDir.setRootDirectory(true);
     byte [] response = testGetDir.handleRequest(new Request());
     String body = "<!DOCTYPE html><html><body><a href=\"/file1\">file1</a><br>"+CRLF+
                    "<a href=\"/file2\">file2</a><br>"+CRLF+

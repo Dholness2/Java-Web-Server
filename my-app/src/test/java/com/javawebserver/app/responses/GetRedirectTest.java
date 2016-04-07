@@ -1,4 +1,4 @@
-package com.javawebserver.app;
+package com.javawebserver.app.responses;
 
 import org.junit.Test;
 import org.junit.Before;

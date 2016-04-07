@@ -1,4 +1,4 @@
-package com.javawebserver.app;
+package com.javawebserver.app.responses;
 
 import org.junit.Test;
 import org.junit.Before;
@@ -52,7 +52,7 @@ public class GetFormTest {
     File testForm = new File(directory + fileName);
     testForm.delete();
   }
-  
+
   @Test
   public void hasFileNonExistantFileTest() {
     testGetForm.buildPath();

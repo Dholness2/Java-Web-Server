@@ -1,4 +1,6 @@
-package com.javawebserver.app;
+package com.javawebserver.app.helpers;
+
+import com.javawebserver.app.Request;
 
 import java.io.FileWriter;
 import java.io.BufferedWriter;

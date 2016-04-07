@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
-public class RouteConfigurationTest {
-  private RouteConfiguration routeConfig;
+public class RouteBuilderTest {
+  private RouteBuilder routeConfig;
   private Response response = new GetDirectory(new StatusCodes(),new String());
   private File testDirectory;
   private String testDirectoryPath;
@@ -40,7 +40,7 @@ public class RouteConfigurationTest {
     tempHTML.createNewFile();
     tempTXT = new File (testDirectory, "tempTXT.txt");
     tempTXT.createNewFile();
-    routeConfig = new RouteConfiguration();
+    routeConfig = new RouteBuilder(testDirectoryPath);
   }
 
   @After

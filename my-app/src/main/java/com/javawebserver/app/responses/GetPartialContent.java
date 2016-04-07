@@ -3,6 +3,7 @@ package com.javawebserver.app.responses;
 import com.javawebserver.app.responses.Response;
 import com.javawebserver.app.StatusCodes;
 import com.javawebserver.app.Request;
+import com.javawebserver.app.helpers.ExceptionLogger;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -37,7 +38,7 @@ public class GetPartialContent implements Response {
       byte[] fileBytes = Files.readAllBytes(getPath());
       return getResponse(request,fileBytes);
     }catch (IOException e) {
-      e.printStackTrace();
+      ExceptionLogger.logException("can't read file" + e);
     }
     return status.STATUSERROR.getBytes();
   }
@@ -81,8 +82,7 @@ public class GetPartialContent implements Response {
       output.write(file);
       return output.toByteArray();
     } catch (IOException e) {
-      new Exception("Could not write to file").printStackTrace();
-      e.printStackTrace();
+      ExceptionLogger.logException("can't read file" + e);
     }
     return status.STATUSERROR.getBytes();
   }

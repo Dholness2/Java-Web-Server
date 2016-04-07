@@ -3,6 +3,7 @@ package com.javawebserver.app.responses;
 import com.javawebserver.app.responses.Response;
 import com.javawebserver.app.encoders.Encoder;
 import com.javawebserver.app.helpers.FileEditor;
+import com.javawebserver.app.helpers.ExceptionLogger;
 import com.javawebserver.app.StatusCodes;
 import com.javawebserver.app.Request;
 
@@ -55,8 +56,7 @@ public class Patch implements Response {
       byte [] fileBytes = Files.readAllBytes(Paths.get(this.directory+ this.fileName));
       return this.encoder.encode(fileBytes);
     } catch (IOException e) {
-      new Exception("File not found:").printStackTrace();
-      e.printStackTrace();
+      ExceptionLogger.logException("File not found:");
     }
     return tag;
   }

@@ -4,6 +4,7 @@ import com.javawebserver.app.responses.Response;
 import com.javawebserver.app.responseBuilders.ResponseBuilder;
 import com.javawebserver.app.Request;
 import com.javawebserver.app.Authenticator;
+import com.javawebserver.app.helpers.ExceptionLogger;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -57,8 +58,7 @@ public class Get implements Response {
       byte[] file = Files.readAllBytes(Paths.get(getLocation()));
       return fileResponse(file);
     }catch (IOException e) {
-     new Exception("could not readfile").printStackTrace();
-      e.printStackTrace();
+     ExceptionLogger.logException("can't read file" + e);
     }
     return failedFileReadResponse();
   }

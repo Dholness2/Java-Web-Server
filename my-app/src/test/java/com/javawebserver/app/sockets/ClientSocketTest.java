@@ -1,7 +1,9 @@
-package com.javawebserver.app;
+package com.javawebserver.app.sockets;
 
 import com.javawebserver.app.sockets.Socket;
 import com.javawebserver.app.sockets.ClientSocket;
+import com.javawebserver.app.StatusCodes;
+import com.javawebserver.app.Request;
 
 import java.io.OutputStream;
 import java.io.InputStream;

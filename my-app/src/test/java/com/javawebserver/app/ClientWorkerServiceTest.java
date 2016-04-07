@@ -4,6 +4,8 @@ import com.javawebserver.app.responses.Response;
 import com.javawebserver.app.responses.Get;
 import com.javawebserver.app.sockets.Socket;
 import com.javawebserver.app.sockets.ClientSocket;
+import com.javawebserver.app.helpers.Logger;
+import com.javawebserver.app.StatusCodes;
 
 import java.util.ArrayList;
 import java.util.HashMap;

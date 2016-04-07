@@ -5,6 +5,7 @@ import com.javawebserver.app.sockets.ClientSocket;
 
 import com.javawebserver.app.serverSockets.ServerSocket;
 import com.javawebserver.app.serverSockets.ServerSocketWrapper;
+import com.javawebserver.app.helpers.Logger;
 
 import org.junit.Test;
 import org.junit.Before;

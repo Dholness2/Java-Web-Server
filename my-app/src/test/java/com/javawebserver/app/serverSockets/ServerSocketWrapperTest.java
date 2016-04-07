@@ -1,4 +1,4 @@
-package com.javawebserver.app;
+package com.javawebserver.app.serverSockets;
 
 import com.javawebserver.app.serverSockets.ServerSocketWrapper;
 import com.javawebserver.app.serverSockets.ServerSocket;
@@ -7,18 +7,24 @@ import java.io.IOException;
 
 import org.junit.Test;
 import org.junit.After;
+import org.junit.Before;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 public class ServerSocketWrapperTest {
- private ServerSocket testServerSocket = new ServerSocketWrapper(9056);
+ private ServerSocket testServerSocket;
 
- @After
+  @Before
+  public void buildWrapper() throws IOException {
+    testServerSocket = new ServerSocketWrapper(9898);
+  }
+
+  @After
   public void closeSockets() {
    testServerSocket.close();
   }
 
- @Test
+  @Test
   public void TestServerWrapperisclosed() throws Exception {
     assertFalse(testServerSocket.isClosed());
   }

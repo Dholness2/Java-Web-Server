@@ -2,6 +2,7 @@ package com.javawebserver.app;
 
 import com.javawebserver.app.sockets.Socket;
 import com.javawebserver.app.serverSockets.ServerSocket;
+import com.javawebserver.app.helpers.Logger;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -25,11 +26,9 @@ public class Server implements Runnable{
   public  void run () {
     while (isServerOn()) {
       clientSocket = serverSocket.accept();
-      System.out.println("Server: listening on port");
       this.threadPool.execute(new ClientWorkerService(this.clientSocket,this.responder, this.logger));
     }
     closeThreadPool();
-    System.out.println("Server off");
   }
 
   public  boolean isServerOn() {

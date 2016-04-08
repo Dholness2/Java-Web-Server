@@ -1,15 +1,18 @@
-package com.javawebserver.app;
+package com.javawebserver.app.helpers;
 
-import com.javawebserver.app.decoders.Base64Decoder;
+import com.javawebserver.app.Request;
+import com.javawebserver.app.helpers.ExceptionLogger;
 
-import java.io.File;
 import java.nio.charset.Charset;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Base64;
+
+import java.io.IOException;
+import java.io.File;
 
 public class Authenticator {
   private static String credentialsPath = System.getProperty("user.dir")+"/auth.txt";
@@ -24,13 +27,12 @@ public class Authenticator {
     return false;
   }
 
-  private static ArrayList<String> getValidCredentials (){
+  private static ArrayList<String> getValidCredentials() {
     ArrayList<String> credentials = new ArrayList();
     try{
       credentials = new ArrayList<String>(Files.readAllLines(Paths.get(credentialsPath),Charset.forName("utf-8")));
     }catch (IOException e) {
-      new Exception("File not found:").printStackTrace();
-      e.printStackTrace();
+      ExceptionLogger.logException("unable to read Authentication file" + e);
     }
     return credentials;
   }
@@ -41,11 +43,11 @@ public class Authenticator {
 
   private static String getCredential(Request request){
     String header = request.getHeaders().split(credentialHeader)[1];
-    String credentials  = header.substring(0, header.indexOf(CRLF));
+    String credentials = header.substring(0, header.indexOf(CRLF));
     return credentials;
   }
 
-  private static String decodeCredential(String credential) {
-    return  Base64Decoder.decode(credential);
+  private static String decodeCredential(String encoded) {
+    return new String (Base64.getDecoder().decode(encoded));
   }
 }

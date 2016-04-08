@@ -3,7 +3,7 @@ package com.javawebserver.app.responses;
 import com.javawebserver.app.responses.Response;
 import com.javawebserver.app.responseBuilders.ResponseBuilder;
 import com.javawebserver.app.Request;
-import com.javawebserver.app.Authenticator;
+import com.javawebserver.app.helpers.Authenticator;
 import com.javawebserver.app.helpers.ExceptionLogger;
 
 import java.nio.file.Files;

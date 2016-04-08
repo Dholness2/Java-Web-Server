@@ -65,7 +65,7 @@ public class RouteBuilder {
     String directoryName = "/"+ directory.getName();
     String routeKey = getRouteKey(directory, directoryName);
     String directoryPath = directory.getAbsolutePath();
-    addRoute(routeKey, new GetDirectory (new StatusCodes(), directoryPath));
+    addRoute(routeKey, new GetDirectory (new HttpResponseBuilder(), directoryPath));
     buildStandardRoutes(directoryPath);
   }
 

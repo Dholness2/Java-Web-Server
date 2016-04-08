@@ -2,49 +2,80 @@ package com.javawebserver.app.responses;
 
 import com.javawebserver.app.responses.Response;
 import com.javawebserver.app.responses.GetDirectory;
-import com.javawebserver.app.StatusCodes;
+import com.javawebserver.app.responseBuilders.ResponseBuilder;
+import com.javawebserver.app.responseBuilders.HttpResponseBuilder;
 import com.javawebserver.app.Request;
 import com.javawebserver.app.helpers.FileEditor;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+import java.io.File;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.Before;
-import java.util.LinkedHashMap;
+
+import org.junit.Test;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.internal.matchers.StringContains.containsString;
 
 public class GetDirectoryTest {
+  private ResponseBuilder builder = new HttpResponseBuilder();
+  private String directoryPath = System.getProperty("user.dir")+"/public";
+  private File directory = new File(directoryPath);
 
-  private Map <String, String> directoryLinks = new LinkedHashMap <String, String> ();
-  private StatusCodes codes = new StatusCodes();
-  private  final String CRLF = "\r\n";
-  private  final String CONTENTYPE = "text/html";
-  private  String directory = System.getProperty("user.dir")+"/public";
+  private String getRootLink(File file) {
+    String fileName = file.getName();
+    return ("<a href=\"/"+ fileName +"\">"+fileName+"</a><br>");
+  }
 
-  private String buildHeader (String body, String type) {
-    String typeHeader = "Content-Type: ";
-    String contentLength = "Content-Length:";
-    int length = body.getBytes().length;
-    return (codes.OK +CRLF+typeHeader
-        + type+CRLF+contentLength
-        + length);
+  private String getNestedFileLink(File file) {
+    String fileName = file.getName();
+    String path = file.getParentFile().getName() + "/" + fileName;
+    return ("<a href=\"/"+ path +"\">"+ fileName +"</a><br>");
   }
 
   @Test
-  public void handleResponseTest(){
-    GetDirectory testGetDir = new GetDirectory(codes,directory);
+  public void setRootDirectoryTest() {
+    GetDirectory testGetDir = new GetDirectory(directoryPath);
     testGetDir.setRootDirectory(true);
-    byte [] response = testGetDir.handleRequest(new Request());
-    String body = "<!DOCTYPE html><html><body><a href=\"/file1\">file1</a><br>"+CRLF+
-                   "<a href=\"/file2\">file2</a><br>"+CRLF+
-                   "<a href=\"/image.gif\">image.gif</a><br>"+CRLF+
-                   "<a href=\"/image.jpeg\">image.jpeg</a><br>"+CRLF+
-                   "<a href=\"/image.png\">image.png</a><br>"+CRLF+
-                   "<a href=\"/partial_content.txt\">partial_content.txt</a><br>"+CRLF+
-                   "<a href=\"/patch-content.txt\">patch-content.txt</a><br>"+CRLF+
-    "<a href=\"/text-file.txt\">text-file.txt</a><br></body></html>";
-    String expected = buildHeader(body, CONTENTYPE)+CRLF+CRLF+body;
-    assertEquals(expected, new String(response));
+    assertTrue(testGetDir.isRootDirectory());
+  }
+
+  @Test
+  public void isRootDirectoryTest() {
+    GetDirectory testGetDir = new GetDirectory(directoryPath);
+    assertEquals(false, testGetDir.isRootDirectory());
+  }
+
+  @Test
+  public void isRootDirectoryTestTrueState() {
+    GetDirectory testGetDir = new GetDirectory(directoryPath);
+    testGetDir.setRootDirectory(true);
+    assertTrue(testGetDir.isRootDirectory());
+  }
+
+  @Test
+  public void handleResponseTest() {
+    GetDirectory testGetDir = new GetDirectory(directoryPath);
+    testGetDir.setRootDirectory(true);
+    String response = new String (testGetDir.handleRequest(new Request()));
+    for (File file : directory.listFiles()) {
+      if (!file.isHidden()) {
+        assertThat(response, containsString(getRootLink(file)));
+      }
+    }
+  }
+
+  @Test
+  public void hanldeResponseTestForNestedDirectory() {
+    GetDirectory testGetDir = new GetDirectory(directoryPath);
+    testGetDir.setRootDirectory(false);
+    String response = new String (testGetDir.handleRequest(new Request()));
+    for (File file : directory.listFiles()) {
+      if (!file.isHidden()) {
+        String link = getNestedFileLink(file);
+        assertThat(response, containsString(link));
+      }
+    }
   }
 }

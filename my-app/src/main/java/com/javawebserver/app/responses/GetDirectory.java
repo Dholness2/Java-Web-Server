@@ -1,56 +1,92 @@
 package com.javawebserver.app.responses;
 
 import com.javawebserver.app.responses.Response;
-import com.javawebserver.app.StatusCodes;
+import com.javawebserver.app.responseBuilders.ResponseBuilder;
+import com.javawebserver.app.responseBuilders.HttpResponseBuilder;
 import com.javawebserver.app.Request;
+
+import java.io.File;
+import java.io.FileFilter;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.io.File;
 import java.util.Arrays;
 
 public class GetDirectory implements Response {
-  private final String TYPE="text/html";
-  private final String CRLF = "\r\n";
-
+  private boolean rootDirectory = false;
+  private static final String CRLF = System.getProperty("line.separator");
   private String directoryPath;
-  private StatusCodes codes;
-  private String url;
 
-  public GetDirectory(StatusCodes codes, String directoryPath) {
+  public GetDirectory(String directoryPath) {
     this.directoryPath = directoryPath;
-    this.codes = codes;
   }
 
-  public byte []  handleRequest(Request request) {
-    String  body = buildbody((getDirectoryList(this.directoryPath)));
-    String header = buildHeader(body,TYPE);
-    return ((header+CRLF+CRLF+body).getBytes());
+  public void setRootDirectory(boolean directoryStatus) {
+    this.rootDirectory = directoryStatus;
   }
 
-  private String buildbody(String [] dirList) {
-    StringBuilder strBuilder = new StringBuilder();
-    strBuilder.append("<!DOCTYPE html><html><body>");
+  public boolean isRootDirectory() {
+    return this.rootDirectory;
+  }
+
+  public byte[]  handleRequest(Request request) {
+    String body = buildbody((getDirectoryList(this.directoryPath)));
+    return getResponse(body);
+  }
+
+  private byte[] getResponse(String responseBody) {
+    ResponseBuilder builder = new HttpResponseBuilder();
+    byte [] body = responseBody.getBytes();
+    buildResponse(builder, body);
+    return builder.getResponse();
+  }
+
+  private void buildResponse(ResponseBuilder builder, byte[] body) {
+    builder.addStatus("OK");
+    builder.addHeader("Content-Type: ", "text/html");
+    builder.addHeader("Content-Length: ", Integer.toString(body.length));
+    builder.addBody(body);
+  }
+
+  private String buildbody(File [] dirList) {
+    StringBuilder htmlBuilder = new StringBuilder();
+    htmlBuilder.append("<!DOCTYPE html><html><body>");
     Arrays.sort(dirList);
-    for(String file: dirList) {
-      if (file.startsWith(".")){
-
-      }else {
-        strBuilder.append("<a href=\"/"+ file +"\">"+file+"</a><br>"+CRLF);
-      }
+    for(File file: dirList) {
+      buildFileLink(file, htmlBuilder);
     }
-    return ((strBuilder.toString().trim()) + "</body></html>");
+    return ((htmlBuilder.toString().trim()) + "</body></html>");
   }
 
-  private String buildHeader (String body, String type) {
-    String typeHeader = "Content-Type: ";
-    String contentLength = "Content-Length:";
-    int length = body.getBytes().length;
-    return (codes.OK +CRLF+typeHeader+type+CRLF+contentLength+length);
+  private void buildFileLink(File file, StringBuilder htmlBuilder) {
+    if (isRootDirectory()) {
+      buildRootFileLink(file, htmlBuilder);
+    } else {
+      buildNestedFileLink(file, htmlBuilder);
+    }
+  }
+  private void buildRootFileLink(File file, StringBuilder htmlBuilder) {
+    String fileName = file.getName();
+    htmlBuilder.append("<a href=\"/"+ fileName +"\">"+fileName+"</a><br>"+CRLF);
   }
 
-  private String [] getDirectoryList (String path) {
+  private void buildNestedFileLink(File file, StringBuilder htmlBuilder) {
+    String fileName =  file.getName();
+    String pathName = file.getParentFile().getName() + "/" + fileName;
+    htmlBuilder.append("<a href=\"/"+ pathName +"\">"+ fileName +"</a><br>"+CRLF);
+  }
+
+  private File [] getDirectoryList (String path) {
     File directory = new File(path);
-    return directory.list();
+    return directory.listFiles(getFileFilter());
+  }
+
+  private FileFilter getFileFilter() {
+    return new FileFilter() {
+      @Override
+        public boolean accept(File file) {
+          return !file.isHidden();
+        }
+    };
   }
 }

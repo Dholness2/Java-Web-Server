@@ -3,6 +3,7 @@ package com.javawebserver.app;
 import com.javawebserver.app.responses.Response;
 import com.javawebserver.app.responses.GetDirectory;
 import com.javawebserver.app.responses.Get;
+import com.javawebserver.app.responseBuilders.HttpResponseBuilder;
 
 import org.junit.Test;
 import org.junit.Before;
@@ -21,7 +22,7 @@ import java.util.HashMap;
 
 public class RouteBuilderTest {
   private RouteBuilder routeConfig;
-  private Response response = new GetDirectory(new StatusCodes(),new String());
+  private Response response = new GetDirectory(new HttpResponseBuilder(),new String());
   private File testDirectory;
   private String testDirectoryPath;
   private File testSubDirectory;

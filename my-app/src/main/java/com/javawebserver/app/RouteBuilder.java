@@ -65,7 +65,7 @@ public class RouteBuilder {
     String directoryName = "/"+ directory.getName();
     String routeKey = getRouteKey(directory, directoryName);
     String directoryPath = directory.getAbsolutePath();
-    addRoute(routeKey, new GetDirectory (new HttpResponseBuilder(), directoryPath));
+    addRoute(routeKey, new GetDirectory(directoryPath));
     buildStandardRoutes(directoryPath);
   }
 
@@ -81,8 +81,8 @@ public class RouteBuilder {
   }
 
   private boolean isRootFile(File file) {
-   String parentDirectory = getParentName(file); 
-   return (this.rootDirectory.equals(parentDirectory));
+    String parentDirectory = getParentName(file);
+    return (this.rootDirectory.equals(parentDirectory));
   }
 
   public String getFileType(Path path) throws Exception {

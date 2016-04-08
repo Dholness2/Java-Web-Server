@@ -22,7 +22,7 @@ import java.util.HashMap;
 
 public class RouteBuilderTest {
   private RouteBuilder routeConfig;
-  private Response response = new GetDirectory(new HttpResponseBuilder(),new String());
+  private Response response = new GetDirectory("/temp");
   private File testDirectory;
   private String testDirectoryPath;
   private File testSubDirectory;
@@ -33,10 +33,10 @@ public class RouteBuilderTest {
   public void buildTempDirectory() throws Exception {
     String path = System.getProperty ("temp.dir");
     testDirectory = new File (path, "testDir");
-    testDirectory .mkdir();
+    testDirectory.mkdir();
     testDirectoryPath = this.testDirectory.getPath();
     testSubDirectory = new File (testDirectory, "subDirectory");
-    testSubDirectory .mkdir();
+    testSubDirectory.mkdir();
     tempHTML = new File (testDirectory, "tempHTML.html");
     tempHTML.createNewFile();
     tempTXT = new File (testDirectory, "tempTXT.txt");
@@ -45,7 +45,7 @@ public class RouteBuilderTest {
   }
 
   @After
-  public void removeTempDirectory () {
+  public void removeTempDirectory() {
     tempHTML.delete();
     tempTXT.delete();
     testSubDirectory.delete();
@@ -54,9 +54,9 @@ public class RouteBuilderTest {
 
   @Test
   public void addsRouteTest() {
-    routeConfig.addRoute("GET /home",this.response);
+    routeConfig.addRoute("GET /home", this.response);
     Map routes = routeConfig.getRoutes();
-    assertEquals(routes.get("GET /home"),this.response);
+    assertEquals(routes.get("GET /home"), this.response);
   }
 
   @Test

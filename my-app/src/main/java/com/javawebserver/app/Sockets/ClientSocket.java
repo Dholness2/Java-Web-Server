@@ -19,7 +19,7 @@ public class ClientSocket implements Socket {
     this.socket = socket;
   }
 
-  public  Request getRequest() {
+  public Request getRequest() {
     try{
       reader = new BufferedReader(getStreamReader());
       currentRequest = new Request();

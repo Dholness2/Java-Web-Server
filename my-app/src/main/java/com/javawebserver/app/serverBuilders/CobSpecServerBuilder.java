@@ -21,6 +21,8 @@ import com.javawebserver.app.responseBuilders.HttpResponseBuilder;
 
 import com.javawebserver.app.sockets.Socket;
 import com.javawebserver.app.sockets.ClientSocket;
+import com.javawebserver.app.workers.Worker;
+import com.javawebserver.app.workers.ClientWorkerService;
 
 import com.javawebserver.app.serverSockets.ServerSocketWrapper;
 import com.javawebserver.app.serverSockets.ServerSocket;
@@ -51,7 +53,8 @@ public class CobSpecServerBuilder {
     Responder responder = new Responder(routeBuilder.getRoutes());
     ServerSocket serverSocket = new ServerSocketWrapper(port);
     Logger logger = new Logger(loggerPath);
-    Server server = new Server(port, serverSocket,responder,logger);
+    Worker clientWorker = new ClientWorkerService(responder, logger);
+    Server server = new Server(clientWorker, serverSocket);
     return server;
   }
 

@@ -2,6 +2,8 @@ package com.javawebserver.app.serverBuilders;
 
 import com.javawebserver.app.Server;
 import com.javawebserver.app.Responder;
+import com.javawebserver.app.workers.Worker;
+import com.javawebserver.app.workers.ClientWorkerService;
 import com.javawebserver.app.helpers.Logger;
 import com.javawebserver.app.RouteBuilder;
 import com.javawebserver.app.serverSockets.ServerSocket;
@@ -22,7 +24,8 @@ public class SimpleServerBuilder {
     Responder responder = new Responder(routes.getRoutes());
     ServerSocket serverSocket = new ServerSocketWrapper(port);
     Logger logger = new Logger(this.directory);
-    Server server = new Server(port, serverSocket,responder,logger);
+    ClientWorkerService clientWorker = new ClientWorkerService(responder, logger);
+    Server server = new Server(clientWorker, serverSocket);
     return server;
   }
 

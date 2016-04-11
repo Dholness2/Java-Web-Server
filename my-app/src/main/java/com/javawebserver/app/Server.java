@@ -1,5 +1,6 @@
 package com.javawebserver.app;
 
+import com.javawebserver.app.workers.Worker;
 import com.javawebserver.app.sockets.Socket;
 import com.javawebserver.app.serverSockets.ServerSocket;
 import com.javawebserver.app.helpers.Logger;
@@ -8,25 +9,23 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server implements Runnable{
-  private int port;
+  private Worker worker;
   private boolean serverOn = true;
   private ServerSocket serverSocket;
-  private Responder responder;
   private Socket clientSocket;
-  private Logger logger;
   protected ExecutorService threadPool = Executors.newFixedThreadPool(120);
 
-  public Server (int port, ServerSocket socket, Responder responder, Logger logger) {
-    this.port = port;
+  public Server(Worker worker, ServerSocket socket) {
+    this.worker = worker;
     this.serverSocket = socket;
-    this.responder = responder;
-    this.logger = logger;
   }
 
-  public  void run () {
+  public void run() {
     while (isServerOn()) {
       clientSocket = serverSocket.accept();
-      this.threadPool.execute(new ClientWorkerService(this.clientSocket,this.responder, this.logger));
+      Worker currentWorker = this.worker.clone();
+      currentWorker.setSocket(clientSocket);
+      this.threadPool.execute(currentWorker);
     }
     closeThreadPool();
   }
@@ -39,7 +38,7 @@ public class Server implements Runnable{
     this.serverOn = false;
   }
 
-  private void closeThreadPool () {
+  private void closeThreadPool() {
     this.threadPool.shutdown();
   }
 }

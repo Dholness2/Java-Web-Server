@@ -2,7 +2,8 @@ package com.javawebserver.app;
 
 import com.javawebserver.app.responses.Response;
 import com.javawebserver.app.sockets.ClientSocket;
-
+import com.javawebserver.app.workers.Worker;
+import com.javawebserver.app.workers.ClientWorkerService;
 import com.javawebserver.app.serverSockets.ServerSocket;
 import com.javawebserver.app.serverSockets.ServerSocketWrapper;
 import com.javawebserver.app.helpers.Logger;
@@ -26,7 +27,8 @@ public class ServerTest  {
   private Server testServer;
   private ServerSocketMock serverSocketMock;
   private SocketMock socketMock = new SocketMock(new Socket());
-  private String logPath = System.getProperty("user.dir")+"/logs";
+  private String logPath = System.getProperty("user.dir") + "/logs";
+  private int port = 9092;
   private Logger testLogger;
 
   @Before
@@ -34,9 +36,9 @@ public class ServerTest  {
     HashMap<String, Response> routes = new HashMap<String,Response>();
     testLogger = new Logger(logPath);
     Responder testResponder =  new Responder(routes);
-    int  port = 9094;
+    Worker testWorker = new ClientWorkerService(testResponder, testLogger);
     serverSocketMock =  new ServerSocketMock(port);
-    testServer = new Server(port,serverSocketMock,testResponder, testLogger);
+    testServer = new Server(testWorker, serverSocketMock);
   }
 
   @After

@@ -3,6 +3,7 @@ package com.javawebserver.app;
 import com.javawebserver.app.responses.Response;
 import com.javawebserver.app.responses.Get;
 import com.javawebserver.app.responses.GetDirectory;
+import com.javawebserver.app.responseBuilders.ResponseBuilder;
 import com.javawebserver.app.responseBuilders.HttpResponseBuilder;
 
 import java.io.File;
@@ -15,12 +16,14 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class RouteBuilder {
-  private String rootDirectory;
   private boolean enableProtection = false;
   private HashMap<String,Response> routes = new HashMap();
+  private String rootDirectory;
+  private ResponseBuilder responseBuilder;
 
-  public RouteBuilder(String rootDirectory) {
+  public RouteBuilder(String rootDirectory, ResponseBuilder responseBuilder) {
     this.rootDirectory = rootDirectory;
+    this.responseBuilder = responseBuilder;
   }
 
   public void addRoute(String path, Response response) {
@@ -58,14 +61,14 @@ public class RouteBuilder {
     String fileName = "/"+ file.getName();
     String routeKey = getRouteKey(file, fileName);
     String fileType = getFileType(file.toPath());
-    addRoute(routeKey, (new Get(new HttpResponseBuilder(), fileName, fileType, fileDirectory(file), enableProtection)));
+    addRoute(routeKey, (new Get(this.responseBuilder.clone(), fileName, fileType, fileDirectory(file), enableProtection)));
   }
 
   private void buildDirectoryRoute(File directory) throws Exception {
     String directoryName = "/"+ directory.getName();
     String routeKey = getRouteKey(directory, directoryName);
     String directoryPath = directory.getAbsolutePath();
-    addRoute(routeKey, new GetDirectory(directoryPath));
+    addRoute(routeKey, new GetDirectory(directoryPath, this.responseBuilder.clone()));
     buildStandardRoutes(directoryPath);
   }
 

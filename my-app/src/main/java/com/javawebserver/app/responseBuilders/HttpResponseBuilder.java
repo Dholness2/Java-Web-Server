@@ -11,36 +11,57 @@ import java.io.IOException;
 public class HttpResponseBuilder implements ResponseBuilder {
   private StringBuilder headerBuilder = new StringBuilder();
   private String CRLF = System.getProperty("line.separator");
-  private byte [] body;
+  private byte[] body;
 
   private static final  Map<String, String> statusCodes;
   static {
     statusCodes = new HashMap<String, String>();
-    statusCodes.put("OK","HTTP/1.1 200 OK");
-    statusCodes.put("NOT_FOUND","HTTP/1.1 404 Not Found");
-    statusCodes.put("FOUND", "HTTP/1.1 302 Found");
-    statusCodes.put("PARTIAL", "HTTP/1.1 206 Partial Content");
-    statusCodes.put("RANGE_NOT_SATISFIABILITY","HTTP/1.1 416 Range Not Satisfiable");
-    statusCodes.put("STATUSERROR","HTTP/1.1 500 Internal Server Error");
-    statusCodes.put("NO_CONTENT","HTTP/1.1 204 No Content");
-    statusCodes.put("UNAUTHORIZED","HTTP/1.1 401 Unauthorized");
+    statusCodes.put("200", "HTTP/1.1 200 OK");
+    statusCodes.put("404", "HTTP/1.1 404 Not Found");
+    statusCodes.put("302", "HTTP/1.1 302 Found");
+    statusCodes.put("206", "HTTP/1.1 206 Partial Content");
+    statusCodes.put("416", "HTTP/1.1 416 Range Not Satisfiable");
+    statusCodes.put("500", "HTTP/1.1 500 Internal Server Error");
+    statusCodes.put("204", "HTTP/1.1 204 No Content");
+    statusCodes.put("401", "HTTP/1.1 401 Unauthorized");
   };
 
-  public HttpResponseBuilder () {}
+  public HttpResponseBuilder() {}
 
-  public byte [] getResponse(){
+  public ResponseBuilder clone() {
+    return new HttpResponseBuilder();
+  }
+
+  public byte[] getStatus(String statusCode) {
+    return this.statusCodes.get(statusCode).getBytes();
+  }
+
+  public byte [] getResponse() {
     if (body != null){
       return fileResponse();
     }
     return getHeaders();
   }
 
-  private byte [] getHeaders(){
+  public void addHeader(String header, String value) {
+    headerBuilder.append(header + value + CRLF);
+  }
+
+  public void addBody(byte[] body) {
+    this.body = body;
+  }
+
+  public void addStatus(String statusCode) {
+    String statusHeader = getStatusHeader(statusCode);
+    headerBuilder.append(statusHeader + CRLF);
+  }
+
+  private byte[] getHeaders() {
     byte[] response = this.headerBuilder.toString().getBytes();
     return response;
   }
 
-  private byte [] fileResponse() {
+  private byte[] fileResponse() {
     ByteArrayOutputStream output = new ByteArrayOutputStream();
     try{
       output.reset();
@@ -52,20 +73,7 @@ public class HttpResponseBuilder implements ResponseBuilder {
       new Exception("could not write to Strem").printStackTrace();
       e.printStackTrace();
     }
-    return statusCodes.get("STATUSERROR").getBytes();
-  }
-
-  public void addHeader(String header, String value) {
-    headerBuilder.append(header+value+CRLF);
-  }
-
-  public void addBody(byte[] body) {
-    this.body = body;
-  }
-
-  public void addStatus(String status) {
-    String statusHeader = getStatusHeader(status);
-    headerBuilder.append(statusHeader + CRLF);
+    return getStatus("500");
   }
 
   public void clearBuilder() {
@@ -73,7 +81,7 @@ public class HttpResponseBuilder implements ResponseBuilder {
     this.body = null;
   }
 
-  private String getStatusHeader(String statusCode){
+  private String getStatusHeader(String statusCode) {
     return this.statusCodes.get(statusCode);
   }
 }

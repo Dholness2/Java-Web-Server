@@ -22,7 +22,7 @@ import java.util.HashMap;
 
 public class RouteBuilderTest {
   private RouteBuilder routeConfig;
-  private Response response = new GetDirectory("/temp");
+  private Response response = new GetDirectory("/temp", new HttpResponseBuilder());
   private File testDirectory;
   private String testDirectoryPath;
   private File testSubDirectory;
@@ -41,7 +41,7 @@ public class RouteBuilderTest {
     tempHTML.createNewFile();
     tempTXT = new File (testDirectory, "tempTXT.txt");
     tempTXT.createNewFile();
-    routeConfig = new RouteBuilder(testDirectoryPath);
+    routeConfig = new RouteBuilder(testDirectoryPath, new HttpResponseBuilder());
   }
 
   @After

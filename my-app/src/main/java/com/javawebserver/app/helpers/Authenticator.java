@@ -48,6 +48,7 @@ public class Authenticator {
   }
 
   private static String decodeCredential(String encoded) {
-    return new String (Base64.getDecoder().decode(encoded));
+     byte[] decoded =  Base64.getDecoder().decode(encoded);
+     return new String (decoded);
   }
 }

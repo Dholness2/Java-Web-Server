@@ -1,4 +1,4 @@
-/*package com.javawebserver.app;
+package com.javawebserver.app;
 
 import com.javawebserver.app.responses.Response;
 import com.javawebserver.app.responses.GetDirectory;
@@ -22,7 +22,7 @@ import java.util.HashMap;
 
 public class RouteBuilderTest {
   private RouteBuilder routeConfig;
-  private Response response = new GetDirectory("/temp", new HttpResponseBuilder());
+  private Response response = new GetDirectory("/temp", new HttpResponseBuilder(),"/temp");
   private File testDirectory;
   private String testDirectoryPath;
   private File testSubDirectory;
@@ -109,4 +109,4 @@ public class RouteBuilderTest {
     assertEquals(resultType,resultType);
     testFile.delete();
   }
-}*/
+}

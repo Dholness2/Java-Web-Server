@@ -22,7 +22,6 @@ import com.javawebserver.app.responseBuilders.HttpResponseBuilder;
 import com.javawebserver.app.Request;
 import com.javawebserver.app.Responder;
 import com.javawebserver.app.RouteBuilder;
-import com.javawebserver.app.StatusCodes;
 import com.javawebserver.app.serverBuilders.ServerBuilder;
 import com.javawebserver.app.serverBuilders.SimpleServerBuilder;
 import com.javawebserver.app.Server;
@@ -58,9 +57,7 @@ public class CobSpecServerBuild {
   }
 
   public void addCustomRoutes(int port, String directory) {
-    String status = "ok";
-    GetDirectory rootDirectory = new GetDirectory(directory, responseBuilder.clone());
-    rootDirectory.setRootDirectory(true);
+    GetDirectory rootDirectory = new GetDirectory(directory, responseBuilder.clone(), directory);
     boolean unprotected = false;
     boolean protectedRoute = true;
 
@@ -73,14 +70,14 @@ public class CobSpecServerBuild {
     routeBuilder.addRoute("POST /method_options", new PutPost(responseBuilder.clone(), "/method", directory, new FileEditor()));
     routeBuilder.addRoute("HEAD /method_options", new Head(responseBuilder.clone()));
     routeBuilder.addRoute("PUT /method_options", new PutPost(responseBuilder.clone(), "/method", directory, new FileEditor()));
-    routeBuilder.addRoute("GET /redirect", new GetRedirect(new StatusCodes(), port, "http://localhost:"));
+    routeBuilder.addRoute("GET /redirect", new GetRedirect(responseBuilder.clone(), port, "http://localhost:"));
     routeBuilder.addRoute("GET /parameters?", new Params(responseBuilder.clone(), "parameters?"));
     routeBuilder.addRoute("GET /form", new GetForm(responseBuilder.clone(), "/form", "text/plain", workingDirectory, unprotected, "My=Data"));
     routeBuilder.addRoute("POST /form", new PutPost(responseBuilder.clone(), "/form", workingDirectory, new FileEditor()));
     routeBuilder.addRoute("PUT /form", new PutPost(responseBuilder.clone(), "/form", workingDirectory, new FileEditor()));
     routeBuilder.addRoute("DELETE /form", new Delete(responseBuilder.clone(), "/form", workingDirectory, new FileEditor()));
-    routeBuilder.addRoute("GET /partial_content.txt", new GetPartialContent(new StatusCodes(), "/partial_content.txt", "text/plain", directory));
-    routeBuilder.addRoute("PATCH /patch-content.txt", new Patch(new StatusCodes(), "/patch-content.txt", directory, new FileEditor(), new SHA1Encoder()));
+    routeBuilder.addRoute("GET /partial_content.txt", new GetPartialContent(responseBuilder.clone(), "/partial_content.txt", "text/plain", directory));
+    routeBuilder.addRoute("PATCH /patch-content.txt", new Patch(responseBuilder.clone(), "/patch-content.txt", directory, new FileEditor(), new SHA1Encoder()));
     routeBuilder.addRoute("GET /logs", new Get(responseBuilder.clone(), "/logs", "text/plain", workingDirectory, protectedRoute));
   }
 }

@@ -13,82 +13,86 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class Get implements Response {
-  protected ResponseBuilder response;
+  protected ResponseBuilder responseBuilder;
   protected String fileName;
   protected String directory;
   protected String contentType;
-  protected String simpleResponse;
   protected boolean enabledProtection;
 
+  private static final String OK_STATUS_CODE = "200";
+  private static final String UNAUTHORIZED_STATUS_CODE = "401";
+  private static final String INTERNAL_ERROR_STATUS_CODE = "500";
   private static final String TYPE_HEADER = "Content-Type: ";
   private static final String LENGTH_HEADER = "Content-Length: ";
   private static final String AUTH_HEADER ="WWW-Authenticate: Basic realm=";
 
-  public Get (ResponseBuilder response, String fileName, String contentType, String directory, boolean enabledProtection) {
-    this.response = response;
+  public Get (ResponseBuilder responseBuilder, String fileName, String contentType, String directory, boolean enabledProtection) {
+    this.responseBuilder = responseBuilder;
     this.fileName = fileName;
     this.contentType = contentType;
     this.directory = directory;
     this.enabledProtection = enabledProtection;
   }
 
-  public Get (String simpleResponse){
-    this.simpleResponse = simpleResponse;
+  public Get (ResponseBuilder responseBuilder) {
+    this.responseBuilder = responseBuilder;
   }
 
   public byte[] handleRequest(Request request) {
-    if (this.fileName != null ) {
-      if (enabledProtection){
-        return getProtectedResponse(request);
+    ResponseBuilder currentResponse = this.responseBuilder.clone();
+    return getRequiredResponse(request, currentResponse);
+  }
+
+  private byte[] getRequiredResponse(Request request, ResponseBuilder currentResponse) {
+    if (! isSimpleResponse()) {
+      if (enabledProtection) {
+        return getProtectedResponse(request, currentResponse);
       }
-      return getResponse();
+      return getResponse(currentResponse);
     }
-    return this.simpleResponse.getBytes();
+    return currentResponse.getStatus(OK_STATUS_CODE);
   }
 
-  private byte [] getProtectedResponse(Request request) {
+  private boolean isSimpleResponse() {
+    return (this.fileName == null);
+  }
+
+  private byte[] getProtectedResponse(Request request, ResponseBuilder currentResponse) {
     if (Authenticator.canAuthenticate(request)) {
-      return getResponse();
+      return getResponse(currentResponse);
     }
-    return noAccessResponse();
+    return noAccessResponse(currentResponse);
   }
 
-  private byte [] getResponse() {
+  private byte[] getResponse(ResponseBuilder currentResponse) {
     try {
       byte[] file = Files.readAllBytes(Paths.get(getLocation()));
-      return fileResponse(file);
+      return fileResponse(file, currentResponse);
     }catch (IOException e) {
      ExceptionLogger.logException("can't read file" + e);
     }
-    return failedFileReadResponse();
+    return failedFileReadResponse(currentResponse);
   }
 
-  private byte [] fileResponse (byte [] file) {
-    this.response.addStatus("OK");
-    this.response.addHeader(TYPE_HEADER,contentType);
-    this.response.addHeader(LENGTH_HEADER,String.valueOf(file.length));
-    this.response.addBody(file);
-    byte [] fileResponse = this.response.getResponse();
-    this.response.clearBuilder();
-    return fileResponse;
+  private byte[] fileResponse (byte[] file, ResponseBuilder currentResponse) {
+    currentResponse.addStatus(OK_STATUS_CODE);
+    currentResponse.addHeader(TYPE_HEADER, contentType);
+    currentResponse.addHeader(LENGTH_HEADER,String.valueOf(file.length));
+    currentResponse.addBody(file);
+    return currentResponse.getResponse();
   }
 
-  private byte [] noAccessResponse() {
-    this.response.addStatus("UNAUTHORIZED");
-    this.response.addHeader(AUTH_HEADER, this.fileName);
-    byte[] noAccessResponse = this.response.getResponse();
-    this.response.clearBuilder();
-    return noAccessResponse;
+  private byte[] noAccessResponse(ResponseBuilder currentResponse) {
+    currentResponse.addStatus(UNAUTHORIZED_STATUS_CODE);
+    currentResponse.addHeader(AUTH_HEADER, this.fileName);
+    return currentResponse.getResponse();
   }
 
-  private byte [] failedFileReadResponse() {
-    this.response.addStatus("STATUSERROR");
-    byte [] failedResponse = this.response.getResponse();
-    this.response.clearBuilder();
-    return failedResponse;
+  private byte[] failedFileReadResponse(ResponseBuilder currentResponse) {
+    return currentResponse.getStatus(INTERNAL_ERROR_STATUS_CODE);
   }
 
-  private String getLocation()  {
+  private String getLocation() {
     return this.directory + this.fileName;
   }
 }

@@ -2,7 +2,6 @@ package com.javawebserver.app.sockets;
 
 import com.javawebserver.app.sockets.Socket;
 import com.javawebserver.app.sockets.ClientSocket;
-import com.javawebserver.app.StatusCodes;
 import com.javawebserver.app.Request;
 
 import java.io.OutputStream;
@@ -21,13 +20,11 @@ public class ClientSocketTest {
   private final String CRLF = System.getProperty("line.separator");
   private MockSocket mockSocket;
   private ClientSocket testSocket;
-  private StatusCodes codes;
 
   @Before
   public void buildSockets() {
     mockSocket = new MockSocket();
     testSocket = new ClientSocket(mockSocket);
-    codes = new StatusCodes();
   }
 
   @Test
@@ -70,10 +67,10 @@ public class ClientSocketTest {
 
   @Test
   public void testsendResponse() {
-    byte [] response = (codes.OK).getBytes();
+    byte [] response = ("HTTP/1.1 200 OK").getBytes();
     testSocket.sendResponse(response);
     String output = mockSocket.getOutputStream().toString().split(CRLF)[0];
-    assertEquals(codes.OK, output);
+    assertEquals("HTTP/1.1 200 OK", output);
   }
 
  @Test

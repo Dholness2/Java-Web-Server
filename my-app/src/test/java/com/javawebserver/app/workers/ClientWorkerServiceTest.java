@@ -4,14 +4,13 @@ import com.javawebserver.app.workers.Worker;
 import com.javawebserver.app.workers.ClientWorkerService;
 
 import com.javawebserver.app.responses.Response;
-import com.javawebserver.app.responses.Response;
 import com.javawebserver.app.responses.Get;
 import com.javawebserver.app.sockets.Socket;
 import com.javawebserver.app.sockets.ClientSocket;
 import com.javawebserver.app.Responder;
 import com.javawebserver.app.Request;
 import com.javawebserver.app.helpers.Logger;
-import com.javawebserver.app.StatusCodes;
+import com.javawebserver.app.responseBuilders.HttpResponseBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +37,7 @@ public class ClientWorkerServiceTest {
   @Before
   public  void responderSertup() {
     HashMap<String, Response> routes = new HashMap<String,Response>();
-    routes.put("GET /", new Get("HTTP/1.1 200 ok"));
+    routes.put("GET /", new Get(new HttpResponseBuilder()));
     testResponder =  new Responder(routes);
     loggerMock = new LoggerMock("/foobar");
   }
@@ -69,7 +68,7 @@ public class ClientWorkerServiceTest {
     testWorker.setSocket(wrapper);
     testWorker.run();
     String response = mockSocket.getOutputStream().toString().split(BREAK_LINE)[0];
-    assertEquals("HTTP/1.1 200 ok", response);
+    assertEquals("HTTP/1.1 200 OK", response);
   }
 
   @Test

@@ -1,8 +1,12 @@
-package com.javawebserver.app.serverBuilders;
+package com.javawebserver.app.builds;
 
-import com.javawebserver.app.serverBuilders.CobSpecServerBuilder;
+import com.javawebserver.app.Builds.CobSpecServerBuild;
 import com.javawebserver.app.Server;
+import com.javawebserver.app.serverBuilders.ServerBuilder;
+import com.javawebserver.app.serverBuilders.SimpleServerBuilder;
 import com.javawebserver.app.RouteBuilder;
+import com.javawebserver.app.responseBuilders.ResponseBuilder;
+import com.javawebserver.app.responseBuilders.HttpResponseBuilder;
 import com.javawebserver.app.responses.Response;
 import com.javawebserver.app.responses.Get;
 
@@ -18,28 +22,24 @@ import static org.junit.Assert.assertThat;
 import static org.junit.internal.matchers.StringContains.containsString;
 import static org.junit.matchers.JUnitMatchers.hasItem;
 
-public class CobSpecServerBuilderTest {
+public class CobSpecServerBuildTest {
   private String directory = System.getProperty("user.dir") + "/public";
-  private CobSpecServerBuilder testBuilder = new CobSpecServerBuilder(directory);
+  private ResponseBuilder responseBuilder = new HttpResponseBuilder();
+  private RouteBuilder routeBuilder = new RouteBuilder(directory, responseBuilder);
+  private SimpleServerBuilder serverBuilder = new SimpleServerBuilder();
+  private CobSpecServerBuild testBuild = new CobSpecServerBuild(serverBuilder, responseBuilder, routeBuilder);
   private int port = 8000;
 
   @Test
   public void getsServerTest() throws Exception {
-    System.out.println(directory);
-    Server testServer = testBuilder.getServer(port, directory);
+    Server testServer = testBuild.getServer(this.port, this.directory);
     assertEquals(Server.class, testServer.getClass());
   }
 
   @Test
-  public void getsRouteBuilderTest() {
-    RouteBuilder testRouteBuilder = testBuilder.getRouteBuilder();
-    assertEquals(RouteBuilder.class, testRouteBuilder.getClass());
-  }
-
-  @Test
-  public void loadsCustomRoutesTest() {
-    testBuilder.addCustomRoutes(port, directory);
-    RouteBuilder builder = testBuilder.getRouteBuilder();
+  public void loadsCustomRoutesTest() throws Exception {
+    testBuild.addCustomRoutes(port, directory);
+    RouteBuilder builder = testBuild.getRouteBuilder();
     Set<String> routeList = builder.getRoutes().keySet();
     String [] customRoutes = {"POST /file1", "GET /", "PUT /",
                               "PUT /text-file.txt","OPTIONS /method_options",

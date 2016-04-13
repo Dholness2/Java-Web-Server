@@ -1,4 +1,4 @@
-package com.javawebserver.app;
+package com.javawebserver.app.responseBuilders;
 
 import com.javawebserver.app.responseBuilders.ResponseBuilder;
 import com.javawebserver.app.responseBuilders.HttpResponseBuilder;
@@ -11,58 +11,69 @@ import static org.junit.Assert.assertEquals;
 public class HttpResponseBuilderTest {
   private ResponseBuilder testResponseBuilder = new HttpResponseBuilder();
   private String CRLF = System.getProperty("line.separator");
+  private String okStatusCode = "200";
 
   @After
-  public void resetResponse(){
+  public void resetResponse() {
     testResponseBuilder.clearBuilder();
   }
 
   @Test
-  public void addStatusTest(){
-    String OK = "OK";
-    testResponseBuilder.addStatus(OK);
+  public void clonesBuilderInstanceTest() {
+    ResponseBuilder testClone = testResponseBuilder.clone();
+    assertEquals(HttpResponseBuilder.class, testClone.getClass());
+  }
+
+  @Test
+  public void getsStatusTest() {
+    byte[] status = testResponseBuilder.getStatus(okStatusCode);
+    String expectedHeader = "HTTP/1.1 200 OK";
+    assertEquals(expectedHeader, new String(status));
+  }
+
+  @Test
+  public void addStatusTest() {
+    testResponseBuilder.addStatus(okStatusCode);
     String response = (new String (testResponseBuilder.getResponse()));
-    String expectedResponse = "HTTP/1.1 200 OK"+CRLF;
+    String expectedResponse = "HTTP/1.1 200 OK" + CRLF;
     assertEquals(expectedResponse, response);
   }
 
   @Test
-  public void addStatusAndHeaderTest(){
-    String OK = "OK";
+  public void addStatusAndHeaderTest() {
     String header ="Content-Type: ";
     String value = "text/plain";
-    testResponseBuilder.addStatus(OK);
+    testResponseBuilder.addStatus(okStatusCode);
     testResponseBuilder.addHeader(header,value);
     String response = (new String (testResponseBuilder.getResponse()));
-    String expectedResponse = "HTTP/1.1 200 OK"+CRLF+"Content-Type: text/plain"+CRLF;
+    String expectedResponse = "HTTP/1.1 200 OK"+ CRLF + "Content-Type: text/plain"+ CRLF;
     assertEquals(expectedResponse, response);
   }
 
   @Test
-  public void addBodyTest(){
-    String OK = "OK";
+  public void addBodyTest() {
     byte[] body = ("Hello World").getBytes();
     String header ="Content-Length: ";
     String value = Integer.toString(body.length);
-    testResponseBuilder.addStatus(OK);
+    testResponseBuilder.addStatus(okStatusCode);
     testResponseBuilder.addHeader(header,value);
     testResponseBuilder.addBody(body);
     String response = (new String (testResponseBuilder.getResponse()));
-    String expectedResponse = "HTTP/1.1 200 OK"+CRLF+"Content-Length: 11"+CRLF+CRLF+"Hello World";
+    String expectedResponse = "HTTP/1.1 200 OK" + CRLF + "Content-Length: 11" + CRLF + CRLF + "Hello World";
     assertEquals(expectedResponse, response);
   }
 
   @Test
   public void clearBuilderTest() {
-    String OK = "OK";
+    String notFoundStatusCode = "404";
     byte[] body = ("First Response").getBytes();
     String header ="Content-Length: ";
     String value = Integer.toString(body.length);
-    testResponseBuilder.addStatus(OK);
+    testResponseBuilder.addStatus(okStatusCode);
     testResponseBuilder.addHeader(header,value);
     testResponseBuilder.addBody(body);
     testResponseBuilder.clearBuilder();
-    testResponseBuilder.addStatus("NOT_FOUND");
+    testResponseBuilder.addStatus(notFoundStatusCode);
     String response = (new String (testResponseBuilder.getResponse()));
     String expectedResponse = "HTTP/1.1 404 Not Found"+ CRLF;
     assertEquals(expectedResponse, response);

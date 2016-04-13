@@ -1,5 +1,6 @@
 package com.javawebserver.app.serverBuilders;
 
+import com.javawebserver.app.serverBuilders.ServerBuilder;
 import com.javawebserver.app.Server;
 import com.javawebserver.app.Responder;
 import com.javawebserver.app.workers.Worker;
@@ -9,31 +10,44 @@ import com.javawebserver.app.RouteBuilder;
 import com.javawebserver.app.serverSockets.ServerSocket;
 import com.javawebserver.app.serverSockets.ServerSocketWrapper;
 import com.javawebserver.app.responses.Response;
-
+import com.javawebserver.app.responseBuilders.HttpResponseBuilder;
 import java.io.IOException;
 
 import java.util.HashMap;
 
-public class SimpleServerBuilder {
-  private String directory = System.getProperty("user.dir") + "/logs";
-  private RouteBuilder routes = new RouteBuilder(this.directory);
+public class SimpleServerBuilder implements ServerBuilder {
+  private String directory;
+  private String loggerDirectory;
+  private int port;
+  private HashMap<String, Response> routes;
 
   public SimpleServerBuilder() {}
 
-  public Server getServer(int port) throws IOException  {
-    Responder responder = new Responder(routes.getRoutes());
-    ServerSocket serverSocket = new ServerSocketWrapper(port);
-    Logger logger = new Logger(this.directory);
+  public Server buildServer() throws IOException  {
+    Responder responder = new Responder(this.routes);
+    Logger logger = new Logger(this.loggerDirectory);
     ClientWorkerService clientWorker = new ClientWorkerService(responder, logger);
-    Server server = new Server(clientWorker, serverSocket);
-    return server;
+    ServerSocket serverSocket = new ServerSocketWrapper(this.port);
+    return new Server(clientWorker, serverSocket);
   }
 
-  public void addRoute(String route, Response response) {
-    this.routes.addRoute(route,response);
+  public void setDirectory(String path) {
+    this.directory = path;
   }
 
-  public HashMap<String, Response>  getRoutes() {
-    return this.routes.getRoutes();
+  public void setLoggerDirectory(String path) {
+    this.loggerDirectory = path;
+  }
+
+  public void setPort(int port) {
+    this.port = port;
+  }
+
+  public void addRoutes(HashMap<String, Response> routes)  {
+    this.routes = routes;
+  }
+
+  public HashMap<String, Response> getRoutes() {
+    return this.routes;
   }
 }

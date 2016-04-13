@@ -2,17 +2,20 @@ package com.javawebserver.app.responses;
 
 import com.javawebserver.app.responses.Response;
 import com.javawebserver.app.Request;
+import com.javawebserver.app.responseBuilders.ResponseBuilder;
 import com.javawebserver.app.helpers.FileEditor;
 
 public class PutPost implements Response {
-  private String responseStatus;
+  private ResponseBuilder responseBuilder;
   private String path;
   private String fileName;
   private FileEditor editor;
   private String directory;
 
-  public PutPost(String response, String fileName, String directory, FileEditor editor) {
-    this.responseStatus = response;
+  private static final String OK_STATUS_CODE ="200";
+
+  public PutPost(ResponseBuilder responseBuilder, String fileName, String directory, FileEditor editor) {
+    this.responseBuilder = responseBuilder;
     this.editor = editor;
     this.path = path;
     this.fileName = fileName;
@@ -24,11 +27,11 @@ public class PutPost implements Response {
     if(body != null){
       editFile(body);
     }
-    return this.responseStatus.getBytes();
+    return this.responseBuilder.getStatus(OK_STATUS_CODE);
   }
 
   private void editFile(String body) {
-   this.editor.edit(getPath(), body);
+    this.editor.edit(getPath(), body);
   }
 
   private String getPath() {

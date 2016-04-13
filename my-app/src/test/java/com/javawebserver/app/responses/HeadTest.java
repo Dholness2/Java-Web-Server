@@ -1,6 +1,7 @@
 package com.javawebserver.app.responses;
 
 import com.javawebserver.app.responses.Response;
+import com.javawebserver.app.responseBuilders.HttpResponseBuilder;
 import com.javawebserver.app.responses.Head;
 import com.javawebserver.app.Request;
 
@@ -14,7 +15,7 @@ public class HeadTest {
   @Test
   public void handleSimepleRequestTest() {
     String simpleResponse = "HTTP/1.1 200 OK";
-    Head testGet = new Head(simpleResponse);
+    Head testGet = new Head(new HttpResponseBuilder());
     byte [] response = testGet.handleRequest(new Request());
     assertEquals(simpleResponse, new String(response));
   }

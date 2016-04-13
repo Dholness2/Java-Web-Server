@@ -1,5 +1,12 @@
 package com.javawebserver.app;
-import com.javawebserver.app.serverBuilders.CobSpecServerBuilder;
+
+import com.javawebserver.app.Builds.CobSpecServerBuild;
+import com.javawebserver.app.serverBuilders.ServerBuilder;
+import com.javawebserver.app.serverBuilders.SimpleServerBuilder;
+import com.javawebserver.app.responseBuilders.ResponseBuilder;
+import com.javawebserver.app.responseBuilders.HttpResponseBuilder;
+import com.javawebserver.app.RouteBuilder;
+import java.util.Scanner;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -7,17 +14,23 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 public class App {
-  private static final int PORT_INDEX = 0;
-  private static final int DIR_INDEX = 1;
-  private static final String[] KEYS = {"-p","-d"};
+  private static String directory;
+  private static int port;
+
+  public static void setArgs(String[] args) {
+    Scanner consoleScanner =  new Scanner(System.in);
+    OptionsParser parser = new OptionsParser(consoleScanner, args);
+    directory = parser.getDirectory();
+    port = parser.getPort();
+  }
 
   public static void main( String[] args) throws Exception {
-    Map<String, String> Options = OptionsParser.parse(args,KEYS);
-    String directory = Options.get(KEYS[DIR_INDEX]);
-    int port = Integer.parseInt(Options.get(KEYS[PORT_INDEX]));
-
-    CobSpecServerBuilder cobSpecBuilder = new CobSpecServerBuilder(directory);
-    Server appServer = cobSpecBuilder.getServer(port, directory);
+    setArgs(args);
+    ResponseBuilder responseBuilder = new HttpResponseBuilder();
+    RouteBuilder routeBuilder = new RouteBuilder(directory, responseBuilder);
+    ServerBuilder simpleServerBuilder = new SimpleServerBuilder();
+    CobSpecServerBuild cobSpecBuild = new CobSpecServerBuild(simpleServerBuilder, responseBuilder, routeBuilder);
+    Server appServer = cobSpecBuild.getServer(port, directory);
     appServer.run();
   }
 }

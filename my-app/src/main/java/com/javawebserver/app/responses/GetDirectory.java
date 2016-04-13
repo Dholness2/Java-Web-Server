@@ -2,14 +2,11 @@ package com.javawebserver.app.responses;
 
 import com.javawebserver.app.responses.Response;
 import com.javawebserver.app.responseBuilders.ResponseBuilder;
-import com.javawebserver.app.responseBuilders.HttpResponseBuilder;
 import com.javawebserver.app.Request;
 
 import java.io.File;
 import java.io.FileFilter;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Arrays;
 
 public class GetDirectory implements Response {
@@ -33,7 +30,7 @@ public class GetDirectory implements Response {
 
   private byte[] getResponse(String responseBody) {
     ResponseBuilder currentResponse = this.responseBuilder.clone();
-    byte [] body = responseBody.getBytes();
+    byte[] body = responseBody.getBytes();
     buildResponse(currentResponse, body);
     return currentResponse.getResponse();
   }

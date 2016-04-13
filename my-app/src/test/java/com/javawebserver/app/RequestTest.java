@@ -2,9 +2,7 @@ package com.javawebserver.app;
 
 import org.junit.Test;
 import org.junit.Before;
-
 import static org.junit.Assert.assertEquals;
-
 
 public class RequestTest {
   private Request request;
@@ -16,16 +14,18 @@ public class RequestTest {
     request = new Request();
   }
 
-  @Test public void getParamTest() {
-   request.setMessage(message);
-   String expected = "variable_1=Operators%20%3C%2C%20%3E%2C%20%3D%2C%20!%3D%3B%20%2B%2C%20-%2C%20*%2C%20%26%2C%20%40%2C%20%23%2C%20%24%2C%20%5B%2C%20%5D%3A%20%22is%20that%20all%22%3F&variable_2=stuff";
-   assertEquals(request.getParams(),expected);
+  @Test 
+  public void getParamTest() {
+    request.setMessage(message);
+    String expected = "variable_1=Operators%20%3C%2C%20%3E%2C%20%3D%2C%20!%3D%3B%20%2B%2C%20-%2C%20*%2C%20%26%2C%20%40%2C%20%23%2C%20%24%2C%20%5B%2C%20%5D%3A%20%22is%20that%20all%22%3F&variable_2=stuff";
+    assertEquals(request.getParams(), expected);
   }
 
-  @Test public void getParamsRouteTest() {
+  @Test 
+  public void getParamsRouteTest() {
     request.setMessage(message);
     String expected =  "/parameters?";
-    assertEquals(expected,request.getParamsRoute());
+    assertEquals(expected, request.getParamsRoute());
   }
 
   @Test
@@ -33,14 +33,14 @@ public class RequestTest {
     String message = "GET /foo HTTP/1.1";
     String route = "/foo";
     request.setMessage(message);
-    assertEquals(request.getRoute(),route);
+    assertEquals(request.getRoute(), route);
   }
 
   @Test
   public void setMessageTest() {
     String message = "GET / HTTP/1.1";
     request.setMessage(message);
-    assertEquals(request.getRequest(),"GET /");
+    assertEquals(request.getMessage(), message);
   }
 
   @Test
@@ -73,7 +73,7 @@ public class RequestTest {
 
   @Test
   public void validRequestProtocol() {
-   request.setMessage("GET /home");
-   assertEquals(false, request.validRequest());
+    request.setMessage("GET /home");
+    assertEquals(false, request.validRequest());
   }
 }

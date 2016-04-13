@@ -13,8 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.internal.matchers.StringContains.containsString;
 
@@ -35,29 +33,9 @@ public class GetDirectoryTest {
   }
 
   @Test
-  public void setRootDirectoryTest() {
-    GetDirectory testGetDir = new GetDirectory(directoryPath);
-    testGetDir.setRootDirectory(true);
-    assertTrue(testGetDir.isRootDirectory());
-  }
-
-  @Test
-  public void isRootDirectoryTest() {
-    GetDirectory testGetDir = new GetDirectory(directoryPath);
-    assertEquals(false, testGetDir.isRootDirectory());
-  }
-
-  @Test
-  public void isRootDirectoryTestTrueState() {
-    GetDirectory testGetDir = new GetDirectory(directoryPath);
-    testGetDir.setRootDirectory(true);
-    assertTrue(testGetDir.isRootDirectory());
-  }
-
-  @Test
-  public void handleResponseTest() {
-    GetDirectory testGetDir = new GetDirectory(directoryPath);
-    testGetDir.setRootDirectory(true);
+  public void handleResponseTestRootDirectory() {
+    String rootDirectory = directoryPath; 
+    GetDirectory testGetDir = new GetDirectory(directoryPath, builder, rootDirectory);
     String response = new String (testGetDir.handleRequest(new Request()));
     for (File file : directory.listFiles()) {
       if (!file.isHidden()) {
@@ -68,8 +46,8 @@ public class GetDirectoryTest {
 
   @Test
   public void hanldeResponseTestForNestedDirectory() {
-    GetDirectory testGetDir = new GetDirectory(directoryPath);
-    testGetDir.setRootDirectory(false);
+    String rootDirectory = "/my-app";
+    GetDirectory testGetDir = new GetDirectory(directoryPath, builder, rootDirectory);
     String response = new String (testGetDir.handleRequest(new Request()));
     for (File file : directory.listFiles()) {
       if (!file.isHidden()) {

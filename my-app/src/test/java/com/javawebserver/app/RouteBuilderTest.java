@@ -1,4 +1,4 @@
-package com.javawebserver.app;
+/*package com.javawebserver.app;
 
 import com.javawebserver.app.responses.Response;
 import com.javawebserver.app.responses.GetDirectory;
@@ -109,4 +109,4 @@ public class RouteBuilderTest {
     assertEquals(resultType,resultType);
     testFile.delete();
   }
-}
+}*/

@@ -1,28 +1,31 @@
 package com.javawebserver.app;
 
 import com.javawebserver.app.responses.Response;
+import com.javawebserver.app.responseBuilders.ResponseBuilder;
 
 import java.util.Map;
 import java.util.HashMap;
 
 public class Responder {
 
-  private static final String NOT_ALLOWED = "HTTP/1.1 405 Method Not Allowed";
-  private static final String NOT_FOUND = "HTTP/1.1 404 Not Found";
-  private static final String BAD_REQUEST = "HTTP/1.1 400 Bad Request";
+  private static final String NOT_ALLOWED_CODE = "405";
+  private static final String NOT_FOUND_CODE = "404";
+  private static final String BAD_REQUEST_CODE = "400";
   private static final String CRLF = System.getProperty("line.separator");
 
   private Map <String, Response> routes;
+  private ResponseBuilder responseBuilder;
 
-  public Responder(Map <String, Response> routes) {
+  public Responder(Map <String, Response> routes, ResponseBuilder responseBuilder) {
     this.routes = routes;
+    this.responseBuilder = responseBuilder;
   }
 
   public byte[] getResponse(Request request) {
     if (request.validRequest()){
       return handleValidRequest(request);
     } else {
-      return BAD_REQUEST.getBytes();
+      return this.responseBuilder.getStatus(BAD_REQUEST_CODE);
     }
   }
 
@@ -30,7 +33,7 @@ public class Responder {
     if (isValidPath(request)) {
       return handleValidRoute(request);
     }else{
-      return NOT_FOUND.getBytes();
+      return this.responseBuilder.getStatus(NOT_FOUND_CODE);
     }
   }
 
@@ -38,7 +41,7 @@ public class Responder {
     if(checkMethod(request)) {
       return getMessage(request);
     } else {
-      return (NOT_ALLOWED).getBytes();
+      return this.responseBuilder.getStatus(NOT_ALLOWED_CODE);
     }
   }
 

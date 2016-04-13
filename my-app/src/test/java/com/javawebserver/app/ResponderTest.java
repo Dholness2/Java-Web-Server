@@ -29,7 +29,7 @@ public class ResponderTest {
      routes.put("GET /", new Get(new HttpResponseBuilder()));
      routes.put("GET /paramaters?", new Params(new HttpResponseBuilder(), "paramaters?"));
      testRequest = new Request();
-     testResponder =  new Responder(routes);
+     testResponder =  new Responder(routes, new HttpResponseBuilder());
    }
 
   @Test

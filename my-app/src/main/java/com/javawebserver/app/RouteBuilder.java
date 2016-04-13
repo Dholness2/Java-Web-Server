@@ -12,7 +12,6 @@ import java.nio.file.Files;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.HashMap;
 
 public class RouteBuilder {
@@ -36,7 +35,7 @@ public class RouteBuilder {
 
   public ArrayList<File> getFileList(String path) {
     File currentDirectory = new File(path);
-    File [] files = currentDirectory.listFiles();
+    File[] files = currentDirectory.listFiles();
     return new ArrayList<File>(Arrays.asList(files));
   }
 

@@ -1,29 +1,30 @@
 package com.javawebserver.app.responses;
 
 import com.javawebserver.app.responses.Response;
-import com.javawebserver.app.StatusCodes;
+import com.javawebserver.app.responseBuilders.ResponseBuilder;
 import com.javawebserver.app.Request;
 
 public class GetRedirect implements Response {
+  private ResponseBuilder responseBuilder;
+  private int port;
+  private String serverName;
+  private static final String LOCATION_HEADER = "Location: ";
+  private static final String SEPARATOR = System.getProperty("file.separator");
+  private static final String FOUND_STATUS_CODE = "302";
 
-private StatusCodes status;
-private int port;
-private String serverName;
-private String locationHeader = "Location: ";
-private String CRLF = System.getProperty("line.separator");
-private String seperator = "/";
-
-  public GetRedirect(StatusCodes status, int port, String serverName) {
-    this.status = status;
+  public GetRedirect(ResponseBuilder responseBuilder, int port, String serverName) {
+    this.responseBuilder = responseBuilder;
     this.port = port;
     this.serverName = serverName;
   }
 
   public byte [] handleRequest(Request request) {
-    return (status.FOUND +CRLF+ getLocation()).getBytes();
+    responseBuilder.addStatus(FOUND_STATUS_CODE);
+    responseBuilder.addHeader(LOCATION_HEADER, getLocation());
+    return responseBuilder.getResponse();
   }
 
-  private String  getLocation() {
-    return (this.locationHeader+this.serverName + this.port +this.seperator);
+  private String getLocation() {
+    return (this.serverName + this.port + SEPARATOR);
   }
 }

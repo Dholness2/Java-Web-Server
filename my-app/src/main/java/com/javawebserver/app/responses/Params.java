@@ -13,6 +13,7 @@ public class Params implements Response {
   private String params;
   private Request request;
   private static final String CRLF = System.getProperty("line.separator");
+  private static final String OK_STATUS_CODE = "200";
   private static final String TYPE_HEADER = "Content-Type: ";
   private static final String CONTENT_LENGTH = "Content-Length: ";
 
@@ -23,18 +24,21 @@ public class Params implements Response {
 
   public byte[] handleRequest(Request request) {
     this.request = request;
-    byte [] response = getResponse();
-    this.response.clearBuilder();
-    return response;
+    return getResponse();
   }
 
   private byte[] getResponse() {
-    byte[] responseBody = decodeParams().getBytes();
-    this.response.addStatus("OK");
-    this.response.addHeader(TYPE_HEADER,"text/plain");
-    this.response.addHeader(CONTENT_LENGTH, Integer.toString(responseBody.length));
-    this.response.addBody(responseBody);
-    return response.getResponse();
+    ResponseBuilder currentResponse = this.response.clone();
+    byte[] body = decodeParams().getBytes();
+    buildResponse(currentResponse, body);
+    return currentResponse.getResponse();
+  }
+
+  private void buildResponse(ResponseBuilder response, byte[] body) {
+    response.addStatus(OK_STATUS_CODE);
+    response.addHeader(TYPE_HEADER,"text/plain");
+    response.addHeader(CONTENT_LENGTH, Integer.toString(body.length));
+    response.addBody(body);
   }
 
   private String decodeParams() {

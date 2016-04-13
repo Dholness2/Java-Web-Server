@@ -30,10 +30,11 @@ public class GetFormTest {
   private GetForm testGetForm = new GetForm(response,fileName,fileType,directory,authenticationEnabled,formData);
 
   private String buildResponse (String path, String contentType) throws IOException{
+    String okStatusCodes = "200";
     String typeHeader = "Content-Type: ";
     String contentLength = "Content-Length: ";
     String fileLength = String.valueOf(getFile(path).length);
-    this.response.addStatus("OK");
+    this.response.addStatus(okStatusCodes);
     this.response.addHeader(typeHeader, contentType);
     this.response.addHeader(contentLength,(fileLength));
     this.response.addBody(formData.getBytes());

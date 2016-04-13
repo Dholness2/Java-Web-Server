@@ -1,6 +1,6 @@
 package com.javawebserver.app.builds;
 
-import com.javawebserver.app.Builds.CobSpecServerBuild;
+import com.javawebserver.app.builds.CobSpecServerBuild;
 import com.javawebserver.app.Server;
 import com.javawebserver.app.serverBuilders.ServerBuilder;
 import com.javawebserver.app.serverBuilders.SimpleServerBuilder;

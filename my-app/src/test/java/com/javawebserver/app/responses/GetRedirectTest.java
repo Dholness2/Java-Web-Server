@@ -5,28 +5,27 @@ import org.junit.Before;
 
 import com.javawebserver.app.responses.Response;
 import com.javawebserver.app.responses.GetRedirect;
-import com.javawebserver.app.StatusCodes;
+import com.javawebserver.app.responseBuilders.ResponseBuilder;
+import com.javawebserver.app.responseBuilders.HttpResponseBuilder;
 import com.javawebserver.app.Request;
 import com.javawebserver.app.helpers.FileEditor;
 
 import static org.junit.Assert.assertEquals;
 
 public class GetRedirectTest {
-private String locationHeader = "Location: http://localhost:5000/";
-private String CRLF = System.getProperty("line.separator");
-
-private int port = 5000;
-private StatusCodes codes;
-private Request request = new Request();
-private String serverName = "http://localhost:";
+  private String locationHeader = "Location: http://localhost:5000/";
+  private String CRLF = System.getProperty("line.separator");
+  private int port = 5000;
+  private Request request = new Request();
+  private ResponseBuilder responseBuilder = new HttpResponseBuilder();
+  private String serverName = "http://localhost:";
 
   @Test
-  public void handleRequestTest(){
+  public void handleRequestTest() {
     request.setMessage("GET /redirect HTTP/1.1");
-    String expectedResponse = codes.FOUND+CRLF+locationHeader;
-    Response testRedirect = new GetRedirect(codes,port,serverName);
+    String expectedResponse = "HTTP/1.1 302 Found" + CRLF + locationHeader + CRLF;
+    Response testRedirect = new GetRedirect(responseBuilder, port, serverName);
     String response = new String (testRedirect.handleRequest(request));
-    assertEquals(response,expectedResponse);
+    assertEquals(expectedResponse, response);
   }
-
 }

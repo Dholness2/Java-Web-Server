@@ -1,10 +1,10 @@
 package com.javawebserver.app.responses;
 
 import com.javawebserver.app.responses.Response;
+import com.javawebserver.app.responseBuilders.ResponseBuilder;
 import com.javawebserver.app.encoders.Encoder;
 import com.javawebserver.app.helpers.FileEditor;
 import com.javawebserver.app.helpers.ExceptionLogger;
-import com.javawebserver.app.StatusCodes;
 import com.javawebserver.app.Request;
 
 import java.nio.file.Files;
@@ -14,16 +14,19 @@ import java.nio.file.Paths;
 import java.io.IOException;
 
 public class Patch implements Response {
-  private StatusCodes status;
+  private ResponseBuilder responseBuilder;
   private String fileName;
   private String directory;
   private FileEditor editor;
   private Encoder encoder;
-  private String CRLF = System.getProperty("line.separator");
-  private String matchHeader = "If-Match: ";
 
-  public Patch(StatusCodes status, String fileName, String directory, FileEditor editor, Encoder encode) {
-    this.status = status;
+  private final static String CRLF = System.getProperty("line.separator");
+  private final static String MATCHER_HEADER = "If-Match: ";
+  private final static String NO_CONTENT_CODE = "204";
+  private final static String NOT_FOUND_CODE = "404";
+
+  public Patch(ResponseBuilder responseBuilder, String fileName, String directory, FileEditor editor, Encoder encode) {
+    this.responseBuilder = responseBuilder;
     this.editor = editor;
     this.fileName = fileName;
     this.directory = directory;
@@ -34,9 +37,9 @@ public class Patch implements Response {
     String body = request.getBody();
     if ((body != null) && (matchedEtag(request))) {
       editFile(body);
-      return status.NO_CONTENT.getBytes();
+      return responseBuilder.getStatus(NO_CONTENT_CODE);
     }
-   return status.NOT_FOUND.getBytes();
+    return responseBuilder.getStatus(NOT_FOUND_CODE);
   }
 
   private void editFile(String body) {
@@ -45,9 +48,9 @@ public class Patch implements Response {
   }
 
   private boolean matchedEtag(Request request) {
-   String requestTag = getEtag(request.getHeaders());
-   String currentTag = getCurrentFileTag();
-   return (currentTag.equals(requestTag));
+    String requestTag = getEtag(request.getHeaders());
+    String currentTag = getCurrentFileTag();
+    return (currentTag.equals(requestTag));
   }
 
   private String  getCurrentFileTag() {
@@ -61,10 +64,8 @@ public class Patch implements Response {
     return tag;
   }
 
-
- private String getEtag(String header) {
-  String match = header.split(matchHeader)[1];
-  String tag  = match.substring(0, match.indexOf(CRLF));
-  return tag;
- }
+  private String getEtag(String header) {
+    String match = header.split(MATCHER_HEADER)[1];
+    return match.substring(0, match.indexOf(CRLF));
+  }
 }

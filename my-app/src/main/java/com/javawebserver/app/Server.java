@@ -30,11 +30,11 @@ public class Server implements Runnable{
     closeThreadPool();
   }
 
-  public  boolean isServerOn() {
+  public boolean isServerOn() {
     return this.serverOn;
   }
 
-  public  void off() {
+  public void off() {
     this.serverOn = false;
   }
 

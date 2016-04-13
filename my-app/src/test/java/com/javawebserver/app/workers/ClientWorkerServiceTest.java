@@ -38,7 +38,7 @@ public class ClientWorkerServiceTest {
   public  void responderSertup() {
     HashMap<String, Response> routes = new HashMap<String,Response>();
     routes.put("GET /", new Get(new HttpResponseBuilder()));
-    testResponder =  new Responder(routes);
+    testResponder =  new Responder(routes,new HttpResponseBuilder());
     loggerMock = new LoggerMock("/foobar");
   }
 

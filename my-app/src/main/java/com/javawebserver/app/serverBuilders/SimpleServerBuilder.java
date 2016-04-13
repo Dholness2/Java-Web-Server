@@ -24,7 +24,7 @@ public class SimpleServerBuilder implements ServerBuilder {
   public SimpleServerBuilder() {}
 
   public Server buildServer() throws IOException  {
-    Responder responder = new Responder(this.routes);
+    Responder responder = new Responder(this.routes, new HttpResponseBuilder());
     Logger logger = new Logger(this.loggerDirectory);
     ClientWorkerService clientWorker = new ClientWorkerService(responder, logger);
     ServerSocket serverSocket = new ServerSocketWrapper(this.port);

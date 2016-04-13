@@ -1,6 +1,7 @@
 package com.javawebserver.app;
 
 import com.javawebserver.app.responses.Response;
+import com.javawebserver.app.responseBuilders.HttpResponseBuilder;
 import com.javawebserver.app.sockets.ClientSocket;
 import com.javawebserver.app.workers.Worker;
 import com.javawebserver.app.workers.ClientWorkerService;
@@ -11,7 +12,6 @@ import com.javawebserver.app.helpers.Logger;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
-
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
@@ -35,7 +35,7 @@ public class ServerTest  {
   public void setupServer () throws Exception {
     HashMap<String, Response> routes = new HashMap<String,Response>();
     testLogger = new Logger(logPath);
-    Responder testResponder =  new Responder(routes);
+    Responder testResponder =  new Responder(routes,new HttpResponseBuilder());
     Worker testWorker = new ClientWorkerService(testResponder, testLogger);
     serverSocketMock =  new ServerSocketMock(port);
     testServer = new Server(testWorker, serverSocketMock);
@@ -50,12 +50,12 @@ public class ServerTest  {
   }
 
   @Test
-  public void testisServerOnEqualsTrue () {
+  public void testisServerOnEqualsTrue() {
     assertTrue(testServer.isServerOn());
   }
 
   @Test
-  public void testisServerOnEqualsFalse () {
+  public void testisServerOnEqualsFalse() {
     testServer.off();
     assertFalse(testServer.isServerOn());
   }
@@ -71,7 +71,7 @@ public class ServerTest  {
   private class SocketMock extends ClientSocket {
     private  boolean workerRan = false;
 
-    public SocketMock (java.net.Socket socket) {
+    public SocketMock(java.net.Socket socket) {
       super(socket);
     }
 
@@ -83,7 +83,7 @@ public class ServerTest  {
       return fakeRequest;
     }
 
-    public boolean workerWasAssigned () {
+    public boolean workerWasAssigned() {
       return this.workerRan;
     }
 
@@ -95,13 +95,13 @@ public class ServerTest  {
   private class ServerSocketMock implements ServerSocket{
     private SocketMock socketMock;
 
-    public ServerSocketMock (int port) { }
+    public ServerSocketMock(int port) { }
 
     public void setSocket(SocketMock socket) {
       this.socketMock = socket;
     }
 
-    public com.javawebserver.app.sockets.Socket accept () {
+    public com.javawebserver.app.sockets.Socket accept() {
       return this.socketMock;
     }
 

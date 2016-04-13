@@ -18,10 +18,11 @@ public class GetRedirect implements Response {
     this.serverName = serverName;
   }
 
-  public byte [] handleRequest(Request request) {
-    responseBuilder.addStatus(FOUND_STATUS_CODE);
-    responseBuilder.addHeader(LOCATION_HEADER, getLocation());
-    return responseBuilder.getResponse();
+  public byte[] handleRequest(Request request) {
+    ResponseBuilder currentResponse = this.responseBuilder.clone();
+    currentResponse.addStatus(FOUND_STATUS_CODE);
+    currentResponse.addHeader(LOCATION_HEADER, getLocation());
+    return currentResponse.getResponse();
   }
 
   private String getLocation() {

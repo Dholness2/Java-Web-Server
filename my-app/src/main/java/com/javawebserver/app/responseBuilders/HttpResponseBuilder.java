@@ -24,6 +24,8 @@ public class HttpResponseBuilder implements ResponseBuilder {
     statusCodes.put("500", "HTTP/1.1 500 Internal Server Error");
     statusCodes.put("204", "HTTP/1.1 204 No Content");
     statusCodes.put("401", "HTTP/1.1 401 Unauthorized");
+    statusCodes.put("400", "HTTP/1.1 400 Bad Request");
+    statusCodes.put("405", "HTTP/1.1 405 Method Not Allowed");
   };
 
   public HttpResponseBuilder() {}

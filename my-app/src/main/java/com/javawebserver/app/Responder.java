@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class Responder {
-
   private static final String NOT_ALLOWED_CODE = "405";
   private static final String NOT_FOUND_CODE = "404";
   private static final String BAD_REQUEST_CODE = "400";
@@ -58,7 +57,7 @@ public class Responder {
     return hasPath(request.getRoute());
   }
 
-  private boolean hasPath (String path) {
+  private boolean hasPath(String path) {
     String routesKeys = this.routes.keySet().toString();
     return routesKeys.contains(path);
   }

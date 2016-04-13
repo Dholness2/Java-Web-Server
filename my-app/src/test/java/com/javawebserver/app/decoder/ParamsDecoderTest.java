@@ -40,8 +40,8 @@ public class ParamsDecoderTest {
 
   @Test
   public void canDecodeMixedString() {
-    String encoded = "-%2C%20*%2C%20%26%2C%20%40%2C%20%23%2C%20%24";
-    String expected = "-, *, &, @, #, $";
+    String encoded = "-%2C%20*%2C%20%26%2C%20%40%2C%20foobar%2C%23%2C%20%24";
+    String expected = "-, *, &, @, foobar,#, $";
     assertEquals(expected, ParamsDecoder.decodeParams(paramsKey, encoded));
   }
 

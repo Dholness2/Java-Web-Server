@@ -22,7 +22,7 @@ public class PutPost implements Response {
     this.directory = directory;
   }
 
-  public  byte [] handleRequest(Request request) {
+  public byte[] handleRequest(Request request) {
     String body = request.getBody();
     if(body != null){
       editFile(body);

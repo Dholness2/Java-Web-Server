@@ -26,7 +26,6 @@ public class GetDirectory implements Response {
     this.rootPath = rootPath;
   }
 
-
   public byte[] handleRequest(Request request) {
     String body = buildbody((getDirectoryList(this.directoryPath)));
     return getResponse(body);
@@ -46,7 +45,7 @@ public class GetDirectory implements Response {
     builder.addBody(body);
   }
 
-  private String buildbody(File [] dirList) {
+  private String buildbody(File[] dirList) {
     StringBuilder htmlBuilder = new StringBuilder();
     htmlBuilder.append("<!DOCTYPE html><html><body>");
     Arrays.sort(dirList);
@@ -83,7 +82,7 @@ public class GetDirectory implements Response {
    return file.getAbsolutePath().split(this.rootPath)[1];
   }
 
-  private File [] getDirectoryList (String path) {
+  private File[] getDirectoryList (String path) {
     File directory = new File(path);
     return directory.listFiles(getFileFilter());
   }

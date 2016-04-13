@@ -31,7 +31,7 @@ public class ServerSocketWrapper implements ServerSocket {
     return serverSocket.isClosed();
   }
 
-  public void close()  {
+  public void close() {
     try {
       serverSocket.close();
     } catch(IOException e) {

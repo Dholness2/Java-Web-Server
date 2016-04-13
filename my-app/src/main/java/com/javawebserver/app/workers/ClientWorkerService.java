@@ -18,7 +18,7 @@ public class ClientWorkerService implements Worker {
     return new ClientWorkerService(this.responder, this.logger);
   }
 
-  public ClientWorkerService (Responder responder, Logger logger) {
+  public ClientWorkerService(Responder responder, Logger logger) {
     this.responder = responder;
     this.logger = logger;
   }

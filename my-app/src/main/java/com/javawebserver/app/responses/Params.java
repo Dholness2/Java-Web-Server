@@ -17,7 +17,7 @@ public class Params implements Response {
   private static final String TYPE_HEADER = "Content-Type: ";
   private static final String CONTENT_LENGTH = "Content-Length: ";
 
-  public Params (ResponseBuilder response, String params) {
+  public Params(ResponseBuilder response, String params) {
     this.response = response;
     this.params = params;
   }

@@ -12,34 +12,33 @@ import org.junit.Test;
 import org.junit.After;
 
 public class FileEditorTest {
- private String path = System.getProperty("user.dir")+"/form";
- private File currentFile;
+  private String path = System.getProperty("user.dir")+"/form";
+  private File currentFile;
 
- private boolean containsEdit(String edit) throws IOException {
-  Scanner testScan = new Scanner(this.currentFile);
-  int lineNum = 0;
-  while (testScan.hasNextLine()) {
-    String line = testScan.nextLine();
-    lineNum++;
-    if(line.contains(edit)) {
-       return true;
+  private boolean containsEdit(String edit) throws IOException {
+    Scanner testScan = new Scanner(this.currentFile);
+    int lineNum = 0;
+    while (testScan.hasNextLine()) {
+      String line = testScan.nextLine();
+      lineNum++;
+      if(line.contains(edit)) {
+        return true;
+      }
     }
+    return false;
   }
-  return false;
- }
 
- @After
- public void undoChanges() throws IOException{
-   File file = new File(path);
-   file.delete();
- }
+  @After
+  public void undoChanges() throws IOException{
+    File file = new File(path);
+    file.delete();
+  }
 
- @Test
-   public void EditfileTest () throws IOException {
-   String edit = "data=helloworld";
-   new FileEditor().edit(path,edit);
-   currentFile = new File(path);
-   assertEquals(true, containsEdit(edit));
- }
-
+  @Test
+  public void EditfileTest() throws IOException {
+    String edit = "data=helloworld";
+    new FileEditor().edit(path,edit);
+    currentFile = new File(path);
+    assertEquals(true, containsEdit(edit));
+  }
 }

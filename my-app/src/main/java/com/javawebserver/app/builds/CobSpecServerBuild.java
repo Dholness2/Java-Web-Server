@@ -18,7 +18,6 @@ import com.javawebserver.app.helpers.FileEditor;
 import com.javawebserver.app.responseBuilders.ResponseBuilder;
 import com.javawebserver.app.responseBuilders.HttpResponseBuilder;
 
-import com.javawebserver.app.Request;
 import com.javawebserver.app.RouteBuilder;
 import com.javawebserver.app.serverBuilders.ServerBuilder;
 import com.javawebserver.app.serverBuilders.SimpleServerBuilder;
@@ -55,12 +54,10 @@ public class CobSpecServerBuild {
   }
 
   public void addCustomRoutes(int port, String directory) {
-    GetDirectory rootDirectory = new GetDirectory(directory, responseBuilder.clone(), directory);
     boolean unprotected = false;
     boolean protectedRoute = true;
-
     routeBuilder.addRoute("POST /file1", new PutPost(responseBuilder.clone(), "/file1", directory, new FileEditor()));
-    routeBuilder.addRoute("GET /", rootDirectory);
+    routeBuilder.addRoute("GET /", new GetDirectory(directory, responseBuilder.clone(), directory));
     routeBuilder.addRoute("PUT /", new PutPost(responseBuilder.clone(), "/", directory, new FileEditor()));
     routeBuilder.addRoute("PUT /text-file.txt", new PutPost(responseBuilder.clone(), "text", directory, new FileEditor()));
     routeBuilder.addRoute("OPTIONS /method_options", new Options(responseBuilder.clone(), new String [] {"GET","HEAD","POST","OPTIONS","PUT"}));

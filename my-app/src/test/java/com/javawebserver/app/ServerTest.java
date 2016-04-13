@@ -87,7 +87,7 @@ public class ServerTest  {
       return this.workerRan;
     }
 
-    public void sendResponse(byte [] response) { }
+    public void sendResponse(byte[] response) {}
 
     public void close() {}
   }
@@ -95,7 +95,7 @@ public class ServerTest  {
   private class ServerSocketMock implements ServerSocket{
     private SocketMock socketMock;
 
-    public ServerSocketMock(int port) { }
+    public ServerSocketMock(int port) {}
 
     public void setSocket(SocketMock socket) {
       this.socketMock = socket;

@@ -22,9 +22,9 @@ public class OptionsParser {
     String directory;
     directory = parseArgs().get(KEYS[DIR_INDEX]);
     File dir = new File(directory);
-      if (dir.exists()) {
-        return  dir.getAbsolutePath();
-      }
+    if (dir.exists()) {
+      return  dir.getAbsolutePath();
+    }
     return getCorrectFilePath();
   }
 
@@ -32,9 +32,9 @@ public class OptionsParser {
     System.out.print("Path does not exist, enter correct path:");
     String path = input.nextLine();
     File dir = new File(path);
-      if (dir.exists()) {
-        return dir.getAbsolutePath();
-      }
+    if (dir.exists()) {
+      return dir.getAbsolutePath();
+    }
     return getCorrectFilePath();
   }
 

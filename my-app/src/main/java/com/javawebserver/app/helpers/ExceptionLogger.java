@@ -7,8 +7,8 @@ import java.io.IOException;
 public class ExceptionLogger {
   private static String logPath = System.getProperty("user.dir") + "/ExceptionsLogs";
 
-public static void logException (String exception) {
-    try{
+  public static void logException(String exception) {
+    try {
       FileWriter writer = new FileWriter(logPath,true);
       BufferedWriter logger = new BufferedWriter(writer);
       logger.append(exception);

@@ -16,7 +16,7 @@ public class HeadTest {
   public void handleSimepleRequestTest() {
     String simpleResponse = "HTTP/1.1 200 OK";
     Head testGet = new Head(new HttpResponseBuilder());
-    byte [] response = testGet.handleRequest(new Request());
+    byte[] response = testGet.handleRequest(new Request());
     assertEquals(simpleResponse, new String(response));
   }
 }

@@ -10,7 +10,7 @@ public class SHA1Encoder implements Encoder {
 
   public SHA1Encoder () {}
 
-  public String encode(byte [] content) {
+  public String encode(byte[] content) {
     String sha1 = "";
     try{
       MessageDigest messageAlgorithm = MessageDigest.getInstance("SHA-1");
@@ -21,10 +21,9 @@ public class SHA1Encoder implements Encoder {
     return sha1;
   }
 
-  private String byteToHex (byte [] content) {
+  private String byteToHex(byte[] content) {
     StringBuilder builder = new StringBuilder();
-    int length = content.length;
-    for (int index = 0; index < length; index++) {
+    for (int index = 0; index < content.length; index++) {
       builder.append(String.format("%02x",content[index]));
     }
     return builder.toString();

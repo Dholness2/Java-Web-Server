@@ -35,7 +35,7 @@ public class ResponderTest {
   @Test
   public void getResponseTest() {
     testRequest.setMessage("GET / HTTP/1.1");
-   byte [] response =  testResponder.getResponse(testRequest);
+   byte[] response =  testResponder.getResponse(testRequest);
     assertEquals("HTTP/1.1 200 OK", new String(response));
   }
 

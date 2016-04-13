@@ -19,7 +19,7 @@ public class OptionsTest {
   @Test
   public void handlesOptionsRequestTest() {
     testRequest.setMessage("OPTIONS /method_options HTTP/1.1");
-    String[] options = new String [] {"GET","HEAD","POST","OPTIONS","PUT"};
+    String[] options = new String[] {"GET","HEAD","POST","OPTIONS","PUT"};
     Response testOptions = new Options (new HttpResponseBuilder(), options);
     String response = new String (testOptions.handleRequest(testRequest));
     String expectedResponse = "HTTP/1.1 200 OK" + CRLF + "Allow: GET,HEAD,POST,OPTIONS,PUT," + CRLF;

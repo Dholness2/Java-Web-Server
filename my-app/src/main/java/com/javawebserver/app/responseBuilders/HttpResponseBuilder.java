@@ -65,7 +65,7 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
   private byte[] fileResponse() {
     ByteArrayOutputStream output = new ByteArrayOutputStream();
-    try{
+    try {
       output.reset();
       output.write(getHeaders());
       output.write((CRLF).getBytes());

@@ -41,7 +41,7 @@ public class CobSpecServerBuildTest {
     testBuild.addCustomRoutes(port, directory);
     RouteBuilder builder = testBuild.getRouteBuilder();
     Set<String> routeList = builder.getRoutes().keySet();
-    String [] customRoutes = {"POST /file1", "GET /", "PUT /",
+    String[] customRoutes = {"POST /file1", "GET /", "PUT /",
                               "PUT /text-file.txt","OPTIONS /method_options",
                               "GET /method_options","POST /method_options",
                               "HEAD /method_options","PUT /method_options",

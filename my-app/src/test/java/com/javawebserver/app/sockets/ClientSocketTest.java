@@ -67,7 +67,7 @@ public class ClientSocketTest {
 
   @Test
   public void testsendResponse() {
-    byte [] response = ("HTTP/1.1 200 OK").getBytes();
+    byte[] response = ("HTTP/1.1 200 OK").getBytes();
     testSocket.sendResponse(response);
     String output = mockSocket.getOutputStream().toString().split(CRLF)[0];
     assertEquals("HTTP/1.1 200 OK", output);

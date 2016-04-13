@@ -14,12 +14,12 @@ public class GetForm extends Get {
   private File currentFile;
   private String form;
 
-  public GetForm (ResponseBuilder response, String fileName, String contentType, String directory, boolean protectedRoute, String form) {
+  public GetForm(ResponseBuilder response, String fileName, String contentType, String directory, boolean protectedRoute, String form) {
     super(response, fileName, contentType, directory, protectedRoute);
     this.form = form;
   }
 
-  public byte [] handleRequest (Request request){
+  public byte[] handleRequest(Request request) {
     buildPath();
     if (hasFile()){
       return super.handleRequest(request);
@@ -36,14 +36,14 @@ public class GetForm extends Get {
     return (this.currentFile.exists());
   }
 
-  public byte [] getNewFormResponse (Request request) {
+  public byte[] getNewFormResponse(Request request) {
     buildFormFile();
     return super.handleRequest(request);
   }
 
   public void buildFormFile() {
     try {
-      byte [] formData = this.form.getBytes("UTF-8");
+      byte[] formData = this.form.getBytes("UTF-8");
       Path file = this.currentFile.toPath();
       Files.write(file,formData);
     } catch (Exception e) {

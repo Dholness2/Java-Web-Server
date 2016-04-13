@@ -12,10 +12,10 @@ import org.junit.Before;
 import static org.junit.Assert.assertEquals;
 
 public class PutPostTest {
- private  Request testRequest = new Request();
- private ResponseBuilder testResponse = new HttpResponseBuilder();
- private String fileName = "/foobar";
- private String directory = "/foo/bar";
+  private  Request testRequest = new Request();
+  private ResponseBuilder testResponse = new HttpResponseBuilder();
+  private String fileName = "/foobar";
+  private String directory = "/foo/bar";
 
   @Test
   public void HandleRequestFormEditTest() {

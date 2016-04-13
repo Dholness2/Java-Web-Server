@@ -32,7 +32,7 @@ public class ClientSocket implements Socket {
     return this.currentRequest;
   }
 
-  public void sendResponse(byte [] response) {
+  public void sendResponse(byte[] response) {
     try {
       OutputStream output = getOutputStream();
       output.write(response);

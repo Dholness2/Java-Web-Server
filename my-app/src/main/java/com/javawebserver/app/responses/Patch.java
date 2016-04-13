@@ -33,7 +33,7 @@ public class Patch implements Response {
     this.encoder = encode;
   }
 
-  public  byte [] handleRequest(Request request) {
+  public byte[] handleRequest(Request request) {
     String body = request.getBody();
     if ((body != null) && (matchedEtag(request))) {
       editFile(body);
@@ -55,7 +55,7 @@ public class Patch implements Response {
 
   private String  getCurrentFileTag() {
     String tag = "";
-    try{
+    try {
       byte [] fileBytes = Files.readAllBytes(Paths.get(this.directory+ this.fileName));
       return this.encoder.encode(fileBytes);
     } catch (IOException e) {

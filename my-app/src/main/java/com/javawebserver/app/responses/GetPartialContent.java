@@ -30,7 +30,7 @@ public class GetPartialContent implements Response {
   private static final String RANGE_NOT_SATSIFIABLE = "416";
   private static final String PARTIAL_STATUS_CODE = "206";
 
-  public GetPartialContent (ResponseBuilder responseBuilder, String fileName, String contentType, String directory) {
+  public GetPartialContent(ResponseBuilder responseBuilder, String fileName, String contentType, String directory) {
     this.responseBuilder = responseBuilder;
     this.fileName = fileName;
     this.contentType = contentType;
@@ -47,7 +47,7 @@ public class GetPartialContent implements Response {
     return responseBuilder.getStatus(INTERNAL_ERROR_CODE);
   }
 
-  private byte [] getResponse (Request request, byte [] fileBytes) {
+  private byte[] getResponse (Request request, byte[] fileBytes) {
     if (hasRangeHeaders(request)) {
       return getPartialResponse(fileBytes, request);
     }
@@ -119,7 +119,7 @@ public class GetPartialContent implements Response {
     }
   }
 
-  private String getRange (String header){
+  private String getRange (String header) {
     return header.substring((header.indexOf("=") + 1), header.indexOf(CRLF));
   }
 
@@ -127,7 +127,7 @@ public class GetPartialContent implements Response {
     return (separatorIndex == 0);
   }
 
-  private boolean upperBoundRequest(int separatorIndex, String range){
+  private boolean upperBoundRequest(int separatorIndex, String range) {
     return ((separatorIndex + 1) > (range.length() - 1));
   }
 }

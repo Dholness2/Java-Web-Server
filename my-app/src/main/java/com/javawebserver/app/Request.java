@@ -2,17 +2,17 @@ package com.javawebserver.app;
 import java.util.Arrays;
 
 public class Request {
-  private static final String  PROTOCOL = "HTTP/1.1";
-  private static final String  ROUTESlASH = "/";
+  private static final String PROTOCOL = "HTTP/1.1";
+  private static final String ROUTESlASH = "/";
 
   private String request;
   private String body;
   private String header;
 
-  public Request () {}
+  public Request() {}
 
   public boolean isParams() {
-    return this.request.split(" ")[1].contains("?");
+    return this.request.contains("?");
   }
 
   public String getRoute() {
@@ -32,8 +32,8 @@ public class Request {
     return route.substring(0,(route.indexOf("?") + 1));
   }
 
-  public String getRequest(){
-    if (isParams()){
+  public String getRequest() {
+    if (isParams()) {
       return (getMethod() + " "+ getParamsRoute());
     }
     return this.request.replace(PROTOCOL,"").trim();
@@ -43,7 +43,11 @@ public class Request {
     this.request = message;
   }
 
-  public void setHeaders( String header) {
+  public String getMessage() {
+    return this.request;
+  }
+
+  public void setHeaders(String header) {
    this.header = header;
   }
 
@@ -51,11 +55,11 @@ public class Request {
     return this.header;
   }
 
-  public void setBody(String body){
+  public void setBody(String body) {
     this.body = body;
   }
 
-  public String getBody () {
+  public String getBody() {
     return this.body;
   }
 
@@ -66,7 +70,7 @@ public class Request {
   public boolean validRequest() {
     if (this.request.trim().isEmpty()) {
       return false;
-    }else if ((validRoute() == false) ||(validProtocol() == false)) {
+    } else if ((validRoute() == false) ||(validProtocol() == false)) {
       return false;
     } else {
       return true;

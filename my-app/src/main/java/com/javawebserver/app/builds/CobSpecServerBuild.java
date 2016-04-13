@@ -1,4 +1,4 @@
-package com.javawebserver.app.Builds;
+package com.javawebserver.app.builds;
 
 import com.javawebserver.app.responses.Get;
 import com.javawebserver.app.responses.GetForm;
@@ -15,12 +15,10 @@ import com.javawebserver.app.responses.Options;
 import com.javawebserver.app.encoders.SHA1Encoder;
 
 import com.javawebserver.app.helpers.FileEditor;
-import com.javawebserver.app.helpers.Logger;
 import com.javawebserver.app.responseBuilders.ResponseBuilder;
 import com.javawebserver.app.responseBuilders.HttpResponseBuilder;
 
 import com.javawebserver.app.Request;
-import com.javawebserver.app.Responder;
 import com.javawebserver.app.RouteBuilder;
 import com.javawebserver.app.serverBuilders.ServerBuilder;
 import com.javawebserver.app.serverBuilders.SimpleServerBuilder;

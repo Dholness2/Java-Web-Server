@@ -15,7 +15,7 @@ public class FileEditor {
     try {
       Files.write(file.toPath(),edit.getBytes("UTF-8"));
     } catch (Exception e) {
-      ExceptionLogger.logException("can't read file" + e);
+      ExceptionLogger.logException("can't write to file" + e);
     }
   }
 }

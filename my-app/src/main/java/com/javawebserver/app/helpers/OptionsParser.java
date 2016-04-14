@@ -20,11 +20,10 @@ public class OptionsParser {
   }
 
   public String getDirectory() {
-    String directory;
-    directory = parseArgs().get(KEYS[DIR_INDEX]);
+    String directory = parseArgs().get(KEYS[DIR_INDEX]);
     File dir = new File(directory);
     if (dir.exists()) {
-      return  dir.getAbsolutePath();
+      return dir.getAbsolutePath();
     }
     return getCorrectFilePath();
   }

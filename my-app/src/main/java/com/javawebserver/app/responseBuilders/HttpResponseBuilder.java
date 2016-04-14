@@ -1,6 +1,7 @@
 package com.javawebserver.app.responseBuilders;
 
 import com.javawebserver.app.responseBuilders.ResponseBuilder;
+import com.javawebserver.app.helpers.ExceptionLogger;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -72,8 +73,7 @@ public class HttpResponseBuilder implements ResponseBuilder {
       output.write(this.body);
       return output.toByteArray();
     } catch (IOException e) {
-      new Exception("could not write to Strem").printStackTrace();
-      e.printStackTrace();
+      ExceptionLogger.logException("can not write to stream" + e);
     }
     return getStatus("500");
   }

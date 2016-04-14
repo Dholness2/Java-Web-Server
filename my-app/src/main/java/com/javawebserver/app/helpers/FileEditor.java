@@ -1,5 +1,7 @@
 package com.javawebserver.app.helpers;
 
+import com.javawebserver.app.helpers.ExceptionLogger;
+
 import java.io.File;
 import java.nio.file.Files;
 import java.io.IOException;
@@ -13,8 +15,7 @@ public class FileEditor {
     try {
       Files.write(file.toPath(),edit.getBytes("UTF-8"));
     } catch (Exception e) {
-      new Exception("Path not found:").printStackTrace();
-      e.printStackTrace();
+      ExceptionLogger.logException("can't read file" + e);
     }
   }
 }

@@ -3,6 +3,7 @@ package com.javawebserver.app.sockets;
 import com.javawebserver.app.sockets.Socket;
 import com.javawebserver.app.sockets.Socket;
 import com.javawebserver.app.Request;
+import com.javawebserver.app.helpers.ExceptionLogger;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,8 +27,7 @@ public class ClientSocket implements Socket {
       updateRequest();
       return currentRequest;
     } catch (IOException e) {
-      new Exception("Can't read Request").printStackTrace();
-      e.printStackTrace();
+      ExceptionLogger.logException("can't read stream" + e);
     }
     return this.currentRequest;
   }
@@ -38,7 +38,7 @@ public class ClientSocket implements Socket {
       output.write(response);
       output.close();
     } catch  (IOException e)  {
-      System.out.println("can't write to ouptustream"+ e);
+      ExceptionLogger.logException("can't write to stream" + e);
     }
   }
 
@@ -46,7 +46,7 @@ public class ClientSocket implements Socket {
     try {
       this.socket.close();
     } catch (IOException e) {
-      System.out.println("Can't Close Client Socket" + e);
+      ExceptionLogger.logException("can't close stream" + e);
     }
   }
 
@@ -54,7 +54,7 @@ public class ClientSocket implements Socket {
     try {
       return socket.getInputStream();
     } catch(IOException e) {
-      System.out.println("can't open InputStream"+ e);
+      ExceptionLogger.logException("can't get Stream" + e);
       return null;
     }
   }
@@ -63,7 +63,7 @@ public class ClientSocket implements Socket {
     try {
       return socket.getOutputStream();
     } catch(IOException e) {
-      System.out.println("can't open OuputStream"+ e);
+      ExceptionLogger.logException("can't get outputstream" + e);
       return null;
     }
   }

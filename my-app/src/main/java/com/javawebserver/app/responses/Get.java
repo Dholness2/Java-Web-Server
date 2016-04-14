@@ -69,7 +69,7 @@ public class Get implements Response {
       byte[] file = Files.readAllBytes(Paths.get(getLocation()));
       return fileResponse(file, currentResponse);
     }catch (IOException e) {
-     ExceptionLogger.logException("can't read file" + e);
+      ExceptionLogger.logException("can't read file" + e);
     }
     return failedFileReadResponse(currentResponse);
   }

@@ -1,6 +1,7 @@
 package com.javawebserver.app.helpers;
 
 import com.javawebserver.app.Request;
+import com.javawebserver.app.helpers.ExceptionLogger;
 
 import java.io.FileWriter;
 import java.io.BufferedWriter;
@@ -22,8 +23,7 @@ public class Logger {
       logger.newLine();
       logger.close();
     } catch (IOException e) {
-      new Exception("Path not found:").printStackTrace();
-      e.printStackTrace();
+      ExceptionLogger.logException("can't write to file" + e);
     }
   }
 
@@ -34,8 +34,7 @@ public class Logger {
       logger.write("");
       logger.close();
     } catch (Exception e) {
-      new Exception("Path not found:").printStackTrace();
-      e.printStackTrace();
+      ExceptionLogger.logException("can't write to file" + e);
     }
   }
 }

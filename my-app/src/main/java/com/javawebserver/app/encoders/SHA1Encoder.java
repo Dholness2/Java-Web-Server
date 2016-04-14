@@ -1,6 +1,7 @@
 package com.javawebserver.app.encoders;
 
 import com.javawebserver.app.encoders.Encoder;
+import com.javawebserver.app.helpers.ExceptionLogger;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -16,8 +17,8 @@ public class SHA1Encoder implements Encoder {
     try{
       MessageDigest messageAlgorithm = MessageDigest.getInstance("SHA-1");
       sha1  = byteToHex(messageAlgorithm.digest(content));
-    } catch (NoSuchAlgorithmException exception) {
-      System.out.println("No Such Algorithm"+ exception);
+    } catch (NoSuchAlgorithmException e) {
+      ExceptionLogger.logException("No Such Algorithm" + e); 
     }
     return sha1;
   }

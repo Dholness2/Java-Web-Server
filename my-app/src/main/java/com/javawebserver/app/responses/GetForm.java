@@ -3,6 +3,7 @@ package com.javawebserver.app.responses;
 import com.javawebserver.app.responses.Response;
 import com.javawebserver.app.responseBuilders.ResponseBuilder;
 import com.javawebserver.app.Request;
+import com.javawebserver.app.helpers.ExceptionLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +49,7 @@ public class GetForm extends Get {
       Path file = this.currentFile.toPath();
       Files.write(file,formData);
     } catch (Exception e) {
-      System.out.println("can not write new file" + e);
+      ExceptionLogger.logException("can't write to file" + e);
     }
   }
 }

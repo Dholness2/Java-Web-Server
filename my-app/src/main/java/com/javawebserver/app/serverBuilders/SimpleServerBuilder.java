@@ -11,9 +11,10 @@ import com.javawebserver.app.serverSockets.ServerSocket;
 import com.javawebserver.app.serverSockets.ServerSocketWrapper;
 import com.javawebserver.app.responses.Response;
 import com.javawebserver.app.responseBuilders.HttpResponseBuilder;
-import java.io.IOException;
 
 import java.util.HashMap;
+
+import java.io.IOException;
 
 public class SimpleServerBuilder implements ServerBuilder {
   private String directory;

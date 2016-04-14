@@ -6,7 +6,6 @@ import com.javawebserver.app.responseBuilders.ResponseBuilder;
 import com.javawebserver.app.decoders.ParamsDecoder;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class Params implements Response {
   private ResponseBuilder response;

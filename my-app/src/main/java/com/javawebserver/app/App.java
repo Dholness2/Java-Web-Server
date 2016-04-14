@@ -6,12 +6,8 @@ import com.javawebserver.app.serverBuilders.SimpleServerBuilder;
 import com.javawebserver.app.responseBuilders.ResponseBuilder;
 import com.javawebserver.app.responseBuilders.HttpResponseBuilder;
 import com.javawebserver.app.RouteBuilder;
-import java.util.Scanner;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
+import java.util.Scanner;
 
 public class App {
   private static String directory;

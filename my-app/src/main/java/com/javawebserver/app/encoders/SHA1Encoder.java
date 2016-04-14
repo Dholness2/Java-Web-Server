@@ -4,6 +4,7 @@ import com.javawebserver.app.encoders.Encoder;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
 import java.io.UnsupportedEncodingException;
 
 public class SHA1Encoder implements Encoder {

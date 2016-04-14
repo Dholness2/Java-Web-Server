@@ -12,13 +12,16 @@ import com.javawebserver.app.responses.Head;
 import com.javawebserver.app.responses.Patch;
 import com.javawebserver.app.responses.Response;
 import com.javawebserver.app.responses.Options;
+
 import com.javawebserver.app.encoders.SHA1Encoder;
 
 import com.javawebserver.app.helpers.FileEditor;
+
 import com.javawebserver.app.responseBuilders.ResponseBuilder;
 import com.javawebserver.app.responseBuilders.HttpResponseBuilder;
 
 import com.javawebserver.app.RouteBuilder;
+
 import com.javawebserver.app.serverBuilders.ServerBuilder;
 import com.javawebserver.app.serverBuilders.SimpleServerBuilder;
 import com.javawebserver.app.Server;

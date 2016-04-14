@@ -1,5 +1,4 @@
 package com.javawebserver.app;
-import java.util.Arrays;
 
 public class Request {
   private static final String PROTOCOL = "HTTP/1.1";
